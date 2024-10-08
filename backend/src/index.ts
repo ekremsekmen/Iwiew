@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose'; // MongoDB bağlantısı için
 import dotenv from 'dotenv'; // .env dosyasını okumak için
 
+const SECRET_KEY = process.env.JWT_SECRET;
+
 dotenv.config(); // .env dosyasını yükleyin
 
 const app = express();
