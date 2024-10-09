@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../state/authStore'; // Zustand store'unu import et
+import useAuthStore from '../store/authStore'; // Zustand store'unu import et
 import '../styles/Login.css';
 
 const Login = () => {
