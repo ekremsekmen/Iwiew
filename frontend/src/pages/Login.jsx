@@ -1,62 +1,47 @@
+// src/pages/Login.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../store/authStore'; // Zustand store'unu import et
+import useAuthStore from '../store/authStore';
 import '../styles/Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login); // login fonksiyonunu al
+  const login = useAuthStore((state) => state.login);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state before login attempt
     try {
-      const response = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      // Eğer yanıt başarılıysa JSON olarak ayrıştır
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        
-        // Zustand ile giriş yap
-        login({ username }); // Kullanıcı bilgisini store'a ekle
-        navigate('/admin');
-      } else {
-        // Hata durumunda yanıtı düz metin olarak al
-        const errorText = await response.text();
-        alert(errorText || 'Giriş başarısız oldu');
-      }
+      await login(username, password);
+      navigate('/admin'); // Navigate to admin page if login is successful
     } catch (error) {
-      console.error('Bir hata oluştu:', error);
+      setError(error.message); // Set error message for display
     }
   };
 
   return (
-    <div className="login-container"> 
-      <h2>IWiew Admin Panel</h2> 
+    <div className="login-container">
+      <h2>IWiew Admin Panel</h2>
       <form onSubmit={handleSubmit}>
+        {error && <p className="error-message">{error}</p>} {/* Display error message */}
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Kullanıcı Adı"
+          placeholder="Username"
           required
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Şifre"
+          placeholder="Password"
           required
         />
-        <button type="submit">Giriş Yap</button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );

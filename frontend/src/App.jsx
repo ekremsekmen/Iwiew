@@ -1,5 +1,5 @@
 import React from 'react';
-import AppRouter from './router/index';  // Router dosyanın yolunu güncelle
+import AppRouter from './index';  // Router dosyanın yolunu güncelle
 
 function App() {
   return (
