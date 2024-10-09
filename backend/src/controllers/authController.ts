@@ -1,27 +1,30 @@
+// controllers/authController.ts
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-dotenv.config(); // .env dosyasını yükle
+dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET; // .env dosyasından anahtarı al
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME; // .env dosyasından admin kullanıcı adını al
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD; // .env dosyasından admin şifresini al
+const SECRET_KEY = process.env.JWT_SECRET;
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-export const login = (req: Request, res: Response) => {
+export const login = (req: Request, res: Response): Response => {
   const { username, password } = req.body;
 
-  // SECRET_KEY'in undefined olup olmadığını kontrol et
   if (!SECRET_KEY) {
-    return res.status(500).json({ message: 'Gizli anahtar tanımlanmamış.' });
+    return res.status(500).json({ message: 'Secret key is not defined.' });
   }
 
-  // Admin kullanıcı adı ve şifresini kontrol et
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    // JWT oluştur
+    // Generate JWT
     const token = jwt.sign({ username: ADMIN_USERNAME }, SECRET_KEY, { expiresIn: '1h' });
-    return res.json({ token });
+    // Create user object
+    const user = { username: ADMIN_USERNAME };
+
+    // Return token and user in the response
+    return res.status(200).json({ token, user });
   } else {
-    return res.status(401).json({ message: 'Kullanıcı adı veya şifre hatalı' });
+    return res.status(401).json({ message: 'Invalid username or password.' });
   }
 };

@@ -1,9 +1,9 @@
-// src/services/authService.js
+// src/services/authService.jsx
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/packages';
 
 // Login function
 export const login = async (username, password) => {
@@ -15,6 +15,10 @@ export const login = async (username, password) => {
 
     if (response.status === 200) {
       const { token, user } = response.data;
+      if (!token || !user) {
+        throw new Error('Login response is missing token or user');
+      }
+
       cookies.set('authToken', token, { path: '/', secure: true, sameSite: 'Strict' });
       return user;
     } else {
@@ -32,10 +36,10 @@ export const login = async (username, password) => {
 // Logout function
 export const logout = async () => {
   try {
-    await axios.post(`${API_BASE_URL}/logout`);
+    const response = await axios.post(`${API_BASE_URL}/logout`);
     cookies.remove('authToken', { path: '/' });
+    return response.data;
   } catch (error) {
-    console.error('Error logging out:', error);
-    throw error;
+    throw new Error(error.response?.data?.message || 'An error occurred while logging out');
   }
 };

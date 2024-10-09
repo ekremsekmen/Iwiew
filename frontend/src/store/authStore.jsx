@@ -6,25 +6,28 @@ import { login as loginService, logout as logoutService } from '../services/auth
 const cookies = new Cookies();
 
 const useAuthStore = create((set) => ({
-  isAuthenticated: !!cookies.get('authToken'), // Check if the token is present in cookies
+  isAuthenticated: !!cookies.get('authToken'),
   user: null,
 
   login: async (username, password) => {
     try {
-      const user = await loginService(username, password); // Perform login via authService
-      cookies.set('authToken', user.token, { path: '/' }); // Save token in cookies
+      const user = await loginService(username, password);
+      if (!user) {
+        throw new Error('Login failed: User data is missing');
+      }
+
       set({ isAuthenticated: true, user });
     } catch (error) {
       set({ isAuthenticated: false });
       console.error('Login error:', error);
-      throw error; // Rethrow error to handle in the component
+      throw error;
     }
   },
 
   logout: async () => {
     try {
-      await logoutService(); // Call logout service
-      cookies.remove('authToken', { path: '/' }); // Remove token from cookies
+      await logoutService();
+      cookies.remove('authToken', { path: '/' });
       set({ isAuthenticated: false, user: null });
     } catch (error) {
       console.error('Logout error:', error);

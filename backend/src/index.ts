@@ -1,36 +1,31 @@
-import express from 'express';
+// index.ts
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express, { Application } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';
-import questionRoutes from './routes/questionRoutes'; // Soru paketleri için route ekleyin
+import questionRoutes from './routes/questionRoutes';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose'; // MongoDB bağlantısı için
-import dotenv from 'dotenv'; // .env dosyasını okumak için
+import mongoose from 'mongoose';
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const app: Application = express();
 
-dotenv.config(); // .env dosyasını yükleyin
-
-const app = express();
-app.use(bodyParser.json());
-
-// CORS'u kullan
 app.use(cors({
-  origin: 'http://localhost:5173', // Frontend uygulamanızın kök alanı
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // İzin verilen HTTP yöntemleri
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
-// Auth rotalarını kullan
-app.use('/', authRoutes);
+app.use(bodyParser.json());
 
-// Soru paketleri rotalarını kullan
-app.use('/api', questionRoutes);
+app.use('/api/packages', authRoutes); // Authentication routes
+app.use('/api', questionRoutes); // Question management routes
 
-// MongoDB'ye bağlan
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/interviewApp')
   .then(() => {
-    console.log('MongoDB bağlantısı başarılı!');
+    console.log('MongoDB connected successfully!');
     app.listen(3000, () => {
-      console.log('Sunucu 3000 portunda çalışıyor');
+      console.log('Server is running on port 3000');
     });
   })
-  .catch((error) => console.log('MongoDB bağlantı hatası:', error));
+  .catch((error) => console.log('MongoDB connection error:', error));
