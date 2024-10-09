@@ -1,0 +1,109 @@
+iView Framing Çalışması
+Framers :
+Taha ZEYTUN
+Murat Efe ÇETİN
+Problem Tanımı
+IK birimi tarafından sorulan soruların büyük bir kısmı, farklı görüşmelerde tekrarlanmakta ve adaylara aynı sorular yeniden
+yöneltilmektedir. Aynı soruların tekrar tekrar sorulması, adaylarla randevu ayarlanması ve iptal edilen randevuları yönetmesi
+işlemleri IK biriminin zamanını verimsiz kullanmasına neden olmakta ve süreçten bıkkınlık duymalarına yol açmaktadır. Bu
+problem, mülakat süreçlerinin asenkron yürütülmesi ve etkili hale getirilmesi ihtiyacını doğurmaktadır.
+Çözüm Önerisi
+iView sistemi sayesinde IK uzmanları ile adaylar arasında asenkron video mülakatlar yürütülmesine çözüm sunacaktır.
+Proje Detayları
+Kişilerin mülakatlarını video mülakat şeklinde gerçekleştirebileceği bir Video Mülakat Sayfası oluşturulacak. Kişiye, bu video
+mülakat sayfası mail üzerinden iletilecek. İletilen bu sayfada kişiye, cevaplanması gereken soruların gösterildiği bir ekran
+sunulacak. Bu soruları hazırlaması için, admine özel bir soru hazırlama/düzenleme paneli oluşturulacak. Kişi, bu soruları
+yanıtladığında otomatik mülakat tamamlanacak ve gerekli birimlerin değerlendirmesine sunulacak.
+1 - Admin Paneli
+Admin kullanımı için soruların içeriklerinin ve sürelerinin düzenlendiği bir panel oluşturulacaktır.
+Video mülakat için davet linkleri oluşturulacak ve adaya mail üzerinden iletilecek.
+2 - Video Mülakat Sayfası
+Adaylar, mailden iletilen linke tıklayarak sayfaya ulaşılacak.
+Aday, “Mülakata Başla” butonuna tıkladığında mülakat başlayacak.
+Admin tarafından planlanmış sorular, zamana ya da sıraya göre ekrana yansıtılacak. Adaylar verilen süre boyunca
+soruları görüntüleyecek ve gereken cevabı video kayıt esnasında cevaplayacaklardır.
+Aday, soru için verilen süre bittiğinde ya da erkenden mülakatı sonlandırmak istediğinde video kayıt admin paneline
+gönderilecektir.
+Her mülakat için video kayıt süresi admin tarafından hesaplanacak. Süre bitince mülakat otomatik sonlanacak.
+Admin, soru paketini hazırlarken bazı ayarlar yapabilecek:
+Sıralı / tekte göster ,
+Süreli / süresiz getir,
+Geçme hakkı sağla / sağlama
+Aday, mülakat başladıktan sonra toplam süresini ve soru başına verilen süresini görebilecek.
+iView Framing Çalışması 1
+Adaylar, video kayıt butonuna basmadan önce kişisel bilgilerin yer aldığı bir formu zorunlu olarak dolduracak. Submit
+ettikten sonra video ile bu aday eşleştirilmiş olacak.
+3 - Değerlendirme Formu
+İK Birimi, adayların kaydedilen video mülakatını istediği zaman izleyebilecek.
+Video mülakat izlendikten sonra bir değerlendirme formu açılacak.
+İK Birimi, bu formda adayın ilerleme durumunu belirleyecek. Seçildi ya da elendi olarak işaretleyebilecek.
+Riskler
+1- Site Performansı ve Hatalar: Platformun düzgün çalışmaması, yavaşlamalar veya çökmeler gibi teknik sorunlar kullanıcı
+deneyimini olumsuz etkileyebilir. Bu durum, mülakatların kesintiye uğramasına yol açabilir.
+2- API Servisi Sorunları: WhereBy API’de meydana gelebilecek herhangi bir erişim sorunu veya servis kesintisi, video
+görüşmelerinin aksamasına ya da tamamen kesilmesine yol açabilir. Böyle bir duruma hazırlıksız yakalanmak, kullanıcıların
+olumsuz deneyim yaşamasına ve platforma duyulan güvenin azalmasına yol açabilir. Bu gibi durumlarla karşılaşılması
+durumunda, başka API servislerinin kullanılması durumu göz önünde bulundurulacaktır.
+Teknoloji Listesi
+Backend:
+ExpressJS (Framework)
+NodeJS, TypeScript
+Frontend:
+React 18.3.1
+Javascript
+Tailwind CSS
+Veritabanı:
+MongoDB
+State Management:
+Zustand (Genel state yönetimi)
+Context API (URL takibi)
+Diğer:
+C4 Model (Mimari tasarım)
+Postman (API dokümantasyonu)
+JWT Gizleme: Cookie
+WhereBy API (API Servisi)
+React-Router-Dom-v6 (Routing)
+iView Framing Çalışması 2
+Kısıtlamalar
+1. AI ve Chatbot Geliştirme: AI ve chatbot sistemlerinin yüksek maliyetli olması ve uzun geliştirme süresi gerektirmesi
+nedeniyle bu projede yer almamalıdır.
+2. Canlı Mülakat Altyapısı: Yüksek maliyetli ve zaman gerektiren bir canlı mülakat platformu yerine, mevcut video mülakat
+sistemlerinin (örneğin, Whereby) entegrasyonu tercih edilmelidir.
+3. Avatar Sistemleri: Adayların avatar oluşturabileceği dijital mülakat ortamı, zaman ve maliyet açısından kısıtlayıcı
+olduğundan proje kapsamına alınmamalıdır.
+4. Video Mülakat Analiz Sistemi: Jest, mimik ve ses tonu üzerinden kişilik analizleri yapan ileri seviye AI altyapısının
+geliştirilmesi mevcut bütçe ve zaman planı için uygun değildir.
+5. Aday Mülakat İlerleyişi Takibi: Adayların mülakat ilerleyişlerini ve başvuru durumlarını takip edebilecekleri ayrı bir
+portal geliştirilmesi yerine, bu bilgilerin adaylara e-posta yoluyla bildirilmesi daha verimli ve maliyet açısından uygun
+olacaktır.
+6. Referans Doğrulama: Adayların referanslarını doğrulama ve sosyal medya hesaplarının analizi için (LinkedIn, GitHub,
+Behance vb.) uygun bir API bulunmaması durumunda, bu entegrasyon sınırlandırılacaktır.
+7. Sosyal Medya ve Kariyer Platformları Entegrasyonu: LinkedIn vb. gibi platformların API’larına erişimin sınırlı olması
+nedeniyle sosyal medya başvuruları doğrudan toplanamayacaktır.
+8. Veri Toplama Kısıtlaması: Veri toplama işlemleri, yalnızca kaç kişinin başvurduğu ve kaç kişinin mülakat sürecini geçtiği
+gibi temel bilgilerle sınırlı tutulmalıdır.
+9. Dijital İmza ile Sözleşme İmzalama: Mevcut hukuki düzenlemeler ve teknik altyapı kısıtlamaları nedeniyle dijital imza ile
+iş sözleşmelerinin imzalanması bu proje kapsamında mümkün değildir.
+10. Dinamik Başvuru Form Yapısı: Uzmanlık alanına göre özelleştirilmiş başvuru formları oluşturma ve dinamik başvuru
+form yapısı geliştirme, mevcut proje kısıtları nedeniyle uygulanmayacaktır.
+11. Dokümantasyon Yönetimi: Adayların sisteme belge yükleme, saklama, silme ve bu belgeleri önizleme işlevleri mevcut
+proje kapsamında yer almayacaktır. Ayrıca, İK biriminin adaylardan yeni belgeler talep etmesi ve bu belgeler
+yüklendiğinde bildirim gönderilmesi gibi özellikleri proje kısıtlamaları nedeniyle uygulanmayacaktır.
+12. İK Birimi Görev Dağılımı ve Performans Takibi: İK yöneticisinin ilanlar arasında görev dağılımı yapması, İK uzmanlarının
+sorumluluk alanlarını ve performanslarını takip etmesi, ülke bazlı İK uzmanlarını görevlendirme gibi işlemler proje
+kapsamında yer almayacaktır. Ayrıca, ilanların birden fazla dilde yayına çıkabilmesi ve işe alım gerçekleştiğinde ilanların
+başarılı bir şekilde kapatılması gibi özellikler mevcut proje kısıtları nedeniyle uygulanmayacaktır.
+13. Gerçek Zamanlı İstatistik Takip Modülü: Adayların işe alım sürecindeki aşamalarını, elenen veya beklemede olan
+adayların durumunu, ilanların yayında kalma süresi gibi gerçek zamanlı istatistikleri izleyebileceğimiz bir dashboard
+oluşturulması proje kapsamında yer almayacaktır. Anlık istatistiklerin takip edilmesi ve bu tür bir dashboard ile ekip içi
+koordinasyon sağlanması mevcut proje kısıtları nedeniyle uygulanmayacaktır.
+Teslim Süresi:
+Proje tamamlanması: 7 hafta
+Framing, breadboarding ve design çalışmaları: 1 hafta
+Proje geliştirilmesi: 6 hafta
+Ekip Üye Sayısı:
+İki kişi
+Taha ZEYTUN
+Murat Efe ÇETİN
+iView Framing Çalışması 3
+iView Framing Çalışması 4
