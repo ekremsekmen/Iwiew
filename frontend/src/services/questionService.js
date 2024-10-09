@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/packages'; // Backend API URL'si
+const API_URL = import.meta.env.API_URL; // Backend API URL'si
 
 // Soru paketlerini oluştur
 export const createQuestionPackage = async (data) => {
