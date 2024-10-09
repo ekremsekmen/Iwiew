@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useQuestionStore from '../store/questionStore';
+import useAuthStore from '../store/authStore';
 import '../styles/Admin.css';
 
 const Admin = () => {
@@ -19,6 +20,7 @@ const Admin = () => {
   const [newQuestion, setNewQuestion] = useState('');
   const [questionDuration, setQuestionDuration] = useState('');
   const [newPackageName, setNewPackageName] = useState('');
+  const logout = useAuthStore((state) => state.logout);
 
   useEffect(() => {
     fetchQuestionPackages(); // Fetch question packages on component mount
@@ -57,6 +59,14 @@ const Admin = () => {
       setQuestions([...questions, { text: newQuestion, duration: questionDuration }]);
       setNewQuestion('');
       setQuestionDuration('');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
   };
 
@@ -190,6 +200,10 @@ const Admin = () => {
           </tbody>
         </table>
       </div>
+      <br/><br/><br/><br/><br/>
+      <button onClick={handleLogout} className="button-primary">
+        Logout
+      </button>
     </div>
   );
 };
