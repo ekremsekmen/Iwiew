@@ -1,23 +1,31 @@
+// src/services/questionService.jsx
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
-const API_URL = import.meta.env.API_URL; // Backend API URL'si
+const API_URL = import.meta.env.VITE_API_URL;
+const cookies = new Cookies();
 
-// Soru paketlerini oluştur
+const getAuthHeaders = () => {
+  const token = cookies.get('authToken');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+// Create a new question package
 export const createQuestionPackage = async (data) => {
-  return await axios.post(API_URL, data);
+  return await axios.post(API_URL, data, { headers: getAuthHeaders() });
 };
 
-// Tüm soru paketlerini al
+// Get all question packages
 export const getAllQuestionPackages = async () => {
-  return await axios.get(API_URL);
+  return await axios.get(API_URL, { headers: getAuthHeaders() });
 };
 
-// Soru paketini güncelle
+// Update a question package
 export const updateQuestionPackage = async (id, data) => {
-  return await axios.put(`${API_URL}/${id}`, data);
+  return await axios.put(`${API_URL}/${id}`, data, { headers: getAuthHeaders() });
 };
 
-// Soru paketini sil
+// Delete a question package
 export const deleteQuestionPackage = async (id) => {
-  return await axios.delete(`${API_URL}/${id}`);
+  return await axios.delete(`${API_URL}/${id}`, { headers: getAuthHeaders() });
 };

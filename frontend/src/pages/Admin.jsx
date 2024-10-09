@@ -1,63 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { getAllQuestionPackages, createQuestionPackage, updateQuestionPackage, deleteQuestionPackage } from '../services/questionService';
+import useQuestionStore from '../store/questionStore';
 import '../styles/Admin.css';
 
 const Admin = () => {
-  const [questionPackages, setQuestionPackages] = useState([]);
+  const {
+    questionPackages,
+    loading,
+    error,
+    fetchQuestionPackages,
+    addQuestionPackage,
+    updateQuestionPackage,
+    deleteQuestionPackage,
+  } = useQuestionStore();
+
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [packageName, setPackageName] = useState("");
-  const [questions, setQuestions] = useState([]); 
-  const [newQuestion, setNewQuestion] = useState(""); 
-  const [questionDuration, setQuestionDuration] = useState(""); 
-  const [newPackageName, setNewPackageName] = useState("");
+  const [packageName, setPackageName] = useState('');
+  const [questions, setQuestions] = useState([]);
+  const [newQuestion, setNewQuestion] = useState('');
+  const [questionDuration, setQuestionDuration] = useState('');
+  const [newPackageName, setNewPackageName] = useState('');
 
   useEffect(() => {
-    const fetchPackages = async () => {
-      const response = await getAllQuestionPackages();
-      setQuestionPackages(response.data);
-    };
-    fetchPackages();
+    fetchQuestionPackages(); // Fetch question packages on component mount
   }, []);
 
   const handleDelete = async (id) => {
-    try {
-      await deleteQuestionPackage(id);
-      setQuestionPackages(questionPackages.filter(pkg => pkg._id !== id));
-    } catch (error) {
-      console.error("Silme işleminde hata:", error);
-    }
+    await deleteQuestionPackage(id);
+    setSelectedPackage(null);
   };
 
   const handleUpdate = async (id) => {
-    try {
-      const updatedData = { packageName, questions };
-      await updateQuestionPackage(id, updatedData);
-      setQuestionPackages(questionPackages.map(pkg => 
-        pkg._id === id ? { ...pkg, packageName, questions } : pkg
-      ));
-      setPackageName("");
-      setQuestions([]);
-      setSelectedPackage(null);
-    } catch (error) {
-      console.error("Güncelleme işleminde hata:", error);
-    }
+    const updatedData = { packageName, questions };
+    await updateQuestionPackage(id, updatedData);
+    setPackageName('');
+    setQuestions([]);
+    setSelectedPackage(null);
   };
 
   const handleCreatePackage = async () => {
-    try {
-      const newPackage = { packageName: newPackageName, questions: [] };
-      const response = await createQuestionPackage(newPackage);
-      setQuestionPackages([...questionPackages, response.data]);
-      setNewPackageName("");
-    } catch (error) {
-      console.error("Paket oluşturma işleminde hata:", error);
-    }
+    const newPackage = { packageName: newPackageName, questions: [] };
+    await addQuestionPackage(newPackage);
+    setNewPackageName('');
   };
 
   const handleUpdateQuestions = (id) => {
-    const currentPackage = questionPackages.find(pkg => pkg._id === id);
+    const currentPackage = questionPackages.find((pkg) => pkg._id === id);
     if (currentPackage) {
       setSelectedPackage(id);
+      setPackageName(currentPackage.packageName);
       setQuestions(currentPackage.questions);
     }
   };
@@ -65,15 +55,18 @@ const Admin = () => {
   const handleAddQuestion = () => {
     if (newQuestion && questionDuration) {
       setQuestions([...questions, { text: newQuestion, duration: questionDuration }]);
-      setNewQuestion("");
-      setQuestionDuration("");
+      setNewQuestion('');
+      setQuestionDuration('');
     }
   };
 
   return (
     <div className="admin-container">
       <h1 className="admin-header">Manage Question Package</h1>
-      
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="error-message">{error}</p>}
+
       <div className="admin-content">
         <h2>Yeni Soru Paketi Ekle</h2>
         <input
@@ -83,7 +76,9 @@ const Admin = () => {
           placeholder="Paket adı"
           className="input-full"
         />
-        <button onClick={handleCreatePackage} className="button-primary mt-2">Ekle</button>
+        <button onClick={handleCreatePackage} className="button-primary mt-2">
+          Ekle
+        </button>
 
         <h2 className="mt-4">Soru Paketleri</h2>
         <table className="table mt-2">
@@ -95,7 +90,7 @@ const Admin = () => {
             </tr>
           </thead>
           <tbody>
-            {questionPackages.map(pkg => (
+            {questionPackages.map((pkg) => (
               <tr key={pkg._id}>
                 <td>
                   {selectedPackage === pkg._id ? (
@@ -153,26 +148,42 @@ const Admin = () => {
                           placeholder="Süre (dakika)"
                           className="input-full"
                         />
-                        <button onClick={handleAddQuestion} className="button-primary mt-2">Ekle</button>
+                        <button onClick={handleAddQuestion} className="button-primary mt-2">
+                          Ekle
+                        </button>
                       </div>
                     </div>
                   ) : (
                     pkg.questions.map((q, i) => (
-                      <div key={i}>{q.text} - {q.duration} dakika</div>
+                      <div key={i}>
+                        {q.text} - {q.duration} dakika
+                      </div>
                     ))
                   )}
                 </td>
                 <td className="table-actions">
                   {selectedPackage === pkg._id ? (
-                    <button onClick={() => handleUpdate(pkg._id)} className="button-primary">Kaydet</button>
+                    <button onClick={() => handleUpdate(pkg._id)} className="button-primary">
+                      Kaydet
+                    </button>
                   ) : (
-                    <button onClick={() => { 
-                      setSelectedPackage(pkg._id); 
-                      setPackageName(pkg.packageName); 
-                      handleUpdateQuestions(pkg._id); 
-                    }} className="button-primary">Düzenle</button>
+                    <button
+                      onClick={() => {
+                        setSelectedPackage(pkg._id);
+                        setPackageName(pkg.packageName);
+                        handleUpdateQuestions(pkg._id);
+                      }}
+                      className="button-primary"
+                    >
+                      Düzenle
+                    </button>
                   )}
-                  <button onClick={() => handleDelete(pkg._id)} className="button-primary bg-red-500 hover:bg-red-600">Sil</button>
+                  <button
+                    onClick={() => handleDelete(pkg._id)}
+                    className="button-primary bg-red-500 hover:bg-red-600"
+                  >
+                    Sil
+                  </button>
                 </td>
               </tr>
             ))}
