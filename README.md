@@ -1,6 +1,6 @@
+soru silme olucak
 
-
-# second
+# later:
 
 sifre sisteminde **hash/decode olucak**
 

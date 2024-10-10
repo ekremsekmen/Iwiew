@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useQuestionStore from '../store/questionStore';
 import useAuthStore from '../store/authStore';
+import Sidebar from '../components/Sidebar';
 import '../styles/Admin.css';
 
 const Admin = () => {
@@ -72,7 +73,8 @@ const Admin = () => {
 
   return (
     <div className="admin-container">
-      <h1 className="admin-header">Manage Question Package</h1>
+      <Sidebar />
+      <h1 className="admin-header"></h1>
 
       {loading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
