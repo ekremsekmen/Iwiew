@@ -27,7 +27,14 @@ const Admin = () => {
     fetchQuestionPackages(); // Fetch question packages on component mount
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDeleteQuestion = async (packageId, questionIndex) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions.splice(questionIndex, 1);
+    await updateQuestionPackage(packageId, { questions: updatedQuestions });
+    setQuestions(updatedQuestions);
+  };
+
+  const handleDeletePackage = async (id) => {
     await deleteQuestionPackage(id);
     setSelectedPackage(null);
   };
@@ -74,7 +81,7 @@ const Admin = () => {
   return (
     <div className="admin-container">
       <Sidebar />
-      <h1 className="admin-header"></h1>
+      <h1 className="admin-header">Admin Panel</h1>
 
       {loading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
@@ -143,6 +150,12 @@ const Admin = () => {
                             placeholder="Süre (dakika)"
                             className="input-full"
                           />
+                          <button
+                            onClick={() => handleDeleteQuestion(pkg._id, index)}
+                            className="button-primary bg-red-500 hover:bg-red-600 mt-2"
+                          >
+                            Soru Sil
+                          </button>
                         </div>
                       ))}
                       <div className="flex flex-col mt-2">
@@ -191,10 +204,10 @@ const Admin = () => {
                     </button>
                   )}
                   <button
-                    onClick={() => handleDelete(pkg._id)}
+                    onClick={() => handleDeletePackage(pkg._id)}
                     className="button-primary bg-red-500 hover:bg-red-600"
                   >
-                    Sil
+                    Paketi Sil
                   </button>
                 </td>
               </tr>
@@ -202,8 +215,7 @@ const Admin = () => {
           </tbody>
         </table>
       </div>
-      <br/><br/><br/><br/><br/>
-      <button onClick={handleLogout} className="button-primary">
+      <button onClick={handleLogout} className="button-primary mt-4">
         Logout
       </button>
     </div>

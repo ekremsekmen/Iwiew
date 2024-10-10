@@ -5,6 +5,7 @@ import Cookies from 'universal-cookie';
 //const API_URL = import.meta.env.VITE_API_URL;
 const QUESTION_URL = import.meta.env.VITE_API_URL + '/packages';
 const EDIT_DELETE_QUESTION_URL = import.meta.env.VITE_API_URL + '/packages';
+const DELETE_QUESTION_URL = import.meta.env.VITE_API_URL + '/packages';
 const cookies = new Cookies();
 
 const getAuthHeaders = () => {
@@ -30,4 +31,8 @@ export const updateQuestionPackage = async (id, data) => {
 // Delete a question package
 export const deleteQuestionPackage = async (id) => {
   return await axios.delete(`${EDIT_DELETE_QUESTION_URL}/${id}`, { headers: getAuthHeaders() });
+};
+
+export const deleteQuestionFromPackage = async (packageId, questionId) => {
+  return await axios.put(`${DELETE_QUESTION_URL}/${packageId}/questions/${questionId}`, { headers: getAuthHeaders() });
 };
