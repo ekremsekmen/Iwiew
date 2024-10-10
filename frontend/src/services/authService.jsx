@@ -3,12 +3,12 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/packages';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 // Login function
 export const login = async (username, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, {
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, {
       username,
       password,
     });
@@ -36,7 +36,7 @@ export const login = async (username, password) => {
 // Logout function
 export const logout = async () => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/logout`);
+    const response = await axios.post(`${API_BASE_URL}/auth/logout`);
     cookies.remove('authToken', { path: '/' });
     return response.data;
   } catch (error) {
