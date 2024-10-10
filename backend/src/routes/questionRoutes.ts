@@ -1,17 +1,18 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   createQuestionPackage,
   getAllQuestionPackages,
   updateQuestionPackage,
-  deleteQuestionPackage
+  deleteQuestionPackage,
+  deleteQuestionFromPackage,
 } from '../controllers/questionController';
 
-const router = express.Router();
+const router = Router();
 
-// Soru paketlerini yönetmek için CRUD işlemleri
-router.post('/packages', createQuestionPackage);  // Paket oluşturma
-router.get('/packages', getAllQuestionPackages);  // Tüm paketleri listeleme
-router.put('/packages/:id', updateQuestionPackage);  // Paket güncelleme
-router.delete('/packages/:id', deleteQuestionPackage);  // Paket silme
+router.post('/', createQuestionPackage);  // Yeni paket oluşturma
+router.get('/', getAllQuestionPackages);  // Tüm paketleri listeleme
+router.put('/:id', updateQuestionPackage);  // Paket güncelleme
+router.delete('/:id', deleteQuestionPackage);  // Paket silme
+router.delete('/:packageId/questions/:questionId', deleteQuestionFromPackage);  // Belirli bir soruyu bir paketten silme
 
 export default router;

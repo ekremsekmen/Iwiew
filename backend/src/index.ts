@@ -1,4 +1,3 @@
-// index.ts
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -18,8 +17,11 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-app.use('/api/packages', authRoutes); // Authentication routes
-app.use('/api', questionRoutes); // Question management routes
+// Authentication işlemleri için rotalar
+app.use('/api/auth', authRoutes);
+
+// Soru paketleri yönetimi için rotalar
+app.use('/api/packages', questionRoutes);
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/interviewApp')
   .then(() => {

@@ -52,3 +52,23 @@ export const deleteQuestionPackage = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error deleting question package', error });
   }
 };
+// Belirli bir soruyu bir paketten silme
+export const deleteQuestionFromPackage = async (req: Request, res: Response) => {
+  const { packageId, questionId } = req.params;
+
+  try {
+    const updatedPackage = await QuestionPackage.findByIdAndUpdate(
+      packageId,
+      { $pull: { questions: { _id: questionId } } },  // _id ile soruyu silme
+      { new: true }
+    );
+    
+    if (!updatedPackage) {
+      return res.status(404).json({ message: 'Package or Question not found' });
+    }
+
+    res.status(200).json(updatedPackage);
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting question from package', error });
+  }
+};
