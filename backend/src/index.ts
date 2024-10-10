@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes';
 import questionRoutes from './routes/questionRoutes';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import interviewRoutes from './routes/interviewRoutes';
 
 const app: Application = express();
 
@@ -22,6 +23,9 @@ app.use('/api/auth', authRoutes);
 
 // Soru paketleri yönetimi için rotalar
 app.use('/api/packages', questionRoutes);
+
+// Mülakat için rota 
+app.use('/api/interviews', interviewRoutes);
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/interviewApp')
   .then(() => {
