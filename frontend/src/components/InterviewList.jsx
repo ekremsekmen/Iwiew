@@ -16,22 +16,25 @@ const InterviewList = ({ interviews, questionpackages, onDelete }) => {  // Use 
           </tr>
         </thead>
         <tbody>
-          {interviews.map((interview) => (
-            <tr key={interview._id}>
-              <td>
-                {
-                  // Use questionpackages with lowercase 'p'
-                  questionpackages.find(pkg => pkg._id.toString() === interview.questionPackageId.toString())?.packageName || 'Unknown'
-                }
-              </td>
-              <td>{interview.totalDuration}</td>
-              <td>{interview.status}</td>
-              <td>
-                <button onClick={() => onDelete(interview._id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {interviews.map((interview) => {
+
+    const questionPackage = questionpackages.find(pkg => pkg._id.toString() === interview.questionPackageId._id?.toString() || interview.questionPackageId.toString());
+
+    return (
+      <tr key={interview._id}>
+        <td>
+          {questionPackage ? questionPackage.packageName : 'Unknown'}
+        </td>
+        <td>{interview.totalDuration}</td>
+        <td>{interview.status}</td>
+        <td>
+          <button onClick={() => onDelete(interview._id)}>Delete</button>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
       </table>
     </div>
   );
