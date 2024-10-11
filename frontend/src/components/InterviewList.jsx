@@ -17,13 +17,15 @@ const InterviewList = ({ interviews, questionpackages, onDelete }) => {  // Use 
         </thead>
         <tbody>
   {interviews.map((interview) => {
+    //console.log(questionPackage.packageName);
+    console.log(interview.questionPackageId);
 
     const questionPackage = questionpackages.find(pkg => pkg._id.toString() === interview.questionPackageId._id?.toString() || interview.questionPackageId.toString());
 
     return (
       <tr key={interview._id}>
         <td>
-          {questionPackage ? questionPackage.packageName : 'Unknown'}
+          {interview.questionPackageId.packageName}
         </td>
         <td>{interview.totalDuration}</td>
         <td>{interview.status}</td>
