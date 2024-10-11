@@ -1,12 +1,27 @@
 // src/components/InterviewForm.jsx
 import React, { useState, useEffect } from 'react';
+import { getQuestionPackages } from '../services/questionService';
 
 const InterviewForm = ({ initialValues, onSubmit, onCancel }) => {
   const [interview, setInterview] = useState(initialValues);
+  const [questionPackages, setQuestionPackages] = useState([]);
 
   useEffect(() => {
     setInterview(initialValues);
   }, [initialValues]);
+
+  useEffect(() => {
+    // Fetch question packages
+    const fetchPackages = async () => {
+      try {
+        const { data } = await getQuestionPackages();
+        setQuestionPackages(data);
+      } catch (error) {
+        console.error('Error fetching question packages:', error);
+      }
+    };
+    fetchPackages();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +35,22 @@ const InterviewForm = ({ initialValues, onSubmit, onCancel }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>{initialValues._id ? 'Edit Interview' : 'Add New Interview'}</h2>
+
+      <select
+        name="questionPackageId"
+        value={interview.questionPackageId || ''}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Select a Question Package</option>
+        {questionPackages.map((pkg) => (
+          <option key={pkg._id} value={pkg._id}>
+            {pkg.packageName}
+          </option>
+        ))}
+      </select>
+
       <input
         type="text"
         name="candidate"
