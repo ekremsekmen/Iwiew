@@ -1,11 +1,73 @@
-GÜNCELLEME !!!
+# GÜNCELLEME !!!
 
-**** Interview bütün işlevler Postman ile test edildi, çalışıyor.  
- 
-Intervıew yönetim rotaları /api/interviews altında toplandı:  
+### Interview Bütün İşlevler Postman ile Test Edildi, Çalışıyor  
 
-- **(POST)** `/api/interviews`: Yeni mülakat oluşturma  
-- **(GET)** `/api/interviews`: Tüm mülakatları listeleme  
-- **(GET)** `/api/interviews/:link`: Belirli bir mülakatı link ile getirme  
-- **(DELETE)** `/api/interviews/:id`: Belirli bir mülakatı silme  
-- **(PATCH)** `/api/interviews/:id/status`: Mülakatın durumunu güncelleme (yayında/yayında değil)
+Interview yönetim rotaları `/api/interviews` altında toplandı:
+
+---
+
+### **Interview Yönetim Rotaları:**
+
+- **(POST)** `/api/interviews`:  
+  **Yeni mülakat oluşturma**  
+  - Mevcut soru paketlerinden biri seçilerek POST isteği yapılır.
+  - Yani, backend'den mevcut soru paketleri alınır ve bu listeden mülakat için istenen soru paketi seçilir.
+  - Seçildikten sonra, `/api/interviews` yoluna seçilen soru paketi POST isteği olarak atılır ve yeni mülakat oluşturulur.
+
+  _**Not:** Backend'den mevcut soru paketlerini çekip, question management ekranında görebiliriz. `/api/packages` rotasına GET isteği yaparak tüm soru paketlerini listeleyebiliriz._
+
+- **(GET)** `/api/interviews`:  
+  **Tüm mülakatları listeleme**
+
+- **(GET)** `/api/interviews/:link`:  
+  **Belirli bir mülakatı link ile getirme**  
+  - _Link, adaylara iletilebilecek mülakatın linkidir._
+
+- **(DELETE)** `/api/interviews/:id`:  
+  **Belirli bir mülakatı silme**
+
+- **(PATCH)** `/api/interviews/:id/status`:  
+  **Mülakatın durumunu güncelleme (yayında/yayında değil durumu)**
+
+---
+
+### **Rotalarda Yapılan İşlemler:**
+
+#### 1. **Kimlik Doğrulama (Authentication) Rotaları**
+- **POST** `/api/auth/login`:  
+  Kullanıcı girişini gerçekleştirir. Kullanıcı adı ve şifre doğrulaması yapılır.
+
+- **POST** `/api/auth/logout`:  
+  Kullanıcı oturumunu sonlandırır ve başarılı bir çıkış mesajı döner.
+
+#### 2. **Soru Paketleri (Question Packages) Rotaları**
+- **POST** `/api/packages/`:  
+  Yeni bir soru paketi oluşturur.
+
+- **GET** `/api/packages/`:  
+  Tüm soru paketlerini listeler.
+
+- **PUT** `/api/packages/:id`:  
+  Belirtilen paket `id` ile soru paketini günceller.
+
+- **DELETE** `/api/packages/:id`:  
+  Belirtilen paket `id` ile soru paketini siler.
+
+- **DELETE** `/api/packages/:packageId/questions/:questionId`:  
+  Belirtilen paket `packageId` ve soru `questionId` ile bir paketten soruyu siler.
+
+#### 3. **Mülakat (Interview) Rotaları**
+- **POST** `/api/interviews/`:  
+  Yeni bir mülakat oluşturur.
+
+- **GET** `/api/interviews/`:  
+  Tüm mülakatları listeler.
+
+- **DELETE** `/api/interviews/:id`:  
+  Belirtilen `id` ile mülakatı siler.
+
+- **GET** `/api/interviews/:link`:  
+  Belirtilen link ile mülakat bilgilerini getirir.
+
+- **PATCH** `/api/interviews/:id/status`:  
+  Belirtilen mülakatın yayında olup olmadığını günceller.
