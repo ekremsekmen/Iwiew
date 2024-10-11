@@ -31,7 +31,7 @@ export const getInterviewByLink = async (link) => {
 }
 
 // Delete an interview
-export const deleteInterview = async (id) => {
+export const deleteInterviewApi = async (id) => {
   return await axios.delete(`${DELETE_SPESIFIC_INTERVIEW}/${id}`, { headers: getAuthHeaders() });
 }
 

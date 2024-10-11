@@ -1,8 +1,7 @@
 // src/components/InterviewList.jsx
 import React from 'react';
-import '../styles/InterviewList.css';
 
-const InterviewList = ({ interviews, questionpackages, onDelete }) => {  // Use lowercase 'p' in questionpackages
+const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus }) => {
   return (
     <div>
       <h2>Interview List</h2>
@@ -16,27 +15,23 @@ const InterviewList = ({ interviews, questionpackages, onDelete }) => {  // Use 
           </tr>
         </thead>
         <tbody>
-  {interviews.map((interview) => {
-    //console.log(questionPackage.packageName);
-    console.log(interview.questionPackageId);
+          {interviews.map((interview) => {
+            const questionPackage = interview.questionPackageId 
+              ? interview.questionPackageId 
+              : { packageName: 'No Package' }; // Fallback if null
 
-    const questionPackage = questionpackages.find(pkg => pkg._id.toString() === interview.questionPackageId._id?.toString() || interview.questionPackageId.toString());
-
-    return (
-      <tr key={interview._id}>
-        <td>
-          {interview.questionPackageId.packageName}
-        </td>
-        <td>{interview.totalDuration}</td>
-        <td>{interview.status}</td>
-        <td>
-          <button onClick={() => onDelete(interview._id)}>Delete</button>
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
-
+            return (
+              <tr key={interview._id}>
+                <td>{questionPackage.packageName}</td>
+                <td>{interview.totalDuration}</td>
+                <td>{interview.status}</td>
+                <td>
+                  <button onClick={() => onDelete(interview._id)}>Delete</button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </div>
   );

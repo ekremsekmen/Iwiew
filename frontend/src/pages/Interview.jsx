@@ -6,16 +6,16 @@ import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
 
 const Interview = () => {
+  const [questionPackages, setQuestionPackages] = useState([]);
   const {
     interviews,
     loading,
     error,
     fetchInterviews,
     addInterview,
-    deleteInterview,
+    handleDeleteInterview,
+    updateInterviewStatus,
   } = useInterviews();
-
-  const [questionPackages, setQuestionPackages] = useState([]);
 
   useEffect(() => {
     fetchInterviews();
@@ -23,9 +23,10 @@ const Interview = () => {
   }, []);
 
   const fetchQuestionPackages = async () => {
+    // Fetch question packages as before
     try {
-      const { data } = await getQuestionPackages(); // Fetch all question packages
-      setQuestionPackages(data); // Set the question packages state
+      const { data } = await getQuestionPackages();
+      setQuestionPackages(data);
     } catch (error) {
       console.error('Failed to fetch question packages', error);
     }
@@ -33,31 +34,26 @@ const Interview = () => {
 
   const handleAddInterview = async (newInterview) => {
     await addInterview(newInterview);
+    fetchInterviews(); // Refresh the list
   };
 
-  const handleDeleteInterview = async (id) => {
-    await deleteInterview(id);
+  const handleUpdateStatus = async (id, newStatus) => {
+    await updateInterviewStatus(id, newStatus);
+    fetchInterviews(); // Refresh the list
   };
 
   return (
     <div className="interview-container">
       <h1>Interview Management</h1>
-
       {loading && <p>Loading interviews...</p>}
       {error && <p className="error-message">{error.message}</p>}
 
-      <div className="interview-form">
-        <h2>Add New Interview</h2>
-        <InterviewForm
-          questionPackages={questionPackages} // Pass question packages to the form
-          onSubmit={handleAddInterview}
-        />
-      </div>
-
+      <InterviewForm questionPackages={questionPackages} onSubmit={handleAddInterview} />
       <InterviewList
         interviews={interviews}
-        questionpackages={questionPackages} // Pass the correct lowercase prop here
+        questionpackages={questionPackages}
         onDelete={handleDeleteInterview}
+        onUpdateStatus={handleUpdateStatus}
       />
     </div>
   );

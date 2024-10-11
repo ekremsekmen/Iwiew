@@ -1,10 +1,10 @@
-// src/hooks/useInterviews.js
+// hooks/useInterviews.js
 import { useState, useEffect } from 'react';
 import {
   getAllInterviews,
   createInterview,
+  deleteInterviewApi,
   updateInterview,
-  deleteInterview,
 } from '../services/interviewService';
 
 const useInterviews = () => {
@@ -38,26 +38,15 @@ const useInterviews = () => {
     }
   };
 
-  const updateInterview = async (id, interviewData) => {
-    try {
-      await updateInterview(id, interviewData);
-      setInterviews((prev) =>
-        prev.map((interview) =>
-          interview._id === id ? { ...interview, ...interviewData } : interview
-        )
-      );
-    } catch (err) {
-      setError(err);
-    }
+  const handleDeleteInterview = async (id) => {
+    await deleteInterviewApi(id);
+    setInterviews((prev) => prev.filter((interview) => interview._id !== id));
   };
 
-  const deleteInterview = async (id) => {
-    try {
-      await deleteInterview(id);
-      setInterviews((prev) => prev.filter((interview) => interview._id !== id));
-    } catch (err) {
-      setError(err);
-    }
+  const updateInterview = async (id, status) => {
+    await updateInterview(id, status);
+    // Optionally fetch updated interviews again
+    fetchInterviews();
   };
 
   return {
@@ -66,8 +55,8 @@ const useInterviews = () => {
     error,
     fetchInterviews,
     addInterview,
+    handleDeleteInterview,
     updateInterview,
-    deleteInterview,
   };
 };
 
