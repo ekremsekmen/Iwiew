@@ -31,10 +31,14 @@ export const createInterview = async (req: Request, res: Response) => {
   }
 };
 
-// Tüm mülakatları listeleme
 export const getAllInterviews = async (req: Request, res: Response) => {
   try {
-    const interviews = await Interview.find().populate('questionPackageId');
+    const interviews = await Interview.find()
+      .populate({
+        path: 'questionPackageId',
+        select: 'packageName createdAt updatedAt' // İstediğiniz alanları seçin
+      });
+      
     res.status(200).json(interviews);
   } catch (error) {
     res.status(500).json({ message: 'Mülakatlar getirilirken hata oluştu', error });
