@@ -33,6 +33,7 @@ Interview yönetim rotaları `/api/interviews` altında toplandı:
   "createdAt": "2024-10-11T10:05:00.123Z",
   "updatedAt": "2024-10-11T10:05:00.123Z"
 }
+ ```
 
 - **(GET)** `/api/interviews/:link`:  
   **Belirli bir mülakatı link ile getirme**  
