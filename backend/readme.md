@@ -17,7 +17,22 @@ Interview yönetim rotaları `/api/interviews` altında toplandı:
   _**Not:** Backend'den mevcut soru paketlerini çekip, question management ekranında görebiliriz. `/api/packages` rotasına GET isteği yaparak tüm soru paketlerini listeleyebiliriz._
 
 - **(GET)** `/api/interviews`:  
-  **Tüm mülakatları listeleme**
+  **Tüm mülakatları listeleme** 
+
+ ### Tüm Mülakatları Listeleme
+
+**BURADA DÖNEN CEVAP BU ŞEKİLDEDİR, (ÖRNEK OLARAK) BURAYA DİKKAT!! MÜLAKAT SÜRESİ DE DÖNDÜRÜLÜYOR.**
+
+```json
+{
+  "_id": "652c95f3c3d3d053f0a3b5f2",
+  "questionPackageId": "652c95f3c3d3d053f0a3b5a1",
+  "totalDuration": 3600,
+  "link": "http://example.com/interview/abc123",
+  "status": "pending",
+  "createdAt": "2024-10-11T10:05:00.123Z",
+  "updatedAt": "2024-10-11T10:05:00.123Z"
+}
 
 - **(GET)** `/api/interviews/:link`:  
   **Belirli bir mülakatı link ile getirme**  
@@ -71,3 +86,6 @@ Interview yönetim rotaları `/api/interviews` altında toplandı:
 
 - **PATCH** `/api/interviews/:id/status`:  
   Belirtilen mülakatın yayında olup olmadığını günceller.
+
+
+
