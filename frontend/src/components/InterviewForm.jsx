@@ -1,90 +1,38 @@
 // src/components/InterviewForm.jsx
-import React, { useState, useEffect } from 'react';
-import { getQuestionPackages } from '../services/questionService';
+import React, { useState } from 'react';
 
-const InterviewForm = ({ initialValues, onSubmit, onCancel }) => {
-  const [interview, setInterview] = useState(initialValues);
-  const [questionPackages, setQuestionPackages] = useState([]);
-
-  useEffect(() => {
-    setInterview(initialValues);
-  }, [initialValues]);
-
-  useEffect(() => {
-    // Fetch question packages
-    const fetchPackages = async () => {
-      try {
-        const { data } = await getQuestionPackages();
-        setQuestionPackages(data);
-      } catch (error) {
-        console.error('Error fetching question packages:', error);
-      }
-    };
-    fetchPackages();
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInterview({ ...interview, [name]: value });
-  };
+const InterviewForm = ({ questionPackages, onSubmit }) => {
+  const [selectedPackageId, setSelectedPackageId] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(interview);
+
+    // Check if a package has been selected
+    if (!selectedPackageId) {
+      alert('Please select a question package');
+      return;
+    }
+
+    // Submit the selected package ID
+    onSubmit({ questionPackageId: selectedPackageId });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>{initialValues._id ? 'Edit Interview' : 'Add New Interview'}</h2>
-
       <select
-        name="questionPackageId"
-        value={interview.questionPackageId || ''}
-        onChange={handleChange}
+        value={selectedPackageId}
+        onChange={(e) => setSelectedPackageId(e.target.value)}
         required
       >
         <option value="">Select a Question Package</option>
-        {questionPackages.map((pkg) => (
+        {questionPackages.map(pkg => (
           <option key={pkg._id} value={pkg._id}>
             {pkg.packageName}
           </option>
         ))}
       </select>
 
-      <input
-        type="text"
-        name="candidate"
-        value={interview.candidate}
-        onChange={handleChange}
-        placeholder="Candidate Name"
-        required
-      />
-      <input
-        type="date"
-        name="date"
-        value={interview.date}
-        onChange={handleChange}
-        required
-      />
-      <select
-        name="status"
-        value={interview.status}
-        onChange={handleChange}
-        required
-      >
-        <option value="">Select Status</option>
-        <option value="Pending">Pending</option>
-        <option value="Scheduled">Scheduled</option>
-        <option value="Completed">Completed</option>
-      </select>
-      <button type="submit" className="button-primary">
-        {initialValues._id ? 'Update' : 'Add'} Interview
-      </button>
-      {onCancel && (
-        <button type="button" onClick={onCancel} className="button-secondary">
-          Cancel
-        </button>
-      )}
+      <button type="submit">Add Interview</button>
     </form>
   );
 };

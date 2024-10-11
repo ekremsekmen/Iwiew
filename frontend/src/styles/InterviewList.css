@@ -1,0 +1,15 @@
+select {
+    background-color: #1e1e2f;
+    color: #ffffff;
+    border: 1px solid #4a4a6a;
+    border-radius: 5px;
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  option {
+    background-color: #1e1e2f;
+    color: #ffffff;
+  }
+  
