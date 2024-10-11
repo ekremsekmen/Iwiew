@@ -1,9 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';  // Login sayfanın yolunu güncelle
-import Admin from './pages/Admin';  // Admin sayfanın yolunu güncelle
-import PrivateRoute from './router/PrivateRoute';  // PrivateRoute dosyasını oluşturman gerekecek
+// src/AppRouter.jsx
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login'; 
+import AdminPanel from './pages/AdminPanel';  
+import Interview from './pages/Interview';
+import Question from './pages/Question';
+import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
-import { Navigate } from 'react-router-dom';
 
 const AppRouter = () => {
   return (
@@ -18,13 +20,16 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/admin"
+          path="/admin/*"
           element={
             <PrivateRoute>
-              <Admin />
+              <AdminPanel />
             </PrivateRoute>
           }
-        />
+        >
+          <Route path="question" element={<Question />} />
+          <Route path="interview" element={<Interview />} />
+        </Route>
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

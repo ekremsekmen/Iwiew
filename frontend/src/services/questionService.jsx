@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie';
 const QUESTION_URL = import.meta.env.VITE_API_URL + '/packages';
 const EDIT_DELETE_QUESTION_URL = import.meta.env.VITE_API_URL + '/packages';
 const DELETE_QUESTION_URL = import.meta.env.VITE_API_URL + '/packages';
+
 const cookies = new Cookies();
 
 const getAuthHeaders = () => {
@@ -13,14 +14,14 @@ const getAuthHeaders = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
+// Get all question packages
+export const getQuestionPackages = async () => {
+  return await axios.get(`${QUESTION_URL}`, { headers: getAuthHeaders() });
+};
+
 // Create a new question package
 export const createQuestionPackage = async (data) => {
   return await axios.post(`${QUESTION_URL}`, data, { headers: getAuthHeaders() });
-};
-
-// Get all question packages
-export const getAllQuestionPackages = async () => {
-  return await axios.get(`${QUESTION_URL}`, { headers: getAuthHeaders() });
 };
 
 // Update a question package
