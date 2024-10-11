@@ -4,15 +4,18 @@ import { getQuestionPackages, createQuestionPackage, updateQuestionPackage, dele
 
 const useQuestionPackages = () => {
   const [packages, setPackages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchPackages = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const { data } = await getQuestionPackages();
       setPackages(data);
     } catch (err) {
-      setError(err);
+      setError('Failed to fetch question packages');
+      console.error('Fetch Error:', err);
     } finally {
       setLoading(false);
     }
@@ -23,31 +26,46 @@ const useQuestionPackages = () => {
   }, []);
 
   const addQuestionPackage = async (packageData) => {
+    setLoading(true);
+    setError(null);
     try {
       const { data: newPackage } = await createQuestionPackage(packageData);
       setPackages((prev) => [...prev, newPackage]);
     } catch (err) {
-      setError(err);
+      setError('Failed to create question package');
+      console.error('Create Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateQuestionPackage = async (id, packageData) => {
+  const updateQuestionPackageHandler = async (id, packageData) => {
+    setLoading(true);
+    setError(null);
     try {
       await updateQuestionPackage(id, packageData);
       setPackages((prev) =>
         prev.map((pkg) => (pkg._id === id ? { ...pkg, ...packageData } : pkg))
       );
     } catch (err) {
-      setError(err);
+      setError('Failed to update question package');
+      console.error('Update Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteQuestionPackage = async (id) => {
+  const deleteQuestionPackageHandler = async (id) => {
+    setLoading(true);
+    setError(null);
     try {
       await deleteQuestionPackage(id);
       setPackages((prev) => prev.filter((pkg) => pkg._id !== id));
     } catch (err) {
-      setError(err);
+      setError('Failed to delete question package');
+      console.error('Delete Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,8 +75,8 @@ const useQuestionPackages = () => {
     error,
     fetchPackages,
     addQuestionPackage,
-    updateQuestionPackage,
-    deleteQuestionPackage,
+    updateQuestionPackage: updateQuestionPackageHandler,
+    deleteQuestionPackage: deleteQuestionPackageHandler,
   };
 };
 
