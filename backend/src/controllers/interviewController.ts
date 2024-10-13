@@ -45,26 +45,36 @@ export const getAllInterviews = async (req: Request, res: Response) => {
   }
 };
 
-// Link ile mülakat getirme fonksiyonu
-export const getInterviewByLink = async (req: Request, res: Response) => {
-  const { link } = req.params;  // URL'den gelen link parametresini al
+export const getInterviewById = async (req: Request, res: Response) => {
+  const { id } = req.params;
 
   try {
-    // Veritabanında link ile mülakatı bul
-    const interview = await Interview.findOne({ link }).populate('questionPackageId');
-    
-    // Eğer mülakat bulunamadıysa hata mesajı gönder
+    const interview = await Interview.findById(id)
+      .populate({
+        path: 'questionPackageId',
+        select: 'packageName questions', // Select only packageName and questions
+        populate: {
+          path: 'questions',
+          select: 'content duration' // Select only content and duration for each question
+        }
+      });
+
     if (!interview) {
       return res.status(404).json({ message: 'Mülakat bulunamadı' });
     }
 
-    // Mülakat bulunduysa veriyi geri döndür
-    res.status(200).json(interview);
+    // Prepare response object excluding unnecessary fields
+    const response = {
+      _id: interview._id,
+      questionPackageId: interview.questionPackageId,
+    };
+
+    res.status(200).json(response);
   } catch (error) {
-    // Hata durumunda mesaj döndür
     res.status(500).json({ message: 'Mülakat getirilirken hata oluştu', error });
   }
 };
+
 
 export const deleteInterview = async (req: Request, res: Response) => {
     const { id } = req.params;
