@@ -1,7 +1,8 @@
 // src/components/InterviewList.jsx
 import React from 'react';
 import '../styles/InterviewList.css';
-const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus }) => {
+
+const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus, onShowQuestions }) => {
   return (
     <div>
       <h2>Interview List</h2>
@@ -12,6 +13,7 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus 
             <th>Total Duration (seconds)</th>
             <th>Status</th>
             <th>Actions</th>
+            <th>Details</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +29,7 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus 
                 <td>{interview.status}</td>
                 <td>
                   <button onClick={() => onDelete(interview._id)}>Delete</button>
+                  <button onClick={() => onShowQuestions(interview._id)}>?</button>
                 </td>
               </tr>
             );

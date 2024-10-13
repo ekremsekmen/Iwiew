@@ -10,6 +10,10 @@ const PATCH_SPESIFIC_INTERVIEW = import.meta.env.VITE_API_URL + '/interviews';
 
 const cookies = new Cookies();
 
+export const getInterviewDetails = async (id) => {
+  return await axios.get(`${GET_SPESIFIC_INTERVIEW}/${id}`); // Ensure the endpoint matches your API
+};
+
 const getAuthHeaders = () => {
     const token = cookies.get('authToken');
     return token ? { Authorization: `Bearer ${token}` } : {};
