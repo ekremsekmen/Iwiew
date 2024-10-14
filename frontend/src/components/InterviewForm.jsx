@@ -1,16 +1,24 @@
-// src/components/InterviewForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const InterviewForm = ({ questionPackages, onSubmit }) => {
   const [selectedPackageId, setSelectedPackageId] = useState('');
+  const [canSkip, setCanSkip] = useState(false);
+  const [showAtOnce, setShowAtOnce] = useState(false);
+  const [expireDate, setExpireDate] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedPackageId) {
-      alert('Please select a question package');
+    if (!selectedPackageId || !expireDate) {
+      alert('Please select a question package and enter an expiration date');
       return;
     }
-    onSubmit({ questionPackageId: selectedPackageId });
+
+    onSubmit({
+      questionPackageId: selectedPackageId,
+      canSkip,
+      showAtOnce,
+      expireDate,
+    });
   };
 
   return (
@@ -27,6 +35,35 @@ const InterviewForm = ({ questionPackages, onSubmit }) => {
           </option>
         ))}
       </select>
+
+      <label>
+        Can Skip:
+        <input
+          type="checkbox"
+          checked={canSkip}
+          onChange={(e) => setCanSkip(e.target.checked)}
+        />
+      </label>
+
+      <label>
+        Show At Once:
+        <input
+          type="checkbox"
+          checked={showAtOnce}
+          onChange={(e) => setShowAtOnce(e.target.checked)}
+        />
+      </label>
+
+      <label>
+        Expire Date:
+        <input
+          type="date"
+          value={expireDate}
+          onChange={(e) => setExpireDate(e.target.value)}
+          required
+        />
+      </label>
+
       <button type="submit">Add Interview</button>
     </form>
   );
