@@ -1,5 +1,53 @@
 # GÜNCELLEME !!! YENİ İŞLEV EKLENDİ !
 
+
+ **(POST)** `/api/interviews`: Bu rotaya aşağıdaki gibi içerikle post isteği atıldığında yeni bir mülakat oluşturulur.
+ - Önceden "canSkip" , "showAtOnce" ,  "expireDate" gibi alanlarımız yoktu mülakat oluştururken bunları ekledik.
+ - Artık mülakat oluşturma ekranında bu parametreler de verilerek mülakat oluşturulur. 
+
+ - !! ÖNEMLİ NOT : Buradaki expireDate parametresi expireDate: { type: Date, required: true }, olarak oluşturulmuştur.Yani değer girilmezse ya da  yanlış girilirse , hata verecektir.
+ - !! ÖNEMLİ NOT : canSkip parametresi ;  default: false olarak ayarlanmıştır.        // Varsayılan: Geçme hakkı yok
+ - !! ÖNEMLİ NOT : showAtOnce , parametresi ; default: false olarak ayarlanmıştır.     // Varsayılan: Sıralı göster
+    
+
+```json 
+{
+  "questionPackageId": "670d100045785130b35d8010",   
+  "canSkip": true,
+  "showAtOnce": true,
+  "expireDate": "2024-12-31T23:59:59Z"
+}
+```
+
+- İstek atıldığında dönen veri budur : 
+
+```json 
+
+{
+    "questionPackageId": "670d100045785130b35d8010",
+    "totalDuration": 2,
+    "link": "7dfe1473-65fc-4291-9ce9-7d0c54b21def",
+    "status": "pending",
+    "canSkip": true,
+    "showAtOnce": true,
+    "expireDate": "2024-12-31T23:59:59.000Z",
+    "_id": "670d53d2bac3d2ffe5535710",
+    "createdAt": "2024-10-14T17:24:34.802Z",
+    "updatedAt": "2024-10-14T17:24:34.802Z",
+    "__v": 0
+}
+
+```
+
+
+---
+
+---
+
+
+
+
+
 - **Interview Soru Paket Bilgisi Dönme İşlevi:**
 
   - Postman ile test edildi çalışıyor.

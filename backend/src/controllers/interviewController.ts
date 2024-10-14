@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';  // Benzersiz link oluşturmak için
 
 // Mülakat oluşturma
 export const createInterview = async (req: Request, res: Response) => {
-  const { questionPackageId } = req.body;
+  const { questionPackageId, canSkip, showAtOnce, expireDate } = req.body;
 
   try {
     const questionPackage = await QuestionPackage.findById(questionPackageId);
@@ -22,6 +22,9 @@ export const createInterview = async (req: Request, res: Response) => {
       questionPackageId,
       totalDuration,
       link,
+      canSkip,           // Formdan gelen atlama hakkı
+      showAtOnce,        // Formdan gelen sıralı gösterim ayarı
+      expireDate,        // Formdan gelen mülakat bitiş tarihi
     });
 
     await newInterview.save();
