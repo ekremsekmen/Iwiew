@@ -1,37 +1,8 @@
 /* src/styles/AdminPanel.css */
 .admin-panel {
-    display: flex;
-    min-height: 100vh;
-  }
-  
-  .sidebar {
-    width: 250px;
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-right: 1px solid #ccc;
-  }
-  
-  .admin-content {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  /* Add some styles to the sidebar links */
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    margin-bottom: 10px;
-  }
-  
-  .sidebar a {
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .sidebar a:hover {
-    color: #007bff;
-  }
-  
+  @apply flex min-h-screen;
+}
+
+.admin-content {
+  @apply flex-1 p-6;
+}

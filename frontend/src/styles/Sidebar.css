@@ -1,27 +1,24 @@
 /* src/styles/Sidebar.css */
 .sidebar {
-    width: 250px;
-    background-color: #f4f4f4;
-    padding: 20px;
-    height: 100vh;
-  }
-  
-  .sidebar h2 {
-    margin-bottom: 20px;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    margin-bottom: 10px;
-    cursor: pointer;
-    color: #007bff;
-  }
-  
-  .sidebar li:hover {
-    text-decoration: underline;
-  }
-  
+  @apply w-64 bg-gray-200 p-4 flex flex-col h-screen;
+}
+
+.sidebar h2 {
+  @apply text-xl font-semibold mb-4;
+}
+
+.sidebar ul {
+  @apply list-none p-0;
+}
+
+.sidebar li {
+  @apply mb-4 cursor-pointer;
+}
+
+.sidebar a {
+  @apply text-blue-500 hover:underline;
+}
+
+.logout-button {
+  @apply w-full bg-gray-200 text-gray-600 font-semibold py-2 rounded-full shadow-md hover:bg-gray-300;
+}

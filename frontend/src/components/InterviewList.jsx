@@ -1,6 +1,6 @@
 // src/components/InterviewList.jsx
 import React from 'react';
-import '../styles/InterviewList.css';
+import '../styles/style.css';
 
 const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus, onShowQuestions }) => {
   return (

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import useQuestionPackages from '../hooks/useQuestionPackages';
 import QuestionForm from '../components/QuestionForm';
 import QuestionList from '../components/QuestionList';
+import '../styles/style.css';
 
 const Questions = () => {
   const {

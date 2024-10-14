@@ -5,6 +5,7 @@ import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
 import { getInterviewDetails } from '../services/interviewService'; // Import the function to fetch interview details
+import '../styles/style.css';
 
 const Interview = () => {
   const [questionPackages, setQuestionPackages] = useState([]);
