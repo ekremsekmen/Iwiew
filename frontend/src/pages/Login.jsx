@@ -23,8 +23,10 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div>
       <h2>IWiew Admin Panel</h2>
+    <div className="login-container">
+      
       <form onSubmit={handleSubmit}>
         {error && <p className="error-message">{error}</p>} {/* Display error message */}
         <input
@@ -43,6 +45,7 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+    </div>
     </div>
   );
 };
