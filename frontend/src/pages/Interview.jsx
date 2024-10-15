@@ -3,13 +3,14 @@ import useInterviews from '../hooks/useInterviews';
 import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
-import { getInterviewDetails } from '../services/interviewService'; // Import the function to fetch interview details
+import { getInterviewDetails } from '../services/interviewService';
 import '../styles/style.css';
 import Modal from '../components/Modal';
 
 const Interview = () => {
   const [questionPackages, setQuestionPackages] = useState([]);
-  const [selectedInterview, setSelectedInterview] = useState(null); // State for selected interview details
+  const [selectedInterview, setSelectedInterview] = useState(null); // For interview details
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for form
   const {
     interviews,
     loading,
@@ -26,7 +27,6 @@ const Interview = () => {
   }, []);
 
   const fetchQuestionPackages = async () => {
-    // Fetch question packages as before
     try {
       const { data } = await getQuestionPackages();
       setQuestionPackages(data);
@@ -38,17 +38,13 @@ const Interview = () => {
   const handleAddInterview = async (newInterview) => {
     await addInterview(newInterview);
     fetchInterviews(); // Refresh the list
-  };
-
-  const handleUpdateStatus = async (id, newStatus) => {
-    await updateInterviewStatus(id, newStatus);
-    fetchInterviews(); // Refresh the list
+    setIsModalOpen(false); // Close modal after submission
   };
 
   const handleShowQuestions = async (id) => {
     try {
-      const response = await getInterviewDetails(id); // Fetch interview details
-      setSelectedInterview(response.data); // Set the interview details to state
+      const response = await getInterviewDetails(id);
+      setSelectedInterview(response.data);
     } catch (error) {
       console.error('Error fetching interview details:', error);
     }
@@ -60,13 +56,21 @@ const Interview = () => {
       {loading && <p>Loading interviews...</p>}
       {error && <p className="error-message">{error.message}</p>}
 
-      <InterviewForm questionPackages={questionPackages} onSubmit={handleAddInterview} />
+      {/* Button to open modal */}
+      <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">+ Add Interview</button>
+
+      {/* Modal for creating a new interview */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2>Create New Interview</h2>
+        <InterviewForm questionPackages={questionPackages} onSubmit={handleAddInterview} />
+      </Modal>
+
       <InterviewList
         interviews={interviews}
         questionpackages={questionPackages}
         onDelete={handleDeleteInterview}
-        onUpdateStatus={handleUpdateStatus}
-        onShowQuestions={handleShowQuestions} // Pass the function to show questions
+        onUpdateStatus={updateInterviewStatus}
+        onShowQuestions={handleShowQuestions}
       />
 
       {/* Modal to display selected interview details */}
