@@ -1,5 +1,46 @@
-# GÜNCELLEME !!! YENİ İŞLEV EKLENDİ !
+# İNTERVİEW STATE UPDATE OPERATİON 
 
+Mülakatın Durumunu Güncelleme İşlevi:  **!! PATCH İSTEĞİ ATILIYOR DİKKAT !!**
+
+  -	**(PATCH)** /api/interviews/:id/status:
+	-	Bu rota, belirli bir mülakatın durumunu güncellemeyi sağlar (örneğin, pending, published, unpublished).
+	-	İstek örneği aşağıdaki gibi olabilir:
+
+```json 
+{
+  "status": "published"
+}
+```
+
+•	İstek atıldığında dönen cevap:
+
+```json 
+{
+  "_id": "670ee871082b77ac4cc33fcb",
+  "questionPackageId": "670e69a8d4424e77e890ed3a",
+  "totalDuration": 6,
+  "link": "c4fc2fd0-ac7b-4403-98dc-69350f9705b5",
+  "status": "published",
+  "canSkip": true,
+  "showAtOnce": true,
+  "expireDate": "2024-10-15T00:00:00.000Z",
+  "createdAt": "2024-10-15T22:10:57.201Z",
+  "updatedAt": "2024-10-15T22:23:26.087Z",
+  "__v": 0
+}
+```
+  - •	ÖNEMLİ NOT: İstek body’sinde “status” alanı published ya da unpublished olarak belirtilmelidir. Eğer farklı bir değer verilirse, sistem hata dönecektir:
+	- "Geçersiz durum değeri" şeklinde hata alırsınız.
+
+  - Bu işlev sayesinde mülakatlar üzerinde yayında olup olmadığını kontrol etme ve değiştirme gibi işlemler yapılabilir.
+
+
+---
+---
+---
+---
+
+# * OLD *
 
  **(POST)** `/api/interviews`: Bu rotaya aşağıdaki gibi içerikle post isteği atıldığında yeni bir mülakat oluşturulur.
  - Önceden "canSkip" , "showAtOnce" ,  "expireDate" gibi alanlarımız yoktu mülakat oluştururken bunları ekledik.
