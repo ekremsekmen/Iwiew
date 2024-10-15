@@ -1,4 +1,3 @@
-// src/pages/Interview.jsx
 import React, { useState, useEffect } from 'react';
 import useInterviews from '../hooks/useInterviews';
 import InterviewForm from '../components/InterviewForm';
@@ -6,6 +5,7 @@ import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
 import { getInterviewDetails } from '../services/interviewService'; // Import the function to fetch interview details
 import '../styles/style.css';
+import Modal from '../components/Modal';
 
 const Interview = () => {
   const [questionPackages, setQuestionPackages] = useState([]);
@@ -69,9 +69,9 @@ const Interview = () => {
         onShowQuestions={handleShowQuestions} // Pass the function to show questions
       />
 
-      {/* Modal or section to display selected interview details */}
+      {/* Modal to display selected interview details */}
       {selectedInterview && (
-        <div className="question-package-details">
+        <Modal isOpen={!!selectedInterview} onClose={() => setSelectedInterview(null)}>
           <h2>Question Package: {selectedInterview.questionPackageId?.packageName}</h2>
           <ul>
             {selectedInterview.questionPackageId?.questions.map((question) => (
@@ -80,7 +80,7 @@ const Interview = () => {
               </li>
             ))}
           </ul>
-        </div>
+        </Modal>
       )}
     </div>
   );
