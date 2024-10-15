@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Question from './Question';
 import Interview from './Interview';
-import '../styles/style.css';
 
 const AdminPanel = () => {
   return (

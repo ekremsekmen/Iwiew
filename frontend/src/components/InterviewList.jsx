@@ -1,8 +1,7 @@
-// src/components/InterviewList.jsx
 import React from 'react';
-import '../styles/style.css';
+import '../styles/InterviewList.css';
 
-const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus, onShowQuestions }) => {
+const InterviewList = ({ interviews, questionpackages, onDelete, onShowQuestions }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Interview List</h2>
@@ -13,7 +12,6 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus,
             <th className="py-2 px-4 border">Total Duration (seconds)</th>
             <th className="py-2 px-4 border">Status</th>
             <th className="py-2 px-4 border">Actions</th>
-            <th className="py-2 px-4 border">Details</th>
             <th className="py-2 px-4 border">Can Skip</th>
             <th className="py-2 px-4 border">Show at Once</th>
             <th className="py-2 px-4 border">Expire Date</th>
@@ -29,7 +27,12 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus,
               <tr key={interview._id} className="hover:bg-gray-100 transition duration-200">
                 <td className="py-2 px-4 border">{questionPackage.packageName}</td>
                 <td className="py-2 px-4 border">{interview.totalDuration || 0}</td>
-                <td className="py-2 px-4 border">{interview.status}</td>
+                
+                {/* Display Status as Text */}
+                <td className="py-2 px-4 border">
+                  {interview.status} {/* Display the status fetched from the backend */}
+                </td>
+
                 <td className="py-2 px-4 border">
                   <button onClick={() => onDelete(interview._id)} className="text-red-600 hover:text-red-800 mr-2">Delete</button>
                   <button onClick={() => onShowQuestions(interview._id)} className="text-blue-600 hover:text-blue-800">?</button>

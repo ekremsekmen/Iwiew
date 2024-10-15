@@ -1,8 +1,108 @@
-/* src/styles/InterviewList.css */
+/* General Sidebar Styles */
+
+
+/* Login Page Styles */
+.login-container {
+    @apply min-h-screen flex items-center justify-center bg-gray-200;
+}
+
+.login-container h2 {
+    @apply text-2xl font-bold mb-6 text-gray-800;
+}
+
+.login-container input {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500;
+}
+
+.login-container button {
+    @apply w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300;
+}
+
+.error-message {
+    @apply text-red-500 text-center mb-4;
+}
+
+.sidebar {
+    @apply w-64 bg-gray-200 p-4 flex flex-col h-screen;
+}
+
+.sidebar h2 {
+    @apply text-xl font-semibold mb-4;
+}
+
+.sidebar ul {
+    @apply list-none p-0;
+}
+
+.sidebar li {
+    @apply mb-4 cursor-pointer;
+}
+
+.sidebar a {
+    @apply text-blue-500 hover:underline;
+}
+
+.logout-button {
+    @apply w-full bg-gray-200 text-gray-600 font-semibold py-2 rounded-full shadow-md hover:bg-gray-300;
+}
+
+/* Admin Panel Layout */
+.admin-panel {
+    @apply flex min-h-screen;
+}
+
+.admin-content {
+    @apply flex-1 p-6;
+}
+
+/* Question Management (Table and Input Styling) */
+.header {
+    @apply text-3xl font-semibold mb-6;
+}
+
+.table-container {
+    @apply bg-white shadow-md rounded-lg p-4;
+}
+
+.table {
+    @apply w-full table-auto border border-gray-300; /* Added border */
+}
+
+.table th {
+    @apply bg-gray-100 text-gray-600 font-semibold p-3 text-left;
+}
+
+.table td {
+    @apply border-t border-gray-200 p-3;
+}
+
+.table-row {
+    @apply bg-gray-50 hover:bg-gray-100;
+}
+
+/* Button Styles for Form (Save, Cancel, Edit, Delete) */
+.form-button {
+    @apply bg-gray-200 text-gray-600 py-2 px-4 rounded-full shadow-md w-auto my-2 mx-2;
+}
+
+.form-button:hover {
+    @apply bg-gray-300;
+}
+
+/* Input Fields */
+.input-field {
+    @apply bg-white text-gray-700 border border-gray-300 rounded-full py-2 px-4 shadow-md w-full my-2;
+}
+
+.input-field:focus {
+    @apply ring-2 ring-blue-300;
+}
+
+/* Interview List Dropdown */
 select {
-  @apply bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 w-full mb-4;
+    @apply bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 w-full mb-4;
 }
 
 option {
-  @apply bg-gray-800 text-white;
+    @apply bg-gray-800 text-white;
 }

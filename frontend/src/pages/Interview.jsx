@@ -4,7 +4,6 @@ import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
 import { getInterviewDetails } from '../services/interviewService';
-import '../styles/style.css';
 import Modal from '../components/Modal';
 
 const Interview = () => {
@@ -50,6 +49,16 @@ const Interview = () => {
     }
   };
 
+  // New function to handle status change
+  const handleStatusChange = async (interviewId, newStatus) => {
+    try {
+      await updateInterviewStatus(interviewId, newStatus); // Call your hook's status update method
+      fetchInterviews(); // Refresh interviews after status update
+    } catch (error) {
+      console.error('Error updating interview status:', error);
+    }
+  };
+
   return (
     <div className="interview-container">
       <h1>Interview Management</h1>
@@ -67,9 +76,9 @@ const Interview = () => {
 
       <InterviewList
         interviews={interviews}
-        questionpackages={questionPackages}
+        questionPackages={questionPackages}
         onDelete={handleDeleteInterview}
-        onUpdateStatus={updateInterviewStatus}
+        onUpdateStatus={handleStatusChange} // Pass status change handler here
         onShowQuestions={handleShowQuestions}
       />
 
