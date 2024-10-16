@@ -120,40 +120,6 @@ const Interview = () => {
         onCopyLink={handleCopyLink} // Link kopyalama işlevini gönder
       />
 
-      {/* Link ile mülakat çekme */}
-      <div className="fetch-by-link">
-        <h2>Fetch Interview by Link</h2>
-        <input
-          type="text"
-          placeholder="Enter Interview Link"
-          value={link}
-          onChange={(e) => setLink(e.target.value)} // Link state'ini güncelle
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <button onClick={handleFetchInterviewByLink} className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2">
-          Fetch
-        </button>
-      </div>
-
-      {/* Link ile gelen mülakat bilgilerini göster */}
-      {interviewByLink && (
-        <div className="mt-6">
-          <h3>Interview Details</h3>
-          <p>Total Duration: {interviewByLink.totalDuration} seconds</p>
-          <p>Can Skip: {interviewByLink.canSkip ? 'Yes' : 'No'}</p>
-          <p>Show at Once: {interviewByLink.showAtOnce ? 'Yes' : 'No'}</p>
-
-          <h3>Questions</h3>
-          <ul>
-            {interviewByLink.questions && interviewByLink.questions.map((question, index) => (
-              <li key={index}>
-                {question.content} - {question.duration} seconds
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       {/* Seçilen mülakat detaylarını göster */}
       {selectedInterview && (
         <Modal isOpen={!!selectedInterview} onClose={() => setSelectedInterview(null)}>

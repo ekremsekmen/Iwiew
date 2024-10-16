@@ -2,6 +2,9 @@
 import React from 'react';
 import '../styles/InterviewList.css';
 
+//const GET_SPESIFIC_INTERVIEW_LINK = import.meta.env.VITE_GET_SPESIFIC_INTERVIEW_LINK;
+const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL
+
 const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
   return (
     <div>
@@ -45,7 +48,7 @@ const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus,
                   <button onClick={() => onShowQuestions(interview._id)} className="text-blue-600 hover:text-blue-800">?</button>
                 </td>
                 <td className="py-2 px-4 border">
-                  <button onClick={() => onCopyLink(interview.link)} className="text-green-600 hover:text-green-800">Copy Link</button>
+                  <button onClick={() => onCopyLink(`${FRONTEND_BASE_URL}/interview/${interview.link}`)} className="text-green-600 hover:text-green-800">Copy Link</button>
                 </td>
                 <td className="py-2 px-4 border">{interview.canSkip ? 'Yes' : 'No'}</td>
                 <td className="py-2 px-4 border">{interview.showAtOnce ? 'Yes' : 'No'}</td>
