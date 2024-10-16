@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/InterviewList.css';
 
-const InterviewList = ({ interviews, questionpackages, onDelete, onShowQuestions }) => {
+const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus, onShowQuestions }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Interview List</h2>
@@ -28,9 +28,17 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onShowQuestions
                 <td className="py-2 px-4 border">{questionPackage.packageName}</td>
                 <td className="py-2 px-4 border">{interview.totalDuration || 0}</td>
                 
-                {/* Display Status as Text */}
+                {/* Status Dropdown */}
                 <td className="py-2 px-4 border">
-                  {interview.status} {/* Display the status fetched from the backend */}
+                  <select
+                    value={interview.status}
+                    onChange={(e) => onUpdateStatus(interview._id, e.target.value)} // Call the update function on change
+                    className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:border-blue-500"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="published">Published</option>
+                    <option value="unpublished">Unpublished</option>
+                  </select>
                 </td>
 
                 <td className="py-2 px-4 border">

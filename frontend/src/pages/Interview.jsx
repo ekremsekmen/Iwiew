@@ -5,6 +5,7 @@ import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
 import { getInterviewDetails } from '../services/interviewService';
 import Modal from '../components/Modal';
+import '../styles/InterviewList.css';
 
 const Interview = () => {
   const [questionPackages, setQuestionPackages] = useState([]);
