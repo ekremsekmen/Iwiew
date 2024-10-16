@@ -1,6 +1,55 @@
+# ÇOK KRİTİK GÜNCELLEME !! 
+
+- Burada kullandığımız link az önceki güncellemede interview dan aldığımız linktir. **GET** /api/interviews ile bütün mülakatları
+ve mülakatın linkini alabiliriz.
+
+**GET** "api/interviews/link/:link"
+
+- Amaç
+- Bu rota, belirli bir mülakata ait bilgileri, mülakata özel bir bağlantı (link) kullanarak almak için kullanılır.
+
+- İstek
+- URL: GET /api/interviews/link/:link
+- Parametre: :link (Mülakatın benzersiz bağlantısı, örneğin: 8d1e9be0-bd25-48a8-bef9-9c4cb0dbd9cc)
+
+- GET /api/interviews/link/8d1e9be0-bd25-48a8-bef9-9c4cb0dbd9cc
+- Cevap:
+
+Dönen Veri:
+
+```json
+{
+  "questions": [
+    {
+      "content": "Soru 1",
+      "duration": 30
+    },
+    {
+      "content": "Soru 2",
+      "duration": 45
+    }
+  ],
+  "canSkip": true,
+  "showAtOnce": false,
+  "totalDuration": 75
+}
+```
+
+
+
+
+--- 
+--- 
+---
+
+
+
+
+
+
 # İNTERVİEW STATE UPDATE OPERATİON 
 
-Mülakatın Durumunu Güncelleme İşlevi:  **!! PATCH İSTEĞİ ATILIYOR DİKKAT !!**
+- Mülakatın Durumunu Güncelleme İşlevi:  **!! PATCH İSTEĞİ ATILIYOR DİKKAT !!**
 
   -	**(PATCH)** /api/interviews/:id/status:
 	-	Bu rota, belirli bir mülakatın durumunu güncellemeyi sağlar (örneğin, pending, published, unpublished).

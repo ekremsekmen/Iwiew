@@ -122,3 +122,40 @@ export const updateInterviewStatus = async (req: Request, res: Response) => {
     }
   };
   
+  // Mülakatı link ile görüntüleme
+  export const getInterviewByLink = async (req: Request, res: Response) => {
+    const { link } = req.params;
+  
+    try {
+      // Verilen link ile mülakatı bul
+      const interview = await Interview.findOne({ link })
+        .populate({
+          path: 'questionPackageId',
+          select: 'questions', // Sadece questions alanını seç
+          populate: {
+            path: 'questions', // Soruların içeriklerini doldur
+            select: 'content duration' // Sadece içerik ve süreleri al
+          }
+        });
+  
+      // Mülakat bulunamadıysa
+      if (!interview) {
+        return res.status(404).json({ message: 'Mülakat bulunamadı' });
+      }
+  
+      // Erişimi kontrol edelim, interview.questionPackageId referanslanmış olmalı
+      const questionPackage = interview.questionPackageId as any; // Burada tip dönüşümü yaparak deneyelim
+  
+      const response = {
+        questions: questionPackage.questions,  // Soru ve süreleri döndür
+        canSkip: interview.canSkip,           // Geçiş hakkı var mı?
+        showAtOnce: interview.showAtOnce,     // Hepsini birden mi göster?
+        totalDuration: interview.totalDuration // Toplam süre
+      };
+  
+      res.status(200).json(response); // Sadeleştirilmiş JSON cevabı
+    } catch (error) {
+      res.status(500).json({ message: 'Mülakat getirilirken hata oluştu', error });
+    }
+  };
+  
