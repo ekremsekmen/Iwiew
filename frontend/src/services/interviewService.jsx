@@ -7,6 +7,7 @@ const CREATE_INTERVIEWS = import.meta.env.VITE_API_URL + '/interviews';
 const GET_SPESIFIC_INTERVIEW = import.meta.env.VITE_API_URL + '/interviews';
 const DELETE_SPESIFIC_INTERVIEW = import.meta.env.VITE_API_URL + '/interviews';
 const PATCH_SPESIFIC_INTERVIEW = import.meta.env.VITE_API_URL + '/interviews';
+const GET_INTERVIEW_BY_LINK = import.meta.env.VITE_API_URL + '/interviews/link';
 
 const cookies = new Cookies();
 
@@ -31,7 +32,7 @@ export const createInterview = async (data) => {
 
 // get speficic interview
 export const getInterviewByLink = async (link) => {
-  return await axios.get(`${GET_SPESIFIC_INTERVIEW}/${link}`, { headers: getAuthHeaders() });
+  return await axios.get(`${GET_INTERVIEW_BY_LINK}`, { headers: getAuthHeaders() });
 }
 
 // Delete an interview

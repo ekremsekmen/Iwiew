@@ -1,9 +1,10 @@
+// src/pages/Interview.jsx
 import React, { useState, useEffect } from 'react';
 import useInterviews from '../hooks/useInterviews';
 import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
-import { getInterviewDetails } from '../services/interviewService';
+import { getInterviewDetails } from '../services/interviewService'; // Import necessary services
 import Modal from '../components/Modal';
 import '../styles/InterviewList.css';
 
@@ -60,6 +61,17 @@ const Interview = () => {
     }
   };
 
+  // Function to copy the interview link to the clipboard
+  const handleCopyLink = (link) => {
+    navigator.clipboard.writeText(link)
+      .then(() => {
+        alert('Link copied to clipboard!');
+      })
+      .catch((err) => {
+        console.error('Failed to copy link: ', err);
+      });
+  };
+
   return (
     <div className="interview-container">
       <h1>Interview Management</h1>
@@ -81,6 +93,7 @@ const Interview = () => {
         onDelete={handleDeleteInterview}
         onUpdateStatus={handleStatusChange} // Pass status change handler here
         onShowQuestions={handleShowQuestions}
+        onCopyLink={handleCopyLink} // Pass the copy link function here
       />
 
       {/* Modal to display selected interview details */}
