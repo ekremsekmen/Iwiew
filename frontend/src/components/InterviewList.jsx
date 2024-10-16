@@ -2,7 +2,7 @@
 import React from 'react';
 import '../styles/InterviewList.css';
 
-const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
+const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Interview List</h2>
@@ -13,7 +13,7 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus,
             <th className="py-2 px-4 border">Total Duration (seconds)</th>
             <th className="py-2 px-4 border">Status</th>
             <th className="py-2 px-4 border">Actions</th>
-            <th className="py-2 px-4 border">Link</th> {/* Added for Copy Link */}
+            <th className="py-2 px-4 border">Link</th>
             <th className="py-2 px-4 border">Can Skip</th>
             <th className="py-2 px-4 border">Show at Once</th>
             <th className="py-2 px-4 border">Expire Date</th>
@@ -29,12 +29,10 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus,
               <tr key={interview._id} className="hover:bg-gray-100 transition duration-200">
                 <td className="py-2 px-4 border">{questionPackage.packageName}</td>
                 <td className="py-2 px-4 border">{interview.totalDuration || 0}</td>
-
-                {/* Status Dropdown */}
                 <td className="py-2 px-4 border">
                   <select
                     value={interview.status}
-                    onChange={(e) => onUpdateStatus(interview._id, e.target.value)} // Call the update function on change
+                    onChange={(e) => onUpdateStatus(interview._id, e.target.value)}
                     className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:border-blue-500"
                   >
                     <option value="pending">Pending</option>
@@ -42,17 +40,13 @@ const InterviewList = ({ interviews, questionpackages, onDelete, onUpdateStatus,
                     <option value="unpublished">Unpublished</option>
                   </select>
                 </td>
-
                 <td className="py-2 px-4 border">
                   <button onClick={() => onDelete(interview._id)} className="text-red-600 hover:text-red-800 mr-2">Delete</button>
                   <button onClick={() => onShowQuestions(interview._id)} className="text-blue-600 hover:text-blue-800">?</button>
                 </td>
-
-                {/* Copy Link Column */}
                 <td className="py-2 px-4 border">
                   <button onClick={() => onCopyLink(interview.link)} className="text-green-600 hover:text-green-800">Copy Link</button>
                 </td>
-
                 <td className="py-2 px-4 border">{interview.canSkip ? 'Yes' : 'No'}</td>
                 <td className="py-2 px-4 border">{interview.showAtOnce ? 'Yes' : 'No'}</td>
                 <td className="py-2 px-4 border">{interview.expireDate ? interview.expireDate.split('T')[0] : 'N/A'}</td>

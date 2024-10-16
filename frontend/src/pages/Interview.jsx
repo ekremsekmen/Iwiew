@@ -4,18 +4,21 @@ import useInterviews from '../hooks/useInterviews';
 import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
-import { getInterviewDetails } from '../services/interviewService'; // Import necessary services
+import { getInterviewDetails, getInterviewByLink } from '../services/interviewService'; // getInterviewByLink eklendi
 import Modal from '../components/Modal';
 import '../styles/InterviewList.css';
 
 const Interview = () => {
   const [questionPackages, setQuestionPackages] = useState([]);
-  const [selectedInterview, setSelectedInterview] = useState(null); // For interview details
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for form
+  const [selectedInterview, setSelectedInterview] = useState(null); // Seçilen mülakatın detayları
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal durum kontrolü
+  const [link, setLink] = useState(''); // Mülakat linki girişi için state
+  const [interviewByLink, setInterviewByLink] = useState(null); // Link ile getirilen mülakat bilgisi
+  const [loading, setLoading] = useState(false); // Yüklenme durumu
+  const [error, setError] = useState(null); // Hata durumu
+
   const {
     interviews,
-    loading,
-    error,
     fetchInterviews,
     addInterview,
     handleDeleteInterview,
@@ -38,8 +41,8 @@ const Interview = () => {
 
   const handleAddInterview = async (newInterview) => {
     await addInterview(newInterview);
-    fetchInterviews(); // Refresh the list
-    setIsModalOpen(false); // Close modal after submission
+    fetchInterviews(); // Listeyi yenile
+    setIsModalOpen(false); // Modalı kapat
   };
 
   const handleShowQuestions = async (id) => {
@@ -47,56 +50,111 @@ const Interview = () => {
       const response = await getInterviewDetails(id);
       setSelectedInterview(response.data);
     } catch (error) {
-      console.error('Error fetching interview details:', error);
+      console.error('Mülakat detayları alınırken hata oluştu:', error);
     }
   };
 
-  // New function to handle status change
+  // Mülakat durumunu güncelleme işlevi
   const handleStatusChange = async (interviewId, newStatus) => {
     try {
-      await updateInterviewStatus(interviewId, newStatus); // Call your hook's status update method
-      fetchInterviews(); // Refresh interviews after status update
+      await updateInterviewStatus(interviewId, newStatus); // Durumu güncelle
+      fetchInterviews(); // Durum güncellenince listeyi yenile
     } catch (error) {
-      console.error('Error updating interview status:', error);
+      console.error('Mülakat durumu güncellenirken hata oluştu:', error);
     }
   };
 
-  // Function to copy the interview link to the clipboard
+  // Mülakat linki ile mülakat bilgisi çekme işlevi
+  const handleFetchInterviewByLink = async () => {
+    if (!link) {
+      alert('Lütfen geçerli bir link girin');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await getInterviewByLink(link); // Link ile mülakat bilgisi getir
+      setInterviewByLink(response.data); // Gelen veriyi state'e yerleştir
+    } catch (error) {
+      console.error('Link ile mülakat bilgisi alınırken hata:', error);
+      setError('Mülakat bilgisi alınırken hata oluştu.');
+    } finally {
+      setLoading(false); // Yükleme durumunu kapat
+    }
+  };
+
+  // Mülakat linkini panoya kopyalama işlevi
   const handleCopyLink = (link) => {
     navigator.clipboard.writeText(link)
       .then(() => {
-        alert('Link copied to clipboard!');
+        alert('Link panoya kopyalandı!');
       })
       .catch((err) => {
-        console.error('Failed to copy link: ', err);
+        console.error('Link kopyalanırken hata oluştu:', err);
       });
   };
 
   return (
     <div className="interview-container">
       <h1>Interview Management</h1>
-      {loading && <p>Loading interviews...</p>}
-      {error && <p className="error-message">{error.message}</p>}
+      {loading && <p>Loading interview details...</p>}
+      {error && <p className="error-message">{error}</p>}
 
-      {/* Button to open modal */}
+      {/* Yeni mülakat eklemek için modal */}
       <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">+ Add Interview</button>
 
-      {/* Modal for creating a new interview */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2>Create New Interview</h2>
         <InterviewForm questionPackages={questionPackages} onSubmit={handleAddInterview} />
       </Modal>
 
+      {/* Mülakatları listeleme */}
       <InterviewList
         interviews={interviews}
         questionPackages={questionPackages}
         onDelete={handleDeleteInterview}
-        onUpdateStatus={handleStatusChange} // Pass status change handler here
+        onUpdateStatus={handleStatusChange} // Durum değişikliği işlevini gönder
         onShowQuestions={handleShowQuestions}
-        onCopyLink={handleCopyLink} // Pass the copy link function here
+        onCopyLink={handleCopyLink} // Link kopyalama işlevini gönder
       />
 
-      {/* Modal to display selected interview details */}
+      {/* Link ile mülakat çekme */}
+      <div className="fetch-by-link">
+        <h2>Fetch Interview by Link</h2>
+        <input
+          type="text"
+          placeholder="Enter Interview Link"
+          value={link}
+          onChange={(e) => setLink(e.target.value)} // Link state'ini güncelle
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <button onClick={handleFetchInterviewByLink} className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2">
+          Fetch
+        </button>
+      </div>
+
+      {/* Link ile gelen mülakat bilgilerini göster */}
+      {interviewByLink && (
+        <div className="mt-6">
+          <h3>Interview Details</h3>
+          <p>Total Duration: {interviewByLink.totalDuration} seconds</p>
+          <p>Can Skip: {interviewByLink.canSkip ? 'Yes' : 'No'}</p>
+          <p>Show at Once: {interviewByLink.showAtOnce ? 'Yes' : 'No'}</p>
+
+          <h3>Questions</h3>
+          <ul>
+            {interviewByLink.questions && interviewByLink.questions.map((question, index) => (
+              <li key={index}>
+                {question.content} - {question.duration} seconds
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Seçilen mülakat detaylarını göster */}
       {selectedInterview && (
         <Modal isOpen={!!selectedInterview} onClose={() => setSelectedInterview(null)}>
           <h2>Question Package: {selectedInterview.questionPackageId?.packageName}</h2>

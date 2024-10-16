@@ -32,7 +32,7 @@ export const createInterview = async (data) => {
 
 // get speficic interview
 export const getInterviewByLink = async (link) => {
-  return await axios.get(`${GET_INTERVIEW_BY_LINK}`, { headers: getAuthHeaders() });
+  return await axios.get(`${GET_INTERVIEW_BY_LINK}/${link}`, { headers: getAuthHeaders() });
 }
 
 // Delete an interview
