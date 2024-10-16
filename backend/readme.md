@@ -3,6 +3,8 @@
 - Burada kullandığımız link az önceki güncellemede interview dan aldığımız linktir. **GET** /api/interviews ile bütün mülakatları
 ve mülakatın linkini alabiliriz.
 
+- AŞAĞIDAKİNİ ÇALIŞTIRMAK İÇİN ÖNCE COPY LİNK İŞLEVİNİ YAPIP LİNKİ ALMAMIZ GEREKLİ.!
+
 **GET** "api/interviews/link/:link"
 
 - Amaç
@@ -37,13 +39,21 @@ Dönen Veri:
 
 
 
+## END ## 
+
 
 --- 
 --- 
 ---
 
 
-
+---
+---
+---
+---
+---
+---
+  -   ###### DONE ######
 
 
 
