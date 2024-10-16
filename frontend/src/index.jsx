@@ -30,11 +30,11 @@ const AppRouter = () => {
         >
 
           <Route path="question" element={<Question />} />
-          <Route path="interview" element={<Interview />} />
+          <Route path="interviews" element={<Interview />} />
         </Route>
 
         <Route
-          path="/interview/:link"
+          path="/interviews/link/:link"
           element={
             <PrivateRoute>
               <InterviewCandidate />

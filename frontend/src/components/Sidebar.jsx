@@ -20,7 +20,7 @@ function Sidebar() {
           <Link to="/admin/question">Manage Questions</Link>
         </li>
         <li>
-          <Link to="/admin/interview">Interview Management</Link>
+          <Link to="/admin/interviews">Interview Management</Link>
         </li>
         <li>
           <button onClick={handleLogout} className="link-button">

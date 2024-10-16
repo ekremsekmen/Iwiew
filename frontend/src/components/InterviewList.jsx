@@ -48,7 +48,7 @@ const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus,
                   <button onClick={() => onShowQuestions(interview._id)} className="text-blue-600 hover:text-blue-800">?</button>
                 </td>
                 <td className="py-2 px-4 border">
-                  <button onClick={() => onCopyLink(`${FRONTEND_BASE_URL}/interview/${interview.link}`)} className="text-green-600 hover:text-green-800">Copy Link</button>
+                  <button onClick={() => onCopyLink(`${FRONTEND_BASE_URL}/interviews/link/${interview.link}`)} className="text-green-600 hover:text-green-800">Copy Link</button>
                 </td>
                 <td className="py-2 px-4 border">{interview.canSkip ? 'Yes' : 'No'}</td>
                 <td className="py-2 px-4 border">{interview.showAtOnce ? 'Yes' : 'No'}</td>

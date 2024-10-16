@@ -12,7 +12,7 @@ const AdminPanel = () => {
       <div className="admin-content">
         <Routes>
           <Route path="/question" element={<Question />} />
-          <Route path="/interview" element={<Interview />} />
+          <Route path="/interviews" element={<Interview />} />
         </Routes>
       </div>
     </div>
