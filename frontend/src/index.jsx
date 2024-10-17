@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import AdminPanel from './pages/AdminPanel';  
 import Interview from './pages/Interview';
 import Question from './pages/Question';
-import InterviewCandidate from './pages/InterviewCandicate';
+import InterviewCandidate from './pages/InterviewCandicate';  // Adayların erişeceği sayfa
 import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
 
@@ -28,18 +28,14 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         >
-
           <Route path="question" element={<Question />} />
           <Route path="interviews" element={<Interview />} />
         </Route>
 
+        {/* InterviewCandidate route no longer uses PrivateRoute */}
         <Route
           path="/interviews/link/:link"
-          element={
-            <PrivateRoute>
-              <InterviewCandidate />
-            </PrivateRoute>
-          }
+          element={<InterviewCandidate />}
         />
 
         <Route path="*" element={<Navigate to="/login" />} />
