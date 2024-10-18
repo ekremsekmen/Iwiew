@@ -1,3 +1,228 @@
+# TITLE ALANI GÜNCELLEMESİ : 19 EKİM CUMARTESİ
+
+- Tabii, title ile ilgili yapılan değişiklikleri aşağıda detaylı bir şekilde not aldım:
+
+## Title Alanı ile İlgili Yapılan Değişiklikler
+
+### Yeni Mülakat Oluşturma
+
+**Endpoint:** `POST /api/interviews`
+
+#### Yapılan Değişiklikler:
+- **Yeni Alan:** `title` alanı eklendi.
+- Mülakat oluştururken `title` alanı da artık gereklidir ve kullanıcıdan alınacaktır.
+
+#### Örnek İstek:
+```json
+{
+  "title": "Yeni Mülakat Başlığı",   // Yeni eklenen title alanı
+  "questionPackageId": "670d100045785130b35d8010",   
+  "canSkip": true,
+  "showAtOnce": true,
+  "expireDate": "2024-12-31T23:59:59Z"
+}
+```
+
+#### Dönen Veri:
+```json
+{
+  "title": "Yeni Mülakat Başlığı",  // Yeni eklenen title alanı
+  "questionPackageId": "670d100045785130b35d8010",
+  "totalDuration": 75,
+  "link": "7dfe1473-65fc-4291-9ce9-7d0c54b21def",
+  "status": "pending",
+  "canSkip": true,
+  "showAtOnce": true,
+  "expireDate": "2024-12-31T23:59:59.000Z",
+  "_id": "670d53d2bac3d2ffe5535710",
+  "createdAt": "2024-10-14T17:24:34.802Z",
+  "updatedAt": "2024-10-14T17:24:34.802Z",
+  "__v": 0
+}
+```
+
+### Tüm Mülakatları Listeleme
+
+**Endpoint:** `GET /api/interviews`
+
+#### Yapılan Değişiklikler:
+- **Dönen Veri:** Artık her mülakatın `title` alanı da dönen veriye eklendi.
+
+#### Örnek Dönen Veri:
+```json
+[
+  {
+    "_id": "652c95f3c3d3d053f0a3b5f2",
+    "title": "Yeni Mülakat Başlığı",  // Yeni eklenen title alanı
+    "questionPackageId": "652c95f3c3d3d053f0a3b5a1",
+    "totalDuration": 3600,
+    "link": "http://example.com/interview/abc123",
+    "status": "pending",
+    "createdAt": "2024-10-11T10:05:00.123Z",
+    "updatedAt": "2024-10-11T10:05:00.123Z"
+  }
+]
+```
+
+### Belirli Bir Mülakatı ID ile Getirme
+
+**Endpoint:** `GET /api/interviews/:id`
+
+#### Yapılan Değişiklikler:
+- **Dönen Veri:** Artık mülakatın `title` alanı da dönen veriye eklendi.
+
+#### Örnek Dönen Veri:
+```json
+{
+  "_id": "670b19f11a5fad306cb602f9",
+  "title": "Yeni Mülakat Başlığı",  // Yeni eklenen title alanı
+  "questionPackageId": {
+    "_id": "6709264fcb0376a8b8b08913",
+    "packageName": "ikinci soru paketi",
+    "questions": [
+      {
+        "content": "Soru a",
+        "duration": 10,
+        "_id": "6709264fcb0376a8b8b08914"
+      },
+      {
+        "content": "Soru b",
+        "duration": 12,
+        "_id": "6709264fcb0376a8b8b08915"
+      },
+      {
+        "content": "backend developer",
+        "duration": 2,
+        "_id": "670b12200efbaeda8eb02cfb"
+      }
+    ]
+  }
+}
+```
+
+### Belirli Bir Mülakatı Link ile Getirme
+
+**Endpoint:** `GET /api/interviews/link/:link`
+
+#### Yapılan Değişiklikler:
+- **Dönen Veri:** Artık mülakatın `title` alanı da dönen veriye eklendi.
+
+#### Örnek Dönen Veri:
+```json
+{
+  "title": "Yeni Mülakat Başlığı",  // Yeni eklenen title alanı
+  "questions": [
+    {
+      "content": "Soru 1",
+      "duration": 30
+    },
+    {
+      "content": "Soru 2",
+      "duration": 45
+    }
+  ],
+  "canSkip": true,
+  "showAtOnce": false,
+  "totalDuration": 75
+}
+```
+
+### Belirli Bir Mülakatı Silme
+
+**Endpoint:** `DELETE /api/interviews/:id`
+
+#### Yapılan Değişiklikler:
+- Herhangi bir değişiklik yok.
+
+### Mülakatın Durumunu Güncelleme
+
+**Endpoint:** `PATCH /api/interviews/:id/status`
+
+#### Yapılan Değişiklikler:
+- **Dönen Veri:** Artık mülakatın `title` alanı da dönen veriye eklendi.
+
+#### Örnek Dönen Veri:
+```json
+{
+  "_id": "670ee871082b77ac4cc33fcb",
+  "title": "Yeni Mülakat Başlığı",  // Yeni eklenen title alanı
+  "questionPackageId": "670e69a8d4424e77e890ed3a",
+  "totalDuration": 6,
+  "link": "c4fc2fd0-ac7b-4403-98dc-69350f9705b5",
+  "status": "published",
+  "canSkip": true,
+  "showAtOnce": true,
+  "expireDate": "2024-10-15T00:00:00.000Z",
+  "createdAt": "2024-10-15T22:10:57.201Z",
+  "updatedAt": "2024-10-15T22:23:26.087Z",
+  "__v": 0
+}
+```
+
+### BU KISMI MUTLAKA OKUMALISIN ###
+
+- İnterview oluştururken title alanı da girilmeli artık front end interview oluştururken böyle bir alan oluşturulmalı title girilebilen.
+- Bu titlelar interviewların listelendiği ana sayfada her interview ın title ı olarak görüntülenecek artık.
+- Sonuç olarak sadece tıtle alanını ekledik , mülakat oluşturulurken giriliyor ve bu title mülakatları listelerken görüntülerken alınıyor. 
+
+
+
+---
+---
+### END ###
+---
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+---
+---
+---
+---
+---
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # ÇOK KRİTİK GÜNCELLEME !! 
 
 - Burada kullandığımız link az önceki güncellemede interview dan aldığımız linktir. **GET** /api/interviews ile bütün mülakatları

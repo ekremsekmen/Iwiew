@@ -6,9 +6,10 @@ interface Interview extends Document {
   totalDuration: number;
   link: string;
   status: string;
-  canSkip: boolean;          // Soruları atlama hakkı
-  showAtOnce: boolean;       // Soruların hepsini bir anda mı gösterelim?
-  expireDate: Date;          // Mülakatın geçerlilik süresi
+  canSkip: boolean;
+  showAtOnce: boolean;
+  expireDate: Date;
+  title: string;          // Yeni alan: Title
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,9 +19,10 @@ const InterviewSchema = new Schema<Interview>({
   totalDuration: { type: Number, required: true },
   link: { type: String, required: true },
   status: { type: String, default: 'pending' },
-  canSkip: { type: Boolean, default: false },        // Varsayılan: Geçme hakkı yok
-  showAtOnce: { type: Boolean, default: false },     // Varsayılan: Sıralı göster
-  expireDate: { type: Date, required: true },        // Bitiş tarihi zorunlu
+  canSkip: { type: Boolean, default: false },
+  showAtOnce: { type: Boolean, default: false },
+  expireDate: { type: Date, required: true },
+  title: { type: String, required: true },  // Yeni alan: Title
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
