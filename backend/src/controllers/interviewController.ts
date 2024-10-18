@@ -147,6 +147,8 @@ export const updateInterviewStatus = async (req: Request, res: Response) => {
       const questionPackage = interview.questionPackageId as any; // Burada tip dönüşümü yaparak deneyelim
   
       const response = {
+
+        interviewId: interview._id, // Mülakatın ID'si
         questions: questionPackage.questions,  // Soru ve süreleri döndür
         canSkip: interview.canSkip,           // Geçiş hakkı var mı?
         showAtOnce: interview.showAtOnce,     // Hepsini birden mi göster?
