@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const InterviewForm = ({ questionPackages, onSubmit }) => {
+  const [interviewName, setInterviewName] = useState('');
   const [selectedPackageId, setSelectedPackageId] = useState('');
   const [canSkip, setCanSkip] = useState(false);
   const [showAtOnce, setShowAtOnce] = useState(false);
@@ -14,6 +15,7 @@ const InterviewForm = ({ questionPackages, onSubmit }) => {
     }
 
     onSubmit({
+      title: interviewName,
       questionPackageId: selectedPackageId,
       canSkip,
       showAtOnce,
@@ -23,6 +25,16 @@ const InterviewForm = ({ questionPackages, onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <label>
+        Interview Name:
+      </label>
+
+      <input
+        type={interviewName}
+        onChange={(e) => setInterviewName(e.target.value)}
+        required
+      />
+
       <select
         value={selectedPackageId}
         onChange={(e) => setSelectedPackageId(e.target.value)}

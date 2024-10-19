@@ -5,13 +5,14 @@ import '../styles/InterviewList.css';
 //const GET_SPESIFIC_INTERVIEW_LINK = import.meta.env.VITE_GET_SPESIFIC_INTERVIEW_LINK;
 const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL
 
-const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
+const InterviewList = ({ interviewName, interviews, questionPackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Interview List</h2>
       <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
         <thead className="bg-gray-200">
           <tr>
+            <th className="py-2 px-4 border">Title</th>
             <th className="py-2 px-4 border">Question Package</th>
             <th className="py-2 px-4 border">Total Duration (seconds)</th>
             <th className="py-2 px-4 border">Status</th>
@@ -30,6 +31,7 @@ const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus,
 
             return (
               <tr key={interview._id} className="hover:bg-gray-100 transition duration-200">
+                <td className="py-2 px-4 border">{interview.title}</td>
                 <td className="py-2 px-4 border">{questionPackage.packageName}</td>
                 <td className="py-2 px-4 border">{interview.totalDuration || 0}</td>
                 <td className="py-2 px-4 border">

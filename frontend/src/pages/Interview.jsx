@@ -112,6 +112,7 @@ const Interview = () => {
 
       {/* Mülakatları listeleme */}
       <InterviewList
+        
         interviews={interviews}
         questionPackages={questionPackages}
         onDelete={handleDeleteInterview}
