@@ -1,24 +1,55 @@
-/* src/styles/Sidebar.css */
+/* Admin Panel Layout */
+.admin-panel {
+  display: flex;
+  min-height: 100vh; /* Ensure the layout fills the viewport height */
+}
+
 .sidebar {
-  @apply w-64 bg-gray-200 p-4 flex flex-col h-screen;
+  width: 16rem; /* Fixed width */
+  background-color: #2D3748; /* Dark sidebar color */
+  padding: 1.5rem;
+  position: fixed; /* Fix the sidebar in place */
+  top: 0;
+  left: 0;
+  height: 100vh; /* Sidebar takes full viewport height */
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar h2 {
-  @apply text-xl font-semibold mb-4;
+.admin-content {
+  margin-left: 16rem; /* Main content moves to the right of sidebar */
+  padding: 2rem;
+  width: calc(100% - 16rem); /* Ensures content uses remaining space */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+  flex-grow: 1; /* Take up the remaining space */
 }
 
-.sidebar ul {
-  @apply list-none p-0;
-}
-
-.sidebar li {
-  @apply mb-4 cursor-pointer;
-}
-
+/* Sidebar link styles */
 .sidebar a {
-  @apply text-blue-500 hover:underline;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #A0AEC0;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #E2E8F0; /* Lighter hover */
 }
 
 .logout-button {
-  @apply w-full bg-gray-200 text-gray-600 font-semibold py-2 rounded-full shadow-md hover:bg-gray-300;
+  background-color: #E53E3E;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-top: auto; /* Push logout button to the bottom */
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #C53030;
 }
