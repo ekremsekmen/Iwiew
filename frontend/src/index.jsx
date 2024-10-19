@@ -43,7 +43,7 @@ const AppRouter = () => {
         />
 
         <Route
-          path="/interview/candidate/:interviewLink"
+          path="/interviews/link/:interviewLink"
           element={<CandidateInterview />} // This is the interview page after form submission
         />
 

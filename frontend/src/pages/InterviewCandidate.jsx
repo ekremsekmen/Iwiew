@@ -1,11 +1,11 @@
 // src/pages/InterviewCandidate.jsx
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { submitCandidateForm } from '../services/interviewService'; // API service to submit form
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // useNavigate for frontend routing
+import { submitCandidateForm } from '../services/interviewService'; // API call
 
 const InterviewCandidate = () => {
-  const { interviewId } = useParams(); // Extract interviewId from the URL
-  const navigate = useNavigate(); // For redirection
+  const { interviewId } = useParams(); // Extract interviewId from URL
+  const navigate = useNavigate(); // Initialize navigate for frontend redirection
 
   const [formData, setFormData] = useState({
     name: '',
@@ -14,9 +14,9 @@ const InterviewCandidate = () => {
     phone: '',
     kvkk: false, // Default value is false
   });
-  const [formError, setFormError] = useState(null); // Error state for form submission
+  const [formError, setFormError] = useState(null); // Track form errors
 
-  // Handle form input changes
+  // Handle input changes in the form
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -38,11 +38,11 @@ const InterviewCandidate = () => {
     try {
       // Submit the candidate form to the API
       const response = await submitCandidateForm(interviewId, formData);
-      // Extract interviewLink from the response
       const { interviewLink } = response.data;
+
+      // Redirect to frontend interview page, using interviewLink for details
+      navigate(`/interviews/link/${interviewLink}`); // Redirect to frontend page
       
-      // Redirect to the interview link for the candidate
-      navigate(`/interview/candidate/${interviewLink}`);
     } catch (err) {
       // Handle form submission error
       setFormError('Form submission failed. Please try again.');
