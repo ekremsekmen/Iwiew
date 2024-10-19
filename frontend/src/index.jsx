@@ -4,7 +4,8 @@ import Login from './pages/Login';
 import AdminPanel from './pages/AdminPanel';  
 import Interview from './pages/Interview';
 import Question from './pages/Question';
-import InterviewCandidate from './pages/InterviewCandicate';  // Adayların erişeceği sayfa
+import InterviewCandidate from './pages/InterviewCandidate';  // Candidate page
+import CandidateInterview from './pages/CandidateInterview';
 import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
 
@@ -12,6 +13,7 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
+        {/* Public routes */}
         <Route
           path="/login"
           element={
@@ -20,6 +22,8 @@ const AppRouter = () => {
             </PublicRoute>
           }
         />
+
+        {/* Admin Panel routes (Private) */}
         <Route
           path="/admin/*"
           element={
@@ -32,12 +36,18 @@ const AppRouter = () => {
           <Route path="interviews" element={<Interview />} />
         </Route>
 
-        {/* InterviewCandidate route no longer uses PrivateRoute */}
+        {/* PUBLIC route for candidates to submit form */}
         <Route
-          path="/interviews/link/:link"
-          element={<InterviewCandidate />}
+          path="/candidates/:interviewId"
+          element={<InterviewCandidate />} // InterviewCandidate is PUBLIC
         />
 
+        <Route
+          path="/interview/candidate/:interviewLink"
+          element={<CandidateInterview />} // This is the interview page after form submission
+        />
+
+        {/* Default redirect for invalid URLs */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

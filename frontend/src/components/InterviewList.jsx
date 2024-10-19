@@ -2,10 +2,20 @@
 import React from 'react';
 import '../styles/InterviewList.css';
 
-//const GET_SPESIFIC_INTERVIEW_LINK = import.meta.env.VITE_GET_SPESIFIC_INTERVIEW_LINK;
-const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL
+const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
 
-const InterviewList = ({ interviewName, interviews, questionPackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
+const InterviewList = ({ interviews, questionPackages, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
+  const handleCopyLink = (interviewId) => {
+    const candidateFormLink = `${FRONTEND_BASE_URL}/candidates/${interviewId}`;
+    navigator.clipboard.writeText(candidateFormLink)
+      .then(() => {
+        alert('Candidate submission link copied to clipboard!');
+      })
+      .catch((err) => {
+        console.error('Error copying link:', err);
+      });
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Interview List</h2>
@@ -27,7 +37,7 @@ const InterviewList = ({ interviewName, interviews, questionPackages, onDelete, 
           {interviews.map((interview) => {
             const questionPackage = interview.questionPackageId 
               ? interview.questionPackageId 
-              : { packageName: 'No Package' }; // Fallback if null
+              : { packageName: 'No Package' };
 
             return (
               <tr key={interview._id} className="hover:bg-gray-100 transition duration-200">
@@ -50,7 +60,7 @@ const InterviewList = ({ interviewName, interviews, questionPackages, onDelete, 
                   <button onClick={() => onShowQuestions(interview._id)} className="text-blue-600 hover:text-blue-800">?</button>
                 </td>
                 <td className="py-2 px-4 border">
-                  <button onClick={() => onCopyLink(`${FRONTEND_BASE_URL}/interviews/link/${interview.link}`)} className="text-green-600 hover:text-green-800">Copy Link</button>
+                  <button onClick={() => handleCopyLink(interview._id)} className="text-green-600 hover:text-green-800">Copy Link</button>
                 </td>
                 <td className="py-2 px-4 border">{interview.canSkip ? 'Yes' : 'No'}</td>
                 <td className="py-2 px-4 border">{interview.showAtOnce ? 'Yes' : 'No'}</td>

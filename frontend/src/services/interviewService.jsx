@@ -2,6 +2,7 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 const GET_ALL_INTERVIEWS = import.meta.env.VITE_API_URL + '/interviews';
 const CREATE_INTERVIEWS = import.meta.env.VITE_API_URL + '/interviews';
 const GET_SPESIFIC_INTERVIEW = import.meta.env.VITE_API_URL + '/interviews';
@@ -10,6 +11,10 @@ const PATCH_SPESIFIC_INTERVIEW = import.meta.env.VITE_API_URL + '/interviews';
 const GET_SPESIFIC_INTERVIEW_LINK = import.meta.env.VITE_API_URL + '/interviews/link';
 
 const cookies = new Cookies();
+
+export const submitCandidateForm = (interviewId, formData) => {
+  return axios.post(`${VITE_API_URL}/candidates/${interviewId}`, formData);
+};
 
 export const getInterviewDetails = async (id) => {
   return await axios.get(`${GET_SPESIFIC_INTERVIEW}/${id}`); // Ensure the endpoint matches your API
