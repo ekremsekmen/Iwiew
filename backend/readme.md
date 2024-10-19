@@ -33,7 +33,7 @@
   ```json
   {
     "message": "Bilgiler başarıyla kaydedildi. Mülakata yönlendiriliyorsunuz.",
-    "interviewLink": "http://example.com/interview/123456"
+    "interviewLink": "12345621221"
   }
   ```
   - `message`: İşlemin başarılı olduğunu belirten mesaj.
