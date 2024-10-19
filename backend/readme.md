@@ -1,3 +1,103 @@
+
+### ADAY BİLGİ FORMU VE MÜLAKATA YÖNLENDİRME İŞLEVİ ### 
+
+### Aday Formunu Gönderme İşlevi: 
+
+- ŞUAN COPY LİNK İLE BİZDE SADECE DİREKT OLARAK MÜLAKATA YÖNLENDİRİYOR.YAPMAMIZ GEREKEN COPY LİNK İLE BU URL Yİ KOPYLAMAK : 
+  `/api/candidates/:interviewId` ARDINDAN BU URL DEKİ AÇILAN FORMDA ADAYIN BİLGİLERİ GİRİLDİKTEN SONRA SUBMİT EDİLDİĞİNDE CEVAP OLARAK GİRİLECEK
+  MÜLAKATIN LİNKİ DÖNECEKTİR.
+
+- **(POST)** `/api/candidates/:interviewId`: Bu rota, belirli bir mülakata ait aday formunun gönderilmesini sağlar.
+
+- **İstek Detayları:**
+  - **HTTP Metodu:** POST
+  - **URL Parametresi:** 
+    - `:interviewId`: Adayın katılacağı mülakatın ID'si.
+  - **İstek Gövdesi (Body):**
+    ```json
+    {
+      "name": "John",
+      "surname": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "555-555-5555",
+      "kvkk": true
+    }
+    ```
+    - `name`: Adayın adı.
+    - `surname`: Adayın soyadı.
+    - `email`: Adayın e-posta adresi.
+    - `phone`: Adayın telefon numarası.
+    - `kvkk`: KVKK onayı (true/false).
+
+- **İstek atıldığında dönen cevap:**
+  ```json
+  {
+    "message": "Bilgiler başarıyla kaydedildi. Mülakata yönlendiriliyorsunuz.",
+    "interviewLink": "http://example.com/interview/123456"
+  }
+  ```
+  - `message`: İşlemin başarılı olduğunu belirten mesaj.
+  - `interviewLink`: Adayın yönlendirileceği mülakatın linkini içeren sayfasının bağlantısı.
+
+- **Hata Durumları:**
+  - Mülakat ID'si bulunamazsa:
+    ```json
+    {
+      "message": "Mülakat bulunamadı"
+    }
+    ```
+  - KVKK onayı verilmemişse:
+    ```json
+    {
+      "message": "KVKK onayı gereklidir."
+    }
+    ```
+  - Sunucu hatası durumunda:
+    ```json
+    {
+      "message": "Aday bilgileri kaydedilirken hata oluştu",
+      "error": "Hata detayı"
+    }
+    ```
+
+- **ÖNEMLİ NOT:** 
+  - İstek body’sinde `kvkk` alanının true olarak belirtilmesi gerekmektedir. Eğer `kvkk` alanı false veya eksik olursa, sistem hata dönecektir: "KVKK onayı gereklidir." şeklinde hata alırsınız.
+  - Bu işlev sayesinde adayların form bilgilerini belirli bir mülakata kaydedebilir ve ilgili mülakat sayfasına yönlendirme yapılabilir.
+  
+
+
+
+
+
+
+
+
+
+---
+# END # 
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # TITLE ALANI GÜNCELLEMESİ : 19 EKİM CUMARTESİ
 
 - Tabii, title ile ilgili yapılan değişiklikleri aşağıda detaylı bir şekilde not aldım:
