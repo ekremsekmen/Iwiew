@@ -69,7 +69,7 @@ const Questions = () => {
   };
 
   return (
-    <div className="questions-container">
+    <div className="questions-container" style={{ marginRight: '300px' }}>
       <h1>Question Management</h1>
 
       {loading && <p>Loading question packages...</p>}

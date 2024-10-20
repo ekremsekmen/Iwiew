@@ -97,7 +97,7 @@ const Interview = () => {
   };
 
   return (
-    <div className="interview-container">
+    <div className="interview-container" style={{ marginRight: '300px' }}>
       <h1>Interview Management</h1>
       {loading && <p>Loading interview details...</p>}
       {error && <p className="error-message">{error}</p>}

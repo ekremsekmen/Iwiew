@@ -1,4 +1,5 @@
 /* General page styles */
+
 .questions-container {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -132,6 +133,7 @@ button.button-delete:hover {
 /* List of questions inside each package */
 .questions-list {
   padding-top: 10px;
+
 }
 
 .question-item {
