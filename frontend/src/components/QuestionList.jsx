@@ -1,5 +1,6 @@
 // src/components/QuestionList.jsx
 import React from 'react';
+import '../styles/Question.css';
 
 const QuestionList = ({ packages, onEdit, onDelete }) => {
   if (!packages || packages.length === 0) {

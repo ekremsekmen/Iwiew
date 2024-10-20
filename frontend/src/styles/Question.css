@@ -1,28 +1,135 @@
-/* src/styles/Question.css */
-.header {
-  @apply text-xl font-semibold mb-4;
+/* General page styles */
+.questions-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
 }
 
-.table-container {
-  @apply bg-white shadow-md rounded-lg p-4;
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.table {
-  @apply w-full table-auto;
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-.table th {
-  @apply bg-gray-100 text-gray-600 font-semibold p-3 text-left;
+button:hover {
+  background-color: #0056b3;
 }
 
-.table td {
-  @apply border-t border-gray-200 p-3;
+.error-message {
+  color: red;
+  font-weight: bold;
 }
 
-.table-row {
-  @apply bg-gray-50 hover:bg-gray-100;
+/* Table styles */
+.question-list {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
 }
 
-.add-button {
-  @apply bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600;
+.question-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.package-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.package-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.package-header h3 {
+  margin: 0;
+}
+
+.package-actions button {
+  margin-left: 10px;
+}
+
+.questions-list {
+  padding: 10px;
+}
+
+.question-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+}
+
+.no-questions {
+  color: #888;
+  font-style: italic;
+}
+
+/* Add New Question Section */
+.add-questions input {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-questions button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-questions button:hover {
+  background-color: #218838;
+}
+
+ul {
+  padding-left: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+button.button-edit {
+  background-color: #ffc107;
+}
+
+button.button-delete {
+  background-color: #dc3545;
+  margin-left: 10px;
+}
+
+button.button-edit:hover {
+  background-color: #e0a800;
+}
+
+button.button-delete:hover {
+  background-color: #c82333;
 }

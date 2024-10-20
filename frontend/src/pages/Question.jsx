@@ -3,6 +3,7 @@ import useQuestionPackages from '../hooks/useQuestionPackages';
 import QuestionForm from '../components/QuestionForm';
 import QuestionList from '../components/QuestionList';
 import Modal from '../components/Modal'; // Modal'ı import ettik
+import '../styles/Question.css';
 
 const Questions = () => {
   const {
