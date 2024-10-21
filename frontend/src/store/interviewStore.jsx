@@ -1,19 +1,36 @@
-// src/store/interviewStore.js
 import { create } from 'zustand';
 import {
   getAllInterviews,
   createInterview,
   updateInterview,
-  deleteInterview,
-  uploadCandidateVideo, // Import the upload function
+  deleteInterviewApi,
+  getInterviewByLink,
+  uploadCandidateVideo,
 } from '../services/interviewService';
 
 const useInterviewStore = create((set) => ({
   interviews: [],
+  interviewDetails: null, // State for interview details
   loading: false,
   error: null,
-  videoUploaded: false, // State for tracking video upload status
-  uploadError: null, // State for tracking errors during upload
+  webcamError: null, // State for webcam error
+  videoUploaded: false,
+  uploadError: null,
+
+  // Set webcam error
+  setWebcamError: (errorMessage) => set({ webcamError: errorMessage }),
+
+  // Fetch interview details by link
+  fetchInterviewDetails: async (link) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await getInterviewByLink(link);
+      set({ interviewDetails: response.data, loading: false });
+    } catch (error) {
+      set({ error: 'Failed to fetch interview details', loading: false });
+      console.error('Error fetching interview details:', error);
+    }
+  },
 
   // Fetch all interviews
   fetchInterviews: async () => {
@@ -63,7 +80,7 @@ const useInterviewStore = create((set) => ({
   deleteInterview: async (id) => {
     set({ loading: true, error: null });
     try {
-      await deleteInterview(id);
+      await deleteInterviewApi(id);
       set((state) => ({
         interviews: state.interviews.filter((interview) => interview._id !== id),
         loading: false,
