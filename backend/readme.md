@@ -1,6 +1,6 @@
 
 
- **BACKEND'DE YENİ API İŞLEVLERİ:**
+ **BACKEND'DE YENİ API İŞLEVLERİ:** 21 EKİM PAZARTESİ
 
    **Video Yükleme:**
 
