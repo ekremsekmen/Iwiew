@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInterviewByLink } from '../services/interviewService'; // Fetch interview details by link
 
@@ -7,11 +7,21 @@ const CandidateInterview = () => {
   const [interviewDetails, setInterviewDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Track current question
-  const [remainingTime, setRemainingTime] = useState(0); // Track remaining time for current question
-  const [hasStarted, setHasStarted] = useState(false); // Track if the interview has started
-  const [isFinished, setIsFinished] = useState(false); // Track if the interview has finished
-  const [progress, setProgress] = useState(0); // Track interview progress
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [videoFile, setVideoFile] = useState(null);
+  const [videoUploaded, setVideoUploaded] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+  
+  // For video recording
+  const [isRecording, setIsRecording] = useState(false);
+  const videoRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const [recordedChunks, setRecordedChunks] = useState([]);
 
   useEffect(() => {
     const fetchInterview = async () => {
@@ -20,7 +30,6 @@ const CandidateInterview = () => {
         setInterviewDetails(response.data);
       } catch (err) {
         setError('Failed to load interview details.');
-        console.error('Error fetching interview:', err);
       } finally {
         setLoading(false);
       }
@@ -29,122 +38,112 @@ const CandidateInterview = () => {
     fetchInterview();
   }, [interviewLink]);
 
+  // Access the camera when the component is mounted
   useEffect(() => {
-    if (!interviewDetails || interviewDetails.showAtOnce || isFinished) return; // Eğer tüm sorular bir arada gösteriliyorsa, süre yönetimini atla
+    async function setupCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoRef.current.srcObject = stream;
+        mediaRecorderRef.current = new MediaRecorder(stream);
 
-    if (interviewDetails.questions && currentQuestionIndex < interviewDetails.questions.length) {
-      const currentQuestionDuration = interviewDetails.questions[currentQuestionIndex].duration;
-      setRemainingTime(currentQuestionDuration);
-
-      // İlerleme çubuğunu ve yüzdesini güncelle
-      setProgress(((currentQuestionIndex + 1) / interviewDetails.questions.length) * 100);
-
-      const timer = setInterval(() => {
-        setRemainingTime((prevTime) => prevTime - 1);
-      }, 1000);
-
-      const timeout = setTimeout(() => {
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-      }, currentQuestionDuration * 1000);
-
-      return () => {
-        clearTimeout(timeout);
-        clearInterval(timer);
-      };
-    } else if (currentQuestionIndex >= interviewDetails.questions.length) {
-      setIsFinished(true); // Tüm sorular tamamlandığında mülakatı bitir
+        mediaRecorderRef.current.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            setRecordedChunks((prev) => prev.concat(event.data));
+          }
+        };
+      } catch (error) {
+        console.error('Error accessing the camera:', error);
+      }
     }
-  }, [interviewDetails, currentQuestionIndex, isFinished]);
+
+    setupCamera();
+  }, []);
+
+  const handleStartRecording = () => {
+    setIsRecording(true);
+    setRecordedChunks([]);
+    mediaRecorderRef.current.start();
+  };
+
+  const handleStopRecording = () => {
+    setIsRecording(false);
+    mediaRecorderRef.current.stop();
+  };
+
+  const handleUploadVideo = async () => {
+    if (recordedChunks.length === 0) {
+      setUploadError('No video recorded.');
+      return;
+    }
+
+    setUploading(true);
+    setUploadError(null);
+
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const formData = new FormData();
+    formData.append('video', blob, 'interview_video.webm');
+
+    try {
+      const response = await fetch(`/api/videos/{candidateId}/video`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setVideoUploaded(true);
+      } else {
+        throw new Error('Failed to upload video.');
+      }
+    } catch (error) {
+      setUploadError('Failed to upload video.');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (loading) return <p>Loading interview...</p>;
   if (error) return <p>{error}</p>;
 
-  // Eğer mülakat tamamlandıysa mesaj göster
   if (isFinished) {
     return (
       <div>
         <h1>Interview Completed</h1>
-        <p>Thank you for completing the interview!</p>
+        <video ref={videoRef} autoPlay style={{ display: 'none' }} />
+        <button onClick={handleUploadVideo} disabled={uploading || videoUploaded}>
+          {uploading ? 'Uploading...' : 'Upload Video'}
+        </button>
+        {uploadError && <p>{uploadError}</p>}
+        {videoUploaded && <p>Video uploaded successfully!</p>}
       </div>
     );
   }
-
-  // Eğer mülakat başlamadıysa "Start Interview" butonu göster
-  if (!hasStarted) {
-    return (
-      <div>
-        <h1>{interviewDetails?.title || 'Interview'}</h1>
-        <p>Total Duration: {interviewDetails?.totalDuration || 0} seconds</p>
-        <button onClick={() => setHasStarted(true)}>Start Interview</button>
-      </div>
-    );
-  }
-
-  // Eğer "showAtOnce" aktifse, tüm soruları bir arada göster
-  if (interviewDetails?.showAtOnce) {
-    return (
-      <div>
-        <h1>{interviewDetails?.title || 'Interview'}</h1>
-        <p>Total Duration: {interviewDetails?.totalDuration || 0} seconds</p>
-        <p>Can Skip: {interviewDetails?.canSkip ? 'Yes' : 'No'}</p>
-        <p>Show All Questions at Once: Yes</p>
-
-        <h2>All Questions</h2>
-        <ul>
-          {interviewDetails.questions.map((question) => (
-            <li key={question._id}>
-              {question.content} - {question.duration} seconds
-            </li>
-          ))}
-        </ul>
-
-        <button onClick={() => setIsFinished(true)}>End Interview</button>
-      </div>
-    );
-  }
-
-  // "showAtOnce" aktif değilse soruları sırayla göster ve ilerleme çubuğu ekle
-  const currentQuestion = interviewDetails?.questions[currentQuestionIndex];
 
   return (
-    <div>
-      <h1>{interviewDetails?.title || 'Interview'}</h1>
-      <p>Total Duration: {interviewDetails?.totalDuration || 0} seconds</p>
-      <p>Can Skip: {interviewDetails?.canSkip ? 'Yes' : 'No'}</p>
-      <p>Show All Questions at Once: No</p>
-
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      {/* Camera Video Preview */}
       <div>
-        {/* İlerleme çubuğu */}
-        <div style={{ width: '100%', backgroundColor: '#f3f4f6', height: '10px', marginBottom: '20px' }}>
-          <div
-            style={{
-              width: `${progress}%`,
-              backgroundColor: '#4caf50',
-              height: '100%',
-            }}
-          />
+        <video ref={videoRef} autoPlay style={{ width: '400px', height: '300px', backgroundColor: '#000' }} />
+        <div>
+          {!isRecording ? (
+            <button onClick={handleStartRecording}>Start Recording</button>
+          ) : (
+            <button onClick={handleStopRecording}>Stop Recording</button>
+          )}
         </div>
-
-        {/* Yüzdesel İlerleme */}
-        <p>Progress: {Math.round(progress)}%</p>
-
-        {currentQuestion ? (
-          <div>
-            <h2>Current Question {currentQuestionIndex + 1}</h2>
-            <p>{currentQuestion.content}</p>
-            <p>Duration: {currentQuestion.duration} seconds</p>
-            <p>Remaining Time: {remainingTime} seconds</p>
-
-            {interviewDetails.canSkip && (
-              <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>Skip</button>
-            )}
-          </div>
-        ) : (
-          <p>Mülakat tamamlandı.</p>
-        )}
       </div>
 
-      <button onClick={() => setIsFinished(true)}>End Interview</button>
+      {/* Interview Details and Questions */}
+      <div>
+        <h1>{interviewDetails?.title || 'Interview'}</h1>
+        <p>Question {currentQuestionIndex + 1} of {interviewDetails?.questions.length}</p>
+        <p>Remaining Time: {remainingTime} seconds</p>
+        <p>Progress: {Math.round(progress)}%</p>
+        <p>{interviewDetails?.questions[currentQuestionIndex]?.content}</p>
+        <button onClick={() => setCurrentQuestionIndex((prevIndex) => prevIndex + 1)}>
+          Next Question
+        </button>
+      </div>
     </div>
   );
 };
