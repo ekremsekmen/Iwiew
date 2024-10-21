@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import Interview from '../models/interview';
 import QuestionPackage from '../models/questionPackage';
 import { v4 as uuidv4 } from 'uuid';  // Benzersiz link oluşturmak için
+import Candidate from '../models/candidate';
+import mongoose from 'mongoose';
 
 // Mülakat oluşturma
 export const createInterview = async (req: Request, res: Response) => {
@@ -178,5 +180,57 @@ export const getInterviewByLink = async (req: Request, res: Response) => {
     res.status(200).json(response); // Sadeleştirilmiş JSON cevabı
   } catch (error) {
     res.status(500).json({ message: 'Mülakat getirilirken hata oluştu', error });
+  }
+};
+
+
+export const getCandidatesByInterviewId = async (req: Request, res: Response) => {
+  const { interviewId } = req.params;
+
+  try {
+    // Belirli bir mülakata ait adayları bulun
+    const candidates = await Candidate.find({ interviewId })
+      .select('name surname videoUrl evaluation note'); // Sadece gerekli alanları seçin
+
+    if (candidates.length === 0) {
+      return res.status(404).json({ message: 'Bu mülakata ait aday bulunamadı' });
+    }
+
+    res.status(200).json(candidates);
+  } catch (error) {
+    res.status(500).json({ message: 'Adaylar getirilirken hata oluştu', error });
+  }
+};
+
+
+// Mülakata ait aday istatistiklerini al
+export const getInterviewCandidateStats = async (req: Request, res: Response) => {
+  const { interviewId } = req.params;
+
+  try {
+    // Adayların sayısını ve değerlendirme durumlarına göre gruplandır
+    const stats = await Candidate.aggregate([
+      { $match: { interviewId: new mongoose.Types.ObjectId(interviewId) } }, // ObjectId'yi 'new' ile oluştur
+      { 
+        $group: { 
+          _id: '$evaluation', // evaluation durumuna göre gruplandır
+          count: { $sum: 1 } 
+        } 
+      }
+    ]);
+
+    // Tüm adayların toplam sayısını al
+    const totalCandidates = await Candidate.countDocuments({ interviewId: new mongoose.Types.ObjectId(interviewId) });
+
+    const response = {
+      total: totalCandidates,
+      selected: stats.find(s => s._id === 'selected')?.count || 0,
+      eliminated: stats.find(s => s._id === 'eliminated')?.count || 0,
+      pending: stats.find(s => s._id === 'pending')?.count || 0,  // 'pending' olanları al
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ message: 'Aday istatistikleri getirilirken hata oluştu', error });
   }
 };

@@ -3,12 +3,12 @@ import Candidate from '../models/candidate';
 
 export const evaluateCandidate = async (req: Request, res: Response) => {
   const { candidateId } = req.params;
-  const { evaluation } = req.body;
+  const { evaluation ,note} = req.body;
 
   try {
     const candidate = await Candidate.findByIdAndUpdate(
       candidateId,
-      { evaluation },
+      { evaluation, note },
       { new: true }
     );
 

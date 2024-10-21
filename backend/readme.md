@@ -1,4 +1,130 @@
 
+
+ **BACKEND'DE YENİ API İŞLEVLERİ:**
+
+   **Video Yükleme:**
+
+   - **(POST)** `/api/videos/:candidateId/video`: Adayın videosunu yükler.
+   - **İstek Gövdesi (FormData):**
+     - Video dosyası `FormData` ile gönderilmeli.
+     - Örnek Frontend Kodu:
+       ```js
+       const formData = new FormData();
+       formData.append('video', file);
+
+       fetch(`/api/videos/{candidateId}/video`, {
+         method: 'POST',
+         body: formData,
+       });
+       ```
+   - **Dönen Cevap:**
+     ```json
+     { "message": "Video başarıyla yüklendi", "videoUrl": "http://s3.aws.com/example.mp4" }
+     ```
+   - **Hata Durumları:**
+     - Video dosyası bulunamazsa:
+       ```json
+       { "message": "Video dosyası bulunamadı" }
+       ```
+
+     - Aday bulunamazsa:
+       ```json
+       { "message": "Aday bulunamadı" }
+       ```
+    ## ÖNEMLİ NOT ##
+   - **Video Yükleme:** Frontend'de `FormData` kullanılarak video dosyasını backend'e POST ile gönderebilirsin. Backend'de multer middleware ile bu dosyayı alıp AWS S3'e yükleniyor.
+
+  
+   ---
+   ---
+
+
+   - **Adayları Getirme:**
+     - **(GET)** `/api/interviews/:interviewId/candidates`: Belirli bir mülakata ait adayların bilgilerini döner.
+     - **İstek Parametreleri:**
+       - `:interviewId`: Adayların ait olduğu mülakatın ID'si.
+     - **Dönen Cevap:**
+       ```json
+       [
+         {
+           "name": "John",
+           "surname": "Doe",
+           "videoUrl": "http://s3.aws.com/example.mp4",
+           "evaluation": "pending",
+           "note": "Aday hakkında not"
+         },
+         
+       ]
+       ```
+     - **Hata Durumları:**
+       - Mülakata ait aday bulunamazsa:
+         ```json
+         { "message": "Bu mülakata ait aday bulunamadı" }
+         ```
+
+    ---
+    ---    
+
+   - **Aday İstatistiklerini Getirme:**
+     - **(GET)** `/api/interviews/:interviewId/candidate-stats`: Belirli bir mülakata ait aday istatistiklerini döner.
+     - **İstek Parametreleri:**
+       - `:interviewId`: İstatistiklerin getirileceği mülakatın ID'si.
+     - **Dönen Cevap:**
+       ```json
+       {
+         "total": 10,
+         "selected": 5,
+         "eliminated": 2,
+         "pending": 3
+       }
+       ```
+     - **Hata Durumları:**
+       - İstatistikler getirilirken hata oluşursa:
+         ```json
+         { "message": "Aday istatistikleri getirilirken hata oluştu", "error": "Hata detayı" }
+         ```
+
+      ---
+      ---
+
+2. **Aday Değerlendirme:**
+   - **(PATCH)** `/api/evaluations/:candidateId`: Belirli bir adayın değerlendirme notunu ve durumunu günceller.
+   - **İstek Gövdesi (Body):**
+     ```json
+     {
+       "evaluation": "selected", // Veya "eliminated", "pending"
+       "note": "Aday başarılı"
+     }
+     ```
+   - **Dönen Cevap:**
+     ```json
+     { "message": "Aday başarıyla değerlendirildi", "candidate": "Aday bilgileri" }
+     ```
+
+   - **Hata Durumları:**
+     - Aday bulunamazsa:
+       ```json
+       { "message": "Aday bulunamadı" }
+       ```
+
+
+
+
+
+
+
+
+
+#####
+#####
+---
+## END ##
+---
+---
+--- 
+## YAPILDI BURASI ##
+---
+---
 ### ADAY BİLGİ FORMU VE MÜLAKATA YÖNLENDİRME İŞLEVİ ### 
 
 ### Aday Formunu Gönderme İşlevi: 

@@ -14,6 +14,8 @@ const candidateSchema = new mongoose.Schema({
     enum: ['selected', 'eliminated', 'pending'], 
     default: 'pending'  // İK biriminin değerlendirmesi
   },
+  note: { type: String, default: '' },  // Yeni alan: Not
+
 }, {
   timestamps: true,
 });
