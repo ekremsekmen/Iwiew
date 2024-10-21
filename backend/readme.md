@@ -122,7 +122,7 @@
 ---
 ---
 --- 
-## YAPILDI BURASI ##
+## YAPILDI BURADAN AŞAĞISI ##
 ---
 ---
 ### ADAY BİLGİ FORMU VE MÜLAKATA YÖNLENDİRME İŞLEVİ ### 
