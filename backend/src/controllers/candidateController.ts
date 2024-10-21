@@ -32,7 +32,12 @@ export const submitCandidateForm = async (req: Request, res: Response) => {
       await candidate.save();
 
       // Adayı mülakat sayfasına yönlendir
-      res.status(200).json({ message: 'Bilgiler başarıyla kaydedildi. Mülakata yönlendiriliyorsunuz.', interviewLink: interview.link });
+      res.status(200).json({ 
+        message: 'Bilgiler başarıyla kaydedildi. Mülakata yönlendiriliyorsunuz.', 
+        interviewLink: interview.link,
+        candidateId: candidate._id,  // candidateId'yi geri döndür
+        interviewId: interview._id   // Mülakat ID'sini döndür
+    });
     } catch (error) {
       res.status(500).json({ message: 'Aday bilgileri kaydedilirken hata oluştu', error });
     }

@@ -9,6 +9,13 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import interviewRoutes from './routes/interviewRoutes';
 import candidateRoutes from './routes/candidateRoutes';
+import videoRoutes from './routes/videoRoutes';
+import evaluationRoutes from './routes/evaluationRoutes';
+
+
+
+// Diğer rotaların yanında ekleyelim
+
 
 const app: Application = express();
 
@@ -30,6 +37,12 @@ app.use('/api/interviews', interviewRoutes);
 
 
 app.use('/api/candidates', candidateRoutes);  // Yeni route'u ekledik
+
+
+app.use('/api/videos', videoRoutes);
+
+
+app.use('/api/evaluations', evaluationRoutes);
 
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/interviewApp')

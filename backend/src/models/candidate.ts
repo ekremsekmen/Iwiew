@@ -6,10 +6,16 @@ const candidateSchema = new mongoose.Schema({
   surname: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  interviewId: { type: mongoose.Schema.Types.ObjectId, ref: 'Interview', required: true },  // Mülakat ile ilişki
-  kvkk: { type: Boolean, required: true },  // KVKK onayı
+  interviewId: { type: mongoose.Schema.Types.ObjectId, ref: 'Interview', required: true },
+  kvkk: { type: Boolean, required: true },
+  videoUrl: { type: String },  // Yeni alan: Adayın video URL'si
+  evaluation: { 
+    type: String, 
+    enum: ['selected', 'eliminated', 'pending'], 
+    default: 'pending'  // İK biriminin değerlendirmesi
+  },
 }, {
-  timestamps: true,  // createdAt ve updatedAt alanlarını otomatik oluştur
+  timestamps: true,
 });
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
