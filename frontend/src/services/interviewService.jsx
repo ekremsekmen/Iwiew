@@ -12,6 +12,17 @@ const GET_SPESIFIC_INTERVIEW_LINK = import.meta.env.VITE_API_URL + '/interviews/
 
 const cookies = new Cookies();
 
+export const uploadCandidateVideo = async (candidateId, videoFile) => {
+  const formData = new FormData();
+  formData.append('video', videoFile);
+
+  return await axios.post(`${VITE_API_URL}/videos/${candidateId}/video`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 export const submitCandidateForm = (interviewId, formData) => {
   return axios.post(`${VITE_API_URL}/candidates/${interviewId}`, formData);
 };

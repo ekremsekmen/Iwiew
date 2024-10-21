@@ -5,13 +5,17 @@ import {
   createInterview,
   updateInterview,
   deleteInterview,
+  uploadCandidateVideo, // Import the upload function
 } from '../services/interviewService';
 
 const useInterviewStore = create((set) => ({
   interviews: [],
   loading: false,
   error: null,
+  videoUploaded: false, // State for tracking video upload status
+  uploadError: null, // State for tracking errors during upload
 
+  // Fetch all interviews
   fetchInterviews: async () => {
     set({ loading: true, error: null });
     try {
@@ -23,6 +27,7 @@ const useInterviewStore = create((set) => ({
     }
   },
 
+  // Create a new interview
   addInterview: async (data) => {
     set({ loading: true, error: null });
     try {
@@ -37,6 +42,7 @@ const useInterviewStore = create((set) => ({
     }
   },
 
+  // Update a specific interview
   updateInterview: async (id, data) => {
     set({ loading: true, error: null });
     try {
@@ -53,6 +59,7 @@ const useInterviewStore = create((set) => ({
     }
   },
 
+  // Delete a specific interview
   deleteInterview: async (id) => {
     set({ loading: true, error: null });
     try {
@@ -64,6 +71,18 @@ const useInterviewStore = create((set) => ({
     } catch (error) {
       set({ error: 'Failed to delete interview', loading: false });
       console.error('Error deleting interview:', error);
+    }
+  },
+
+  // Upload candidate video
+  uploadVideo: async (candidateId, videoFile) => {
+    set({ loading: true, uploadError: null });
+    try {
+      await uploadCandidateVideo(candidateId, videoFile);
+      set({ videoUploaded: true, loading: false });
+    } catch (error) {
+      set({ uploadError: 'Failed to upload video', loading: false });
+      console.error('Error uploading video:', error);
     }
   },
 }));
