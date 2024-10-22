@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
+import VideoService from '../services/VideoService';
 
 const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const [recording, setRecording] = useState(false);
@@ -66,22 +66,16 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   };
 
   const uploadVideo = async (videoBlob) => {
-    if (!videoBlob) return;
-    if (!candidateId) {
-      console.error('Candidate ID is not available.');
+    if (!videoBlob || !candidateId) {
+      console.error('Video yüklenemedi, video ya da aday ID eksik.');
       return;
     }
 
     setUploading(true);
 
-    const formData = new FormData();
-    formData.append('video', videoBlob, `candidate-video-${Date.now()}.mp4`);
-
     try {
-      const response = await axios.post(`http://localhost:3000/api/videos/${candidateId}/video`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      console.log('Video başarıyla yüklendi:', response.data);
+      const response = await VideoService.uploadVideo(videoBlob, candidateId);
+      console.log('Video başarıyla yüklendi:', response);
       setUploadSuccess(true);
       onEndInterview();
     } catch (err) {
