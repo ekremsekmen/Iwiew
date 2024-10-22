@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
-const VideoUpload = () => {
+const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const [recording, setRecording] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -18,13 +18,21 @@ const VideoUpload = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (interviewStarted) {
+      startRecording();
+    } else if (interviewEnded) {
+      stopRecording();
+    }
+  }, [interviewStarted, interviewEnded]);
+
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       videoRef.current.srcObject = stream;
       videoRef.current.play();
 
-      const options = { mimeType: 'video/mp4' }; // MP4 formatı için ayar
+      const options = { mimeType: 'video/mp4' };
       mediaRecorderRef.current = new MediaRecorder(stream, options);
 
       const chunks = [];
@@ -35,15 +43,14 @@ const VideoUpload = () => {
       mediaRecorderRef.current.onstop = async () => {
         const blob = new Blob(chunks, { type: 'video/mp4' });
         const videoURL = URL.createObjectURL(blob);
-        videoRef.current.srcObject = null; // Canlı yayını durdur
-        videoRef.current.src = videoURL; // Kaydedilen videoyu göster
-        videoRef.current.play(); // Video önizlemesini başlat
-        console.log("Video kaydedildi, yüklemeye başlıyoruz...");
-        await uploadVideo(blob); // Video kaydedildiğinde yüklemeyi başlat
+        videoRef.current.srcObject = null;
+        videoRef.current.src = videoURL;
+        videoRef.current.play();
+        await uploadVideo(blob);
       };
 
       mediaRecorderRef.current.start();
-      setRecording(true); // Kaydın başladığını belirt
+      setRecording(true);
     } catch (error) {
       console.error('Error starting video recording:', error);
     }
@@ -52,7 +59,7 @@ const VideoUpload = () => {
   const stopRecording = () => {
     if (mediaRecorderRef.current && recording) {
       mediaRecorderRef.current.stop();
-      setRecording(false); // Kaydın bittiğini belirt
+      setRecording(false);
     } else {
       console.error('Recorder is not running');
     }
@@ -68,7 +75,7 @@ const VideoUpload = () => {
     setUploading(true);
 
     const formData = new FormData();
-    formData.append('video', videoBlob, `candidate-video-${Date.now()}.mp4`); // MP4 uzantısı
+    formData.append('video', videoBlob, `candidate-video-${Date.now()}.mp4`);
 
     try {
       const response = await axios.post(`http://localhost:3000/api/videos/${candidateId}/video`, formData, {
@@ -76,6 +83,7 @@ const VideoUpload = () => {
       });
       console.log('Video başarıyla yüklendi:', response.data);
       setUploadSuccess(true);
+      onEndInterview();
     } catch (err) {
       console.error('Video yükleme hatası:', err);
     } finally {
@@ -87,16 +95,6 @@ const VideoUpload = () => {
     <div>
       <h1>Video Upload for Candidate {candidateId}</h1>
       <video ref={videoRef} width="400" controls></video>
-
-      <div>
-        {!recording ? (
-          <button onClick={startRecording} disabled={uploading}>
-            Start Recording
-          </button>
-        ) : (
-          <button onClick={stopRecording}>Stop Recording</button>
-        )}
-      </div>
 
       {uploading && <p>Uploading...</p>}
       {uploadSuccess && <p>Video başarıyla yüklendi!</p>}

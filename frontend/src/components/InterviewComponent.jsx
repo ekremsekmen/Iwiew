@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { getInterviewByLink } from '../services/interviewService';
 
-const InterviewComponent = () => {
+const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const [interviewData, setInterviewData] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [remainingTime, setRemainingTime] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  // LocalStorage'dan linki al
   const interviewLink = localStorage.getItem('interviewLink');
 
-  // Mülakat verilerini çek
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getInterviewByLink(interviewLink);
         setInterviewData(response.data);
-        setRemainingTime(response.data.totalDuration); // Toplam süreyi başlangıçta al
+        setRemainingTime(response.data.totalDuration);
       } catch (error) {
         console.error("Mülakat verisi çekilemedi:", error);
       }
@@ -26,21 +24,32 @@ const InterviewComponent = () => {
     }
   }, [interviewLink]);
 
-  // Mevcut soru değiştiğinde süreyi ayarla
   useEffect(() => {
-    if (interviewData?.questions?.length > 0 && !interviewData.showAtOnce) {
+    if (interviewStarted && interviewData?.questions?.length > 0) {
       setRemainingTime(interviewData.questions[currentQuestionIndex].duration);
     }
-  }, [interviewData, currentQuestionIndex]);
+  }, [interviewStarted, interviewData, currentQuestionIndex]);
 
-  // Sonraki soruya geçiş
-  const handleNextQuestion = () => {
-    if (interviewData?.canSkip && currentQuestionIndex < interviewData.questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+  useEffect(() => {
+    if (interviewStarted && interviewData?.questions?.length) {
+      const timer = setInterval(() => {
+        setRemainingTime(prevTime => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            if (currentQuestionIndex < interviewData.questions.length - 1) {
+              setCurrentQuestionIndex(currentQuestionIndex + 1);
+            } else {
+              onEndInterview(); // Mülakat sona eriyor
+            }
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
     }
-  };
+  }, [interviewStarted, currentQuestionIndex, interviewData, onEndInterview]);
 
-  // İlerleme yüzdesini hesapla
   useEffect(() => {
     if (interviewData?.questions?.length) {
       const totalQuestions = interviewData.questions.length;
@@ -49,13 +58,17 @@ const InterviewComponent = () => {
     }
   }, [currentQuestionIndex, interviewData]);
 
+  if (!interviewStarted) return null;
+
+  if (interviewEnded) {
+    return <div className="interview-end-message"><h2>Mülakat sona erdi. Teşekkür ederiz!</h2></div>;
+  }
+
   return (
-    <div>
+    <div className="interview-component">
       {interviewData ? (
         <div>
           <h1>{interviewData.title}</h1>
-
-          {/* Sorular sıralı mı, hepsi birden mi gösterilecek */}
           {interviewData.showAtOnce ? (
             <div>
               {interviewData.questions.map((question, index) => (
@@ -75,15 +88,14 @@ const InterviewComponent = () => {
               )}
             </div>
           )}
-
-          {/* Zaman ve progress bar */}
           <div>Progress: {progress}%</div>
           <div>Kalan Süre: {remainingTime} saniye</div>
-
-          {/* Soruları atlama */}
           {interviewData.canSkip && !interviewData.showAtOnce && (
-            <button onClick={handleNextQuestion}>Sonraki Soru</button>
+            <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>
+              Sonraki Soru
+            </button>
           )}
+          <button onClick={onEndInterview}>End Interview</button>
         </div>
       ) : (
         <p>Yükleniyor...</p>
