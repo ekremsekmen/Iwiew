@@ -4,7 +4,7 @@ import useInterviews from '../hooks/useInterviews';
 import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import { getQuestionPackages } from '../services/questionService';
-import { getInterviewDetails, getInterviewByLink } from '../services/interviewService'; // getInterviewByLink eklendi
+import { getInterviewDetails } from '../services/interviewService'; // getInterviewByLink eklendi
 import Modal from '../components/Modal';
 import '../styles/InterviewList.css';
 
@@ -12,13 +12,11 @@ const Interview = () => {
   const [questionPackages, setQuestionPackages] = useState([]);
   const [selectedInterview, setSelectedInterview] = useState(null); // Seçilen mülakatın detayları
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal durum kontrolü
-  const [link, setLink] = useState(''); // Mülakat linki girişi için state
-  const [interviewByLink, setInterviewByLink] = useState(null); // Link ile getirilen mülakat bilgisi
-  const [loading, setLoading] = useState(false); // Yüklenme durumu
-  const [error, setError] = useState(null); // Hata durumu
 
   const {
     interviews,
+    loading, // <-- Add loading here
+    error,
     fetchInterviews,
     addInterview,
     handleDeleteInterview,
@@ -64,26 +62,6 @@ const Interview = () => {
     }
   };
 
-  // Mülakat linki ile mülakat bilgisi çekme işlevi
-  const handleFetchInterviewByLink = async () => {
-    if (!link) {
-      alert('Lütfen geçerli bir link girin');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await getInterviewByLink(link); // Link ile mülakat bilgisi getir
-      setInterviewByLink(response.data); // Gelen veriyi state'e yerleştir
-    } catch (error) {
-      console.error('Link ile mülakat bilgisi alınırken hata:', error);
-      setError('Mülakat bilgisi alınırken hata oluştu.');
-    } finally {
-      setLoading(false); // Yükleme durumunu kapat
-    }
-  };
 
   // Mülakat linkini panoya kopyalama işlevi
   const handleCopyLink = (link) => {
@@ -128,7 +106,7 @@ const Interview = () => {
           <ul>
             {selectedInterview.questionPackageId?.questions.map((question) => (
               <li key={question._id}>
-                {question.content} - {question.duration} min
+                {question.content} - {question.duration} second
               </li>
             ))}
           </ul>
