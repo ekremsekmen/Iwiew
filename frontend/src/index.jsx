@@ -5,7 +5,7 @@ import AdminPanel from './pages/AdminPanel';
 import Interview from './pages/Interview';
 import Question from './pages/Question';
 import InterviewCandidate from './pages/CandidateForm';  // Candidate page
-import CandidateInterview from './pages/CandidateVideoInterview';
+import VideoUpload from './pages/CandidateVideoInterview';
 import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
 
@@ -44,7 +44,7 @@ const AppRouter = () => {
 
         <Route
           path="/interviews/link/:interviewLink"
-          element={<CandidateInterview />} // This is the interview page after form submission
+          element={<VideoUpload />} // This is the interview page after form submission
         />
 
         {/* Default redirect for invalid URLs */}
