@@ -43,7 +43,8 @@ const InterviewCandidate = () => {
       // Store candidateId and interviewId in state
       setCandidateId(candidateId);
       localStorage.setItem('candidateId', candidateId);  // Save candidateId in localStorage
-      localStorage.setItem('interviewId', interviewId);  // Save interviewId in localStorage for future use
+      localStorage.setItem('interviewId', interviewId); 
+      localStorage.setItem('interviewLink', interviewId); // Save interviewId in localStorage for future use
 
       // Redirect to frontend interview page, using interviewLink for details
       navigate(`/interviews/link/${interviewLink}`); // Redirect to frontend page
