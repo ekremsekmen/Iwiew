@@ -2,12 +2,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login'; 
 import AdminPanel from './pages/AdminPanel';  
-import Interview from './pages/Interview';
+import Interview from './pages/ManageInterview';
 import Question from './pages/Question';
-import InterviewCandidate from './pages/CandidateForm';  // Candidate page
-import VideoUpload from './pages/CandidateVideoInterview';
+import InterviewCandidateInfo from './pages/CandidateForm'; 
 import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
+import InterviewPage from './pages/InterviewPage';
 
 const AppRouter = () => {
   return (
@@ -39,12 +39,12 @@ const AppRouter = () => {
         {/* PUBLIC route for candidates to submit form */}
         <Route
           path="/candidates/:interviewId"
-          element={<InterviewCandidate />} // InterviewCandidate is PUBLIC
+          element={<InterviewCandidateInfo />} // InterviewCandidate is PUBLIC
         />
 
         <Route
           path="/interviews/link/:interviewLink"
-          element={<VideoUpload />} // This is the interview page after form submission
+          element={<InterviewPage />} // This is the interview page after form submission
         />
 
         {/* Default redirect for invalid URLs */}

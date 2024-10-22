@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // useNavigate for frontend routing
 import { submitCandidateForm } from '../services/interviewService'; // API call
 
-const InterviewCandidate = () => {
+const InterviewCandidateInfo = () => {
   const { interviewId } = useParams(); // Extract interviewId from URL
   const navigate = useNavigate(); // Initialize navigate for frontend redirection
 
@@ -44,10 +44,11 @@ const InterviewCandidate = () => {
       setCandidateId(candidateId);
       localStorage.setItem('candidateId', candidateId);  // Save candidateId in localStorage
       localStorage.setItem('interviewId', interviewId); 
-      localStorage.setItem('interviewLink', interviewId); // Save interviewId in localStorage for future use
+      localStorage.setItem('interviewLink', interviewLink); // Save interviewId in localStorage for future use
 
       // Redirect to frontend interview page, using interviewLink for details
-      navigate(`/interviews/link/${interviewLink}`); // Redirect to frontend page
+      navigate(`/interviews/link/${interviewLink}`);
+ // Redirect to frontend page
     } catch (err) {
       // Handle form submission error
       setFormError('Form submission failed. Please try again.');
@@ -118,4 +119,4 @@ const InterviewCandidate = () => {
   );
 };
 
-export default InterviewCandidate;
+export default InterviewCandidateInfo;
