@@ -13,12 +13,7 @@ const useInterviewStore = create((set) => ({
   interviewDetails: null, // State for interview details
   loading: false,
   error: null,
-  webcamError: null, // State for webcam error
-  videoUploaded: false,
-  uploadError: null,
-
-  // Set webcam error
-  setWebcamError: (errorMessage) => set({ webcamError: errorMessage }),
+ 
 
   // Fetch interview details by link
   fetchInterviewDetails: async (link) => {
@@ -91,17 +86,6 @@ const useInterviewStore = create((set) => ({
     }
   },
 
-  // Upload candidate video
-  uploadVideo: async (candidateId, videoFile) => {
-    set({ loading: true, uploadError: null });
-    try {
-      await uploadCandidateVideo(candidateId, videoFile);
-      set({ videoUploaded: true, loading: false });
-    } catch (error) {
-      set({ uploadError: 'Failed to upload video', loading: false });
-      console.error('Error uploading video:', error);
-    }
-  },
 }));
 
 export default useInterviewStore;
