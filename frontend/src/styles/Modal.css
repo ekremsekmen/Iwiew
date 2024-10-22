@@ -11,33 +11,35 @@
     z-index: 1000;
   }
   
-.modal-content {
+  .modal-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     max-width: 600px;
     width: 100%;
+    max-height: 90%; /* Modalın yüksekliği %90 ile sınırlı */
+    overflow-y: auto; /* İçerik sığmadığında dikey kaydırma çubuğu eklenir */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 1001;
     font-family: Arial, sans-serif;
-}
-
-.modal-content h2 {
+  }
+  
+  .modal-content h2 {
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 20px;
     border-bottom: 2px solid #ddd;
     padding-bottom: 10px;
-}
-
-.modal-content ul {
+  }
+  
+  .modal-content ul {
     list-style: none;
     padding: 0;
     margin: 0;
-}
-
-.modal-content ul li {
+  }
+  
+  .modal-content ul li {
     background: #f7f7f7;
     padding: 10px 15px;
     margin-bottom: 10px;
@@ -46,18 +48,18 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.modal-content ul li:last-child {
+  }
+  
+  .modal-content ul li:last-child {
     margin-bottom: 0;
-}
-
-.modal-content ul li span {
+  }
+  
+  .modal-content ul li span {
     font-size: 0.9rem;
     color: #666;
-}
-
-.close-button {
+  }
+  
+  .close-button {
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -67,8 +69,9 @@
     cursor: pointer;
     color: #999;
     transition: color 0.2s ease-in-out;
-}
-
-.close-button:hover {
+  }
+  
+  .close-button:hover {
     color: #333;
-}
+  }
+  
