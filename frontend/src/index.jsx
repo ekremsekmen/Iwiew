@@ -4,8 +4,8 @@ import Login from './pages/Login';
 import AdminPanel from './pages/AdminPanel';  
 import Interview from './pages/Interview';
 import Question from './pages/Question';
-import InterviewCandidate from './pages/InterviewCandidate';  // Candidate page
-import CandidateInterview from './pages/CandidateInterview';
+import InterviewCandidate from './pages/CandidateForm';  // Candidate page
+import CandidateInterview from './pages/CandidateVideoInterview';
 import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
 
