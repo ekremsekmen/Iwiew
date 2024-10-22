@@ -5,7 +5,6 @@ import {
   updateInterview,
   deleteInterviewApi,
   getInterviewByLink,
-  uploadCandidateVideo,
 } from '../services/interviewService';
 
 const useInterviewStore = create((set) => ({
