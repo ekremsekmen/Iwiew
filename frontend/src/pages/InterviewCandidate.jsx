@@ -1,4 +1,3 @@
-// src/pages/InterviewCandidate.jsx
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // useNavigate for frontend routing
 import { submitCandidateForm } from '../services/interviewService'; // API call
@@ -15,6 +14,7 @@ const InterviewCandidate = () => {
     kvkk: false, // Default value is false
   });
   const [formError, setFormError] = useState(null); // Track form errors
+  const [candidateId, setCandidateId] = useState(null); // State to store candidateId
 
   // Handle input changes in the form
   const handleInputChange = (e) => {
@@ -38,11 +38,15 @@ const InterviewCandidate = () => {
     try {
       // Submit the candidate form to the API
       const response = await submitCandidateForm(interviewId, formData);
-      const { interviewLink } = response.data;
+      const { interviewLink, candidateId } = response.data; // Get candidateId and interviewLink from API response
+
+      // Store candidateId and interviewId in state
+      setCandidateId(candidateId);
+      localStorage.setItem('candidateId', candidateId);  // Save candidateId in localStorage
+      localStorage.setItem('interviewId', interviewId);  // Save interviewId in localStorage for future use
 
       // Redirect to frontend interview page, using interviewLink for details
       navigate(`/interviews/link/${interviewLink}`); // Redirect to frontend page
-      
     } catch (err) {
       // Handle form submission error
       setFormError('Form submission failed. Please try again.');
@@ -108,6 +112,7 @@ const InterviewCandidate = () => {
         {formError && <p style={{ color: 'red' }}>{formError}</p>}
         <button type="submit">Submit</button>
       </form>
+      {candidateId && <p>Candidate ID: {candidateId}</p>} {/* Show candidateId if available */}
     </div>
   );
 };
