@@ -90,11 +90,12 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
           )}
           <div>Progress: {progress}%</div>
           <div>Kalan Süre: {remainingTime} saniye</div>
-          {interviewData.canSkip && !interviewData.showAtOnce && (
-            <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>
-              Sonraki Soru
-            </button>
+          {interviewData.canSkip && !interviewData.showAtOnce && currentQuestionIndex < interviewData.questions.length - 1 && (
+          <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>
+           Sonraki Soru
+           </button>
           )}
+
           <button onClick={onEndInterview}>End Interview</button>
         </div>
       ) : (
