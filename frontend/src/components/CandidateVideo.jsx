@@ -28,12 +28,13 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   }, []);
 
   useEffect(() => {
-    if (interviewStarted) {
+    if (interviewStarted && !recording) {
       startRecording();
-    } else if (interviewEnded) {
+    } else if (interviewEnded && recording) {
       stopRecording();
     }
-  }, [interviewStarted, interviewEnded]);
+  }, [interviewStarted, interviewEnded, recording]);
+  
 
   const startRecording = async () => {
     try {
@@ -70,11 +71,14 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const stopRecording = () => {
     if (mediaRecorderRef.current && recording) {
       mediaRecorderRef.current.stop();
+      videoRef.current.srcObject.getTracks().forEach(track => track.stop()); // Kamera ve mikrofonu durdur
+      videoRef.current.srcObject = null;
       setRecording(false);
     } else {
       console.error('Recorder is not running');
     }
   };
+  
 
   const uploadVideo = async (videoBlob) => {
     if (!videoBlob || !candidateId) {

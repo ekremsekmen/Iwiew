@@ -33,18 +33,19 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
   useEffect(() => {
     if (interviewStarted && interviewData?.questions?.length) {
       const timer = setInterval(() => {
-        setRemainingTime(prevTime => {
+        setRemainingTime((prevTime) => {
           if (prevTime <= 1) {
             clearInterval(timer);
             if (currentQuestionIndex < interviewData.questions.length - 1) {
-              setCurrentQuestionIndex(currentQuestionIndex + 1);
+              setCurrentQuestionIndex(prev => prev + 1);
             } else {
-              onEndInterview(); // Mülakat sona eriyor
+              onEndInterview();
             }
             return 0;
           }
           return prevTime - 1;
         });
+        
       }, 1000);
       return () => clearInterval(timer);
     }
