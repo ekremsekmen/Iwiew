@@ -102,8 +102,6 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
 
   return (
     <div>
-      <h1>Mülakata Hoşgeldin! {candidateName} {candidateSurname}</h1> {/* state'leri kullanıyoruz */}
-
       <video ref={videoRef} width="400"></video>
 
       {uploading && <p>Uploading...</p>}

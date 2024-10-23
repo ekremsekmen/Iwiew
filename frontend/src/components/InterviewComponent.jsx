@@ -96,8 +96,6 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
            Sonraki Soru
            </button>
           )}
-
-          <button onClick={onEndInterview}>End Interview</button>
         </div>
       ) : (
         <p>Yükleniyor...</p>
