@@ -44,7 +44,9 @@ const InterviewCandidateInfo = () => {
       setCandidateId(candidateId);
       localStorage.setItem('candidateId', candidateId);  // Save candidateId in localStorage
       localStorage.setItem('interviewId', interviewId); 
-      localStorage.setItem('interviewLink', interviewLink); // Save interviewId in localStorage for future use
+      localStorage.setItem('interviewLink', interviewLink); 
+      localStorage.setItem('candidateName', formData.name);
+      localStorage.setItem('candidateSurname', formData.surname);
 
       // Redirect to frontend interview page, using interviewLink for details
       navigate(`/interviews/link/${interviewLink}`);

@@ -8,14 +8,23 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [candidateId, setCandidateId] = useState(null);
+  const [candidateName, setCandidateName] = useState('');  // Candidate Name state
+  const [candidateSurname, setCandidateSurname] = useState('');  // Candidate Surname state
 
   useEffect(() => {
+    const storedName = localStorage.getItem('candidateName');
+    const storedSurname = localStorage.getItem('candidateSurname');
     const storedCandidateId = localStorage.getItem('candidateId');
+    
     if (storedCandidateId) {
       setCandidateId(storedCandidateId);
     } else {
       console.error('Candidate ID not found in localStorage.');
     }
+
+    // Candidate Name ve Surname state'lerine atama yapıyoruz
+    if (storedName) setCandidateName(storedName);
+    if (storedSurname) setCandidateSurname(storedSurname);
   }, []);
 
   useEffect(() => {
@@ -89,7 +98,8 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
 
   return (
     <div>
-      <h1>Video Upload for Candidate {candidateId}</h1>
+      <h1>Mülakata Hoşgeldin! {candidateName} {candidateSurname}</h1> {/* state'leri kullanıyoruz */}
+
       <video ref={videoRef} width="400"></video>
 
       {uploading && <p>Uploading...</p>}
