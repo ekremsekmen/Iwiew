@@ -30,6 +30,8 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       videoRef.current.srcObject = stream;
+      videoRef.current.muted = true;
+      videoRef.current.controls = false;
       videoRef.current.play();
 
       const options = { mimeType: 'video/mp4' };
@@ -88,7 +90,7 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   return (
     <div>
       <h1>Video Upload for Candidate {candidateId}</h1>
-      <video ref={videoRef} width="400" controls></video>
+      <video ref={videoRef} width="400"></video>
 
       {uploading && <p>Uploading...</p>}
       {uploadSuccess && <p>Video başarıyla yüklendi!</p>}
