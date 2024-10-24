@@ -7,13 +7,23 @@ const InterviewPage = () => {
   const [interviewStarted, setInterviewStarted] = useState(false);
   const [interviewEnded, setInterviewEnded] = useState(false);
 
-  const startInterview = () => {
-    setInterviewStarted(true);
+  // Birden fazla kez endInterview çalışmasını engelliyoruz
+  const endInterview = () => {
+    if (!interviewEnded) {  // Eğer mülakat henüz bitmemişse çalışsın
+      setInterviewStarted(false);
+      setInterviewEnded(true);
+    }
   };
 
-  const endInterview = () => {
+  const resetInterview = () => {
     setInterviewStarted(false);
-    setInterviewEnded(true);
+    setInterviewEnded(false);
+    // Gerekirse başka durumları da sıfırlayabiliriz, örneğin localStorage'ı temizlemek gibi.
+  };
+
+  const startInterview = () => {
+    resetInterview();  // Yeni mülakata başlamadan önce her şeyi sıfırlıyoruz
+    setInterviewStarted(true);
   };
 
   return (
@@ -23,23 +33,23 @@ const InterviewPage = () => {
           <VideoUpload 
             interviewStarted={interviewStarted} 
             interviewEnded={interviewEnded} 
-            onEndInterview={endInterview} 
+            onEndInterview={endInterview}  // Video kaydını durduruyoruz
           />
         </div>
         <div className="questionSection">
           <InterviewComponent 
             interviewStarted={interviewStarted} 
             interviewEnded={interviewEnded} 
-            onEndInterview={endInterview} 
+            onEndInterview={endInterview}  // Soruları da bitiriyoruz
           />
         </div>
       </div>
       <div className="controlSection">
         {!interviewStarted && !interviewEnded && (
-          <button onClick={startInterview}>Start Interview</button>
+          <button onClick={startInterview}>Mülakatı Başlat</button>
         )}
         {interviewStarted && (
-          <button onClick={endInterview}>End Interview</button>
+          <button onClick={endInterview}>Mülakatı Bitir</button>
         )}
         {interviewEnded && (
           <p>Mülakat sona erdi. Teşekkür ederiz!</p>
