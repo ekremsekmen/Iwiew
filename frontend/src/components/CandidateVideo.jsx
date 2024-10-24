@@ -8,8 +8,7 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [candidateId, setCandidateId] = useState(null);
-  const [candidateName, setCandidateName] = useState('');  // Candidate Name state
-  const [candidateSurname, setCandidateSurname] = useState('');  // Candidate Surname state
+// Candidate Surname state
 
   useEffect(() => {
     const storedName = localStorage.getItem('candidateName');
@@ -23,8 +22,7 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
     }
 
     // Candidate Name ve Surname state'lerine atama yapıyoruz
-    if (storedName) setCandidateName(storedName);
-    if (storedSurname) setCandidateSurname(storedSurname);
+ 
   }, []);
 
   useEffect(() => {

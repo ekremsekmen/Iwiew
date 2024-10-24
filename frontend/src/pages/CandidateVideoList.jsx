@@ -33,7 +33,7 @@ const CandidateList = () => {
 
   return (
     <div className="candidate-list">
-      <h1>{interviewTitle} Interview Video Collection</h1> {/* Başlığı burada gösterin */}
+      <h1>{interviewTitle} Video Collection</h1> {/* Başlığı burada gösterin */}
       {candidates.length > 0 ? (
         <div className="candidate-cards">
           {candidates.map((candidate, index) => (
