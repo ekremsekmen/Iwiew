@@ -203,14 +203,17 @@ export const getCandidatesByInterviewId = async (req: Request, res: Response) =>
 };
 
 
-// Mülakata ait aday istatistiklerini al
 export const getInterviewCandidateStats = async (req: Request, res: Response) => {
   const { interviewId } = req.params;
 
   try {
-    // Adayların sayısını ve değerlendirme durumlarına göre gruplandır
+    // Sadece videoyu yükleyen adaylar
     const stats = await Candidate.aggregate([
-      { $match: { interviewId: new mongoose.Types.ObjectId(interviewId) } }, // ObjectId'yi 'new' ile oluştur
+      { $match: { 
+          interviewId: new mongoose.Types.ObjectId(interviewId),
+          videoUrl: { $exists: true, $ne: "" } // Video yükleyenleri filtrele
+        }
+      },
       { 
         $group: { 
           _id: '$evaluation', // evaluation durumuna göre gruplandır
@@ -219,8 +222,11 @@ export const getInterviewCandidateStats = async (req: Request, res: Response) =>
       }
     ]);
 
-    // Tüm adayların toplam sayısını al
-    const totalCandidates = await Candidate.countDocuments({ interviewId: new mongoose.Types.ObjectId(interviewId) });
+    // Sadece videoyu yükleyen adayların toplam sayısını al
+    const totalCandidates = await Candidate.countDocuments({ 
+      interviewId: new mongoose.Types.ObjectId(interviewId),
+      videoUrl: { $exists: true, $ne: "" } // Video yükleyenleri filtrele
+    });
 
     const response = {
       total: totalCandidates,
