@@ -70,3 +70,28 @@ h1 {
     color: #007BFF;
     transition: color 0.3s ease;
 }
+
+.go-back-button {
+    background-color: transparent;
+    border: none;
+    color: #007BFF;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    transition: color 0.3s ease;
+}
+
+.go-back-button:hover {
+    color: #0056b3;
+}
+
+.go-back-button::before {
+    content: '←'; /* Geri ok simgesi */
+    margin-right: 8px;
+    font-size: 24px;
+}

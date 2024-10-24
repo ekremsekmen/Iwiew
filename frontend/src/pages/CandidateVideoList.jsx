@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCandidates, getInterviewDetails } from '../services/interviewService'; // Adayları ve mülakat detaylarını almak için servisi import et
 import '../styles/CandidateVideoList.css'; // CSS dosyasını import et
+import { useNavigate } from 'react-router-dom'; // useNavigate'i ekle
+
 
 const CandidateList = () => {
   const { interviewId } = useParams(); // URL'den interviewId'yi alıyoruz
   const [candidates, setCandidates] = useState([]);
-  const [interviewTitle, setInterviewTitle] = useState(''); // Başlık için state
+  const [interviewTitle, setInterviewTitle] = useState('');
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -33,6 +36,9 @@ const CandidateList = () => {
 
   return (
     <div className="candidate-list">
+      <button onClick={() => navigate('/admin/interviews')} className="go-back-button">
+      Go Back
+      </button> {/* Buton eklendi */}
       <h1>{interviewTitle} Video Collection</h1> {/* Başlığı burada gösterin */}
       {candidates.length > 0 ? (
         <div className="candidate-cards">
