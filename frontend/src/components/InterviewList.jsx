@@ -1,9 +1,18 @@
 import React from 'react';
 import '../styles/InterviewList.css';
+import { useNavigate } from 'react-router-dom'; // React Router kullanarak yönlendirme yapacağız
+
 
 const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
 
-const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions, onCopyLink }) => {
+const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions}) => {
+
+  const navigate = useNavigate(); 
+  const handleSeeVideos = (interviewId) => {
+    navigate(`/interview/${interviewId}/candidates`);
+  };
+
+
   const handleCopyLink = (interviewId) => {
     const candidateFormLink = `${FRONTEND_BASE_URL}/candidates/${interviewId}`;
     navigator.clipboard.writeText(candidateFormLink)
@@ -47,6 +56,9 @@ const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions, 
               </select>
             </div>
             <div className="card-footer">
+            <button onClick={() => handleSeeVideos(interview._id)}>
+              See Videos
+            </button>
               <button onClick={() => onDelete(interview._id)}>
                 Delete
               </button>

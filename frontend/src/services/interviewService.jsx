@@ -49,3 +49,9 @@ export const deleteInterviewApi = async (id) => {
 export const updateInterview = async (id, data) => {
   return await axios.patch(`${PATCH_SPESIFIC_INTERVIEW}/${id}/status`, data, { headers: getAuthHeaders() });
 };
+
+export const getCandidates = async (interviewId) => {
+  return await axios.get(`${VITE_API_URL}/interviews/${interviewId}/candidates`, {
+    headers: getAuthHeaders(),
+  });
+};
