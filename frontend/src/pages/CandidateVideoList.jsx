@@ -40,7 +40,7 @@ const CandidateList = () => {
           ))}
         </div>
       ) : (
-        <p>No candidates available for this interview.</p>
+        <p>Henüz Video Yok</p>
       )}
     </div>
   );
