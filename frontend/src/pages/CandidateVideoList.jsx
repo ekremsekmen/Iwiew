@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCandidates } from '../services/interviewService'; // Adayları almak için servisi import et
+import { getCandidates, getInterviewDetails } from '../services/interviewService'; // Adayları ve mülakat detaylarını almak için servisi import et
 import '../styles/CandidateVideoList.css'; // CSS dosyasını import et
-
 
 const CandidateList = () => {
   const { interviewId } = useParams(); // URL'den interviewId'yi alıyoruz
   const [candidates, setCandidates] = useState([]);
+  const [interviewTitle, setInterviewTitle] = useState(''); // Başlık için state
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -18,11 +18,22 @@ const CandidateList = () => {
       }
     };
 
+    const fetchInterviewDetails = async () => {
+      try {
+        const response = await getInterviewDetails(interviewId);
+        setInterviewTitle(response.data.title); // Mülakat başlığını state'e kaydediyoruz
+      } catch (error) {
+        console.error('Error fetching interview details:', error);
+      }
+    };
+
     fetchCandidates();
+    fetchInterviewDetails();
   }, [interviewId]);
 
   return (
     <div className="candidate-list">
+      <h1>{interviewTitle} Interview Video Collection</h1> {/* Başlığı burada gösterin */}
       {candidates.length > 0 ? (
         <div className="candidate-cards">
           {candidates.map((candidate, index) => (
@@ -40,7 +51,7 @@ const CandidateList = () => {
           ))}
         </div>
       ) : (
-        <p>Henüz Video Yok</p>
+        <p>No candidates available for this interview.</p>
       )}
     </div>
   );
