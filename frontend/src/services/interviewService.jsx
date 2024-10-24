@@ -55,3 +55,9 @@ export const getCandidates = async (interviewId) => {
     headers: getAuthHeaders(),
   });
 };
+
+export const getCandidateStats = async (interviewId) => {
+  return await axios.get(`${VITE_API_URL}/interviews/${interviewId}/candidate-stats`, {
+    headers: getAuthHeaders(),
+  });
+};
