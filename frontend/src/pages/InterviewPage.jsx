@@ -7,9 +7,8 @@ const InterviewPage = () => {
   const [interviewStarted, setInterviewStarted] = useState(false);
   const [interviewEnded, setInterviewEnded] = useState(false);
 
-  // Birden fazla kez endInterview çalışmasını engelliyoruz
   const endInterview = () => {
-    if (!interviewEnded) {  // Eğer mülakat henüz bitmemişse çalışsın
+    if (!interviewEnded) {
       setInterviewStarted(false);
       setInterviewEnded(true);
     }
@@ -18,10 +17,35 @@ const InterviewPage = () => {
   const resetInterview = () => {
     setInterviewStarted(false);
     setInterviewEnded(false);
-    // Gerekirse başka durumları da sıfırlayabiliriz, örneğin localStorage'ı temizlemek gibi.
+  
+    // LocalStorage'ı temizliyoruz
+    localStorage.removeItem('candidateName');
+    localStorage.removeItem('candidateSurname');
+    localStorage.removeItem('candidateId');
+  };
+  
+
+  // Kamera ve mikrofon izinlerini kontrol eden fonksiyon
+  const checkPermissions = async () => {
+    try {
+      // Kullanıcıdan kamera ve mikrofon izni istiyoruz
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      stream.getTracks().forEach(track => track.stop()); // İzin verildiyse stream'i kapatıyoruz
+      return true;
+    } catch (error) {
+      // Eğer izin verilmezse hata yakalıyoruz
+      console.error('Kamera ya da mikrofon izni reddedildi:', error);
+      return false;
+    }
   };
 
-  const startInterview = () => {
+  const startInterview = async () => {
+    const hasPermission = await checkPermissions(); // İzinleri kontrol ediyoruz
+    if (!hasPermission) {
+      alert('Mülakatı başlatmak için kamera ve mikrofon erişimine izin vermeniz gerekiyor.');
+      return;
+    }
+
     resetInterview();  // Yeni mülakata başlamadan önce her şeyi sıfırlıyoruz
     setInterviewStarted(true);
   };
@@ -33,14 +57,14 @@ const InterviewPage = () => {
           <VideoUpload 
             interviewStarted={interviewStarted} 
             interviewEnded={interviewEnded} 
-            onEndInterview={endInterview}  // Video kaydını durduruyoruz
+            onEndInterview={endInterview} 
           />
         </div>
         <div className="questionSection">
           <InterviewComponent 
             interviewStarted={interviewStarted} 
             interviewEnded={interviewEnded} 
-            onEndInterview={endInterview}  // Soruları da bitiriyoruz
+            onEndInterview={endInterview} 
           />
         </div>
       </div>
