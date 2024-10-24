@@ -11,8 +11,7 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
 // Candidate Surname state
 
   useEffect(() => {
-    const storedName = localStorage.getItem('candidateName');
-    const storedSurname = localStorage.getItem('candidateSurname');
+
     const storedCandidateId = localStorage.getItem('candidateId');
     
     if (storedCandidateId) {
