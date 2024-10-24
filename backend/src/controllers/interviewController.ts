@@ -188,9 +188,12 @@ export const getCandidatesByInterviewId = async (req: Request, res: Response) =>
   const { interviewId } = req.params;
 
   try {
-    // Belirli bir mülakata ait adayları bulun
-    const candidates = await Candidate.find({ interviewId })
-      .select('name surname videoUrl evaluation note'); // Sadece gerekli alanları seçin
+    // Sadece videoyu yükleyen adayları bulun
+    const candidates = await Candidate.find({ 
+      interviewId, 
+      videoUrl: { $exists: true, $ne: "" } // videoUrl var ve boş değilse
+    })
+    .select('name surname videoUrl evaluation note'); // Sadece gerekli alanları seçin
 
     if (candidates.length === 0) {
       return res.status(404).json({ message: 'Bu mülakata ait aday bulunamadı' });
