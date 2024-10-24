@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCandidates } from '../services/interviewService'; // Adayları almak için servisi import et
+import '../styles/CandidateVideoList.css'; // CSS dosyasını import et
+
 
 const CandidateList = () => {
   const { interviewId } = useParams(); // URL'den interviewId'yi alıyoruz
@@ -20,24 +22,23 @@ const CandidateList = () => {
   }, [interviewId]);
 
   return (
-    <div>
-      <h1>Candidates for Interview {interviewId}</h1>
+    <div className="candidate-list">
       {candidates.length > 0 ? (
-        <ul>
+        <div className="candidate-cards">
           {candidates.map((candidate, index) => (
-            <li key={index}>
+            <div key={index} className="candidate-card">
               <p><strong>Name:</strong> {candidate.name} {candidate.surname}</p>
               <p><strong>Evaluation:</strong> {candidate.evaluation}</p>
               <p><strong>Note:</strong> {candidate.note}</p>
               {candidate.videoUrl && (
-                <video width="320" height="240" controls>
+                <video className="candidate-video" controls>
                   <source src={candidate.videoUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               )}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No candidates available for this interview.</p>
       )}
