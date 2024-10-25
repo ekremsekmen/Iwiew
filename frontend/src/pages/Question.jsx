@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useQuestionPackages from '../hooks/useQuestionPackages';
+import useQuestionStore from '../store/questionStore'; // Direkt store'u import ediyoruz
 import QuestionForm from '../components/QuestionForm';
 import QuestionList from '../components/QuestionList';
 import Modal from '../components/Modal'; // Modal'ı import ettik
@@ -7,14 +7,15 @@ import '../styles/Question.css';
 
 const Questions = () => {
   const {
-    packages,
+    questionPackages: packages,
     loading,
     error,
-    fetchPackages,
+    fetchQuestionPackages,
     addQuestionPackage,
-    updateQuestionPackage, // Ekleme
-    deleteQuestionPackage, // Ekleme
-  } = useQuestionPackages();
+    updateQuestionPackage,
+    deleteQuestionPackage,
+    deleteQuestionFromPackage, // Soru silme fonksiyonu
+  } = useQuestionStore();
 
   const [editingPackage, setEditingPackage] = useState(null);
   const [newQuestion, setNewQuestion] = useState({ content: '', duration: '' });
@@ -22,7 +23,7 @@ const Questions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal kontrolü
 
   useEffect(() => {
-    fetchPackages();
+    fetchQuestionPackages();
   }, []);
 
   const handleAddPackage = async (newPackage) => {

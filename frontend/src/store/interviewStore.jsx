@@ -5,6 +5,7 @@ import {
   updateInterview,
   deleteInterviewApi,
   getInterviewByLink,
+  getInterviewDetails, // Yeni eklediğiniz fonksiyon
 } from '../services/interviewService';
 
 const useInterviewStore = create((set) => ({
@@ -12,7 +13,21 @@ const useInterviewStore = create((set) => ({
   interviewDetails: null, // State for interview details
   loading: false,
   error: null,
- 
+
+  setInterviewDetails: (details) => set({ interviewDetails: details }),
+
+  
+  // Fetch interview details by ID
+  fetchInterviewDetailsById: async (id) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await getInterviewDetails(id); // Yeni eklenen fonksiyon
+      set({ interviewDetails: response.data, loading: false });
+    } catch (error) {
+      set({ error: 'Failed to fetch interview details', loading: false });
+      console.error('Error fetching interview details:', error);
+    }
+  },
 
   // Fetch interview details by link
   fetchInterviewDetails: async (link) => {

@@ -1,46 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getCandidates, getInterviewDetails } from '../services/interviewService'; // Adayları ve mülakat detaylarını almak için servisi import et
-import '../styles/CandidateVideoList.css'; // CSS dosyasını import et
-import { useNavigate } from 'react-router-dom'; // useNavigate'i ekle
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import useCandidateStore from '../store/candidateStore';
+import '../styles/CandidateVideoList.css';
 
+const CandidateVideoList = () => {
+  const { interviewId } = useParams();
+  const navigate = useNavigate();
 
-const CandidateList = () => {
-  const { interviewId } = useParams(); // URL'den interviewId'yi alıyoruz
-  const [candidates, setCandidates] = useState([]);
-  const [interviewTitle, setInterviewTitle] = useState('');
-  const navigate = useNavigate(); 
+  // Candidate Store'dan gerekli state ve metotları alıyoruz
+  const { candidates, isLoading: candidatesLoading, fetchCandidates, error: candidatesError } = useCandidateStore();
 
+  // Candidate listesini çekiyoruz ve interviewId'yi kontrol ediyoruz
   useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const response = await getCandidates(interviewId);
-        setCandidates(response.data); // Aday verilerini state'e kaydediyoruz
-      } catch (error) {
-        console.error('Error fetching candidates:', error);
-      }
-    };
-
-    const fetchInterviewDetails = async () => {
-      try {
-        const response = await getInterviewDetails(interviewId);
-        setInterviewTitle(response.data.title); // Mülakat başlığını state'e kaydediyoruz
-      } catch (error) {
-        console.error('Error fetching interview details:', error);
-      }
-    };
-
-    fetchCandidates();
-    fetchInterviewDetails();
-  }, [interviewId]);
+    if (interviewId) {
+      fetchCandidates(interviewId);
+    }
+  }, [interviewId, fetchCandidates]);
 
   return (
     <div className="candidate-list">
       <button onClick={() => navigate('/admin/interviews')} className="go-back-button">
-      Go Back
-      </button> {/* Buton eklendi */}
-      <h1>{interviewTitle} Video Collection</h1> {/* Başlığı burada gösterin */}
-      {candidates.length > 0 ? (
+        Go Back
+      </button>
+      <h1>Candidate Video Collection</h1>
+      {candidatesLoading ? (
+        <p>Loading...</p>
+      ) : candidatesError ? (
+        <p>{candidatesError}</p>
+      ) : candidates.length > 0 ? (
         <div className="candidate-cards">
           {candidates.map((candidate, index) => (
             <div key={index} className="candidate-card">
@@ -63,4 +50,4 @@ const CandidateList = () => {
   );
 };
 
-export default CandidateList;
+export default CandidateVideoList;

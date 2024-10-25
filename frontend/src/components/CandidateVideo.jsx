@@ -1,28 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import VideoService from '../services/VideoService';
+import useVideoStore from '../store/VideoStore';
+import useCandidateStore from '../store/candidateStore'; // candidateId'yi buradan alacağız
 
 const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
-  const [recording, setRecording] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
-  const [candidateId, setCandidateId] = useState(null);
-// Candidate Surname state
+  const [recording, setRecording] = useState(false);
 
+  // Zustand store'lardan gerekli fonksiyon ve state'leri alıyoruz
+  const { uploadCandidateVideo, isLoading, error, videoUrl, resetState } = useVideoStore();
+  const { candidateId } = useCandidateStore(); // CandidateStore'dan candidateId'yi çekiyoruz
+
+  // `candidateId` kontrolü
   useEffect(() => {
-
-    const storedCandidateId = localStorage.getItem('candidateId');
-    
-    if (storedCandidateId) {
-      setCandidateId(storedCandidateId);
-    } else {
-      console.error('Candidate ID not found in localStorage.');
+    if (!candidateId) {
+      console.error('Candidate ID bulunamadı.');
     }
-
-    // Candidate Name ve Surname state'lerine atama yapıyoruz
- 
-  }, []);
+  }, [candidateId]);
 
   useEffect(() => {
     if (interviewStarted && !recording) {
@@ -31,7 +25,6 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
       stopRecording();
     }
   }, [interviewStarted, interviewEnded, recording]);
-  
 
   const startRecording = async () => {
     try {
@@ -55,7 +48,7 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
         videoRef.current.srcObject = null;
         videoRef.current.src = videoURL;
         videoRef.current.play();
-        await uploadVideo(blob);
+        await uploadVideo(blob); // `uploadVideo` fonksiyonunu çağır
       };
 
       mediaRecorderRef.current.start();
@@ -68,41 +61,48 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const stopRecording = () => {
     if (mediaRecorderRef.current && recording) {
       mediaRecorderRef.current.stop();
-      videoRef.current.srcObject.getTracks().forEach(track => track.stop()); // Kamera ve mikrofonu durdur
-      videoRef.current.srcObject = null;
+      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       setRecording(false);
     } else {
       console.error('Recorder is not running');
     }
   };
-  
 
   const uploadVideo = async (videoBlob) => {
-    if (!videoBlob || !candidateId) {
-      console.error('Video yüklenemedi, video ya da aday ID eksik.');
+    if (!videoBlob) {
+      console.error('Video yüklenemedi, video dosyası eksik.');
       return;
     }
 
-    setUploading(true);
+    if (!candidateId) {
+      console.error('Video yüklenemedi, candidateId eksik.');
+      return;
+    }
 
-    try {
-      const response = await VideoService.uploadVideo(videoBlob, candidateId);
-      console.log('Video başarıyla yüklendi:', response);
-      setUploadSuccess(true);
+    await uploadCandidateVideo(videoBlob, candidateId);
+
+    if (!error) {
+      console.log('Video başarıyla yüklendi!');
       onEndInterview();
-    } catch (err) {
-      console.error('Video yükleme hatası:', err);
-    } finally {
-      setUploading(false);
     }
   };
+
+  useEffect(() => {
+    if (videoUrl) {
+      console.log('Video başarıyla yüklendi:', videoUrl);
+    }
+
+    return () => {
+      resetState();
+    };
+  }, [videoUrl, resetState]);
 
   return (
     <div>
       <video ref={videoRef} width="400"></video>
-
-      {uploading && <p>Uploading...</p>}
-      {uploadSuccess && <p>Video başarıyla yüklendi!</p>}
+      {isLoading && <p>Uploading...</p>}
+      {error && <p>{error}</p>}
+      {videoUrl && <p>Video başarıyla yüklendi!</p>}
     </div>
   );
 };

@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from 'react'; // useState ve useEffect'i ekledik
+import React, { useEffect } from 'react';
 import '../styles/InterviewList.css';
 import { useNavigate } from 'react-router-dom';
-import { getCandidateStats } from '../services/interviewService'; // Yeni API fonksiyonunu ekleyin
+import useInterviewStore from '../store/interviewStore';
 
 const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
 
 const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }) => {
-  const navigate = useNavigate(); 
-  const [stats, setStats] = useState({}); // Aday istatistikleri için state
+  const navigate = useNavigate();
+  const { fetchCandidateStats, stats = {}, isLoading } = useInterviewStore();
 
   useEffect(() => {
-    interviews.forEach(async (interview) => {
-      try {
-        const response = await getCandidateStats(interview._id);
-        setStats((prevStats) => ({
-          ...prevStats,
-          [interview._id]: response.data, // İstatistikleri interview ID'ye göre saklayın
-        }));
-      } catch (error) {
-        console.error(`Error fetching stats for interview ${interview._id}:`, error);
-      }
-    });
-  }, [interviews]);
+    if (fetchCandidateStats) {
+      interviews.forEach((interview) => {
+        if (interview && interview._id) {
+          fetchCandidateStats(interview._id); // Fetch stats for each interview
+        }
+      });
+    }
+  }, [interviews, fetchCandidateStats]);
 
   const handleSeeVideos = (interviewId) => {
     navigate(`/interview/${interviewId}/candidates`);
@@ -41,12 +37,14 @@ const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }
   return (
     <div className="interview-list">
       {interviews.map((interview) => {
+        if (!interview) return null; // Skip if interview is undefined
+
         const questionPackage = interview.questionPackageId
           ? interview.questionPackageId
           : { packageName: 'No Package' };
 
-        // interviewStats'ı her bir kartın içinde kullanın
-        const interviewStats = stats[interview._id] || {};
+        // Safely access interview stats or provide a fallback
+        const interviewStats = stats[interview._id] || { total: 'N/A', selected: 'N/A', eliminated: 'N/A', pending: 'N/A' };
 
         return (
           <div key={interview._id} className="card">
@@ -55,14 +53,13 @@ const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }
               <button onClick={() => onShowQuestions(interview._id)} className="question-mark">?</button>
             </div>
             <div className="card-body">
-              {/* Aday istatistiklerini burada gösterin */}
-              <p><strong>Total Candidates:</strong> {interviewStats.total != null ? interviewStats.total : 'Loading...'}</p>
-              <p><strong>Selected:</strong> {interviewStats.selected != null ? interviewStats.selected : 'Loading...'}</p>
-              <p><strong>Eliminated:</strong> {interviewStats.eliminated != null ? interviewStats.eliminated : 'Loading...'}</p>
-              <p><strong>Pending:</strong> {interviewStats.pending != null ? interviewStats.pending : 'Loading...'}</p>
+              {/* Display candidate stats with loading and undefined checks */}
+              <p><strong>Total Candidates:</strong> {isLoading ? 'Loading...' : interviewStats.total}</p>
+              <p><strong>Selected:</strong> {isLoading ? 'Loading...' : interviewStats.selected}</p>
+              <p><strong>Eliminated:</strong> {isLoading ? 'Loading...' : interviewStats.eliminated}</p>
+              <p><strong>Pending:</strong> {isLoading ? 'Loading...' : interviewStats.pending}</p>
 
-
-              {/* Diğer içerikler */}
+              {/* Other interview details */}
               <p><strong>Package:</strong> {questionPackage.packageName}</p>
               <p><strong>Total Duration:</strong> {interview.totalDuration || 0} seconds</p>
               <p><strong>Can Skip:</strong> {interview.canSkip ? 'Yes' : 'No'}</p>

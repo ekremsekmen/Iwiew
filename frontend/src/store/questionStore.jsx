@@ -1,10 +1,10 @@
-// src/store/questionStore.js
 import { create } from 'zustand';
 import {
-  getAllQuestionPackages,
+  getQuestionPackages,
   createQuestionPackage,
   updateQuestionPackage,
   deleteQuestionPackage,
+  deleteQuestionFromPackage, // Eksik olan fonksiyonu ekliyoruz
 } from '../services/questionService';
 
 const useQuestionStore = create((set) => ({
@@ -15,7 +15,7 @@ const useQuestionStore = create((set) => ({
   fetchQuestionPackages: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await getAllQuestionPackages();
+      const response = await getQuestionPackages();
       set({ questionPackages: response.data, loading: false });
     } catch (error) {
       set({ error: 'Failed to fetch question packages', loading: false });
@@ -64,6 +64,25 @@ const useQuestionStore = create((set) => ({
     } catch (error) {
       set({ error: 'Failed to delete question package', loading: false });
       console.error('Error deleting question package:', error);
+    }
+  },
+
+  // Yeni eklenen fonksiyon: Belirli bir paketten soru silme
+  deleteQuestionFromPackage: async (packageId, questionId) => {
+    set({ loading: true, error: null });
+    try {
+      await deleteQuestionFromPackage(packageId, questionId);
+      set((state) => ({
+        questionPackages: state.questionPackages.map((pkg) =>
+          pkg._id === packageId
+            ? { ...pkg, questions: pkg.questions.filter((q) => q._id !== questionId) }
+            : pkg
+        ),
+        loading: false,
+      }));
+    } catch (error) {
+      set({ error: 'Failed to delete question from package', loading: false });
+      console.error('Error deleting question from package:', error);
     }
   },
 }));

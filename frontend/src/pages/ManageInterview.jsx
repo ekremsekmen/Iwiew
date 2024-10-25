@@ -1,69 +1,55 @@
-// src/pages/Interview.jsx
 import React, { useState, useEffect } from 'react';
-import useInterviews from '../hooks/useInterviews';
 import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
-import { getQuestionPackages } from '../services/questionService';
-import { getInterviewDetails } from '../services/interviewService'; // getInterviewByLink eklendi
 import Modal from '../components/Modal';
 import '../styles/InterviewList.css';
+import useInterviewStore from '../store/interviewStore'; // Zustand for interviews
+import useQuestionStore from '../store/questionStore'; // Zustand for question packages
 
-const Interview = () => {
-  const [questionPackages, setQuestionPackages] = useState([]);
-  const [selectedInterview, setSelectedInterview] = useState(null); // Seçilen mülakatın detayları
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal durum kontrolü
+const ManageInterview = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state control
 
+  // Zustand store for interviews
   const {
     interviews,
-    loading, // <-- Add loading here
+    loading,
     error,
     fetchInterviews,
     addInterview,
-    handleDeleteInterview,
+    deleteInterview,
     updateInterviewStatus,
-  } = useInterviews();
+    interviewDetails, // interview details from Zustand store
+    fetchInterviewDetailsById, // function to fetch interview details by ID
+    setInterviewDetails, // Zustand’da interviewDetails’i temizlemek için
+  } = useInterviewStore();
+
+  // Zustand store for question packages
+  const { questionPackages, fetchQuestionPackages } = useQuestionStore();
 
   useEffect(() => {
-    fetchInterviews();
-    fetchQuestionPackages();
+    fetchInterviews(); // Fetch interviews from Zustand store
+    fetchQuestionPackages(); // Fetch question packages from Zustand store
   }, []);
 
-  const fetchQuestionPackages = async () => {
-    try {
-      const { data } = await getQuestionPackages();
-      setQuestionPackages(data);
-    } catch (error) {
-      console.error('Failed to fetch question packages', error);
-    }
-  };
-
   const handleAddInterview = async (newInterview) => {
-    await addInterview(newInterview);
-    fetchInterviews(); // Listeyi yenile
-    setIsModalOpen(false); // Modalı kapat
+    await addInterview(newInterview); // Add interview to Zustand store
+    fetchInterviews(); // Refresh interview list
+    setIsModalOpen(false); // Close modal after adding interview
   };
 
-  const handleShowQuestions = async (id) => {
-    try {
-      const response = await getInterviewDetails(id);
-      setSelectedInterview(response.data);
-    } catch (error) {
-      console.error('Mülakat detayları alınırken hata oluştu:', error);
+  const handleShowQuestions = async (interviewId) => {
+    if (interviewId) {
+      await fetchInterviewDetailsById(interviewId); // Fetch selected interview details by ID
+    } else {
+      console.error("Geçersiz interviewId");
     }
   };
 
-  // Mülakat durumunu güncelleme işlevi
   const handleStatusChange = async (interviewId, newStatus) => {
-    try {
-      await updateInterviewStatus(interviewId, newStatus); // Durumu güncelle
-      fetchInterviews(); // Durum güncellenince listeyi yenile
-    } catch (error) {
-      console.error('Mülakat durumu güncellenirken hata oluştu:', error);
-    }
+    await updateInterviewStatus(interviewId, newStatus); // Update interview status in Zustand
+    fetchInterviews(); // Refresh interviews after updating status
   };
 
-
-  // Mülakat linkini panoya kopyalama işlevi
   const handleCopyLink = (link) => {
     navigator.clipboard.writeText(link)
       .then(() => {
@@ -80,33 +66,33 @@ const Interview = () => {
       {loading && <p>Loading interview details...</p>}
       {error && <p className="error-message">{error}</p>}
 
-      {/* Yeni mülakat eklemek için modal */}
+      {/* Add new interview button */}
       <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">+ Add Interview</button>
 
+      {/* Modal for creating a new interview */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2>Create New Interview</h2>
         <InterviewForm questionPackages={questionPackages} onSubmit={handleAddInterview} />
       </Modal>
 
-      {/* Mülakatları listeleme */}
+      {/* Interview List */}
       <InterviewList
-        
         interviews={interviews}
         questionPackages={questionPackages}
-        onDelete={handleDeleteInterview}
-        onUpdateStatus={handleStatusChange} // Durum değişikliği işlevini gönder
+        onDelete={deleteInterview}
+        onUpdateStatus={handleStatusChange}
         onShowQuestions={handleShowQuestions}
-        onCopyLink={handleCopyLink} // Link kopyalama işlevini gönder
+        onCopyLink={handleCopyLink}
       />
 
-      {/* Seçilen mülakat detaylarını göster */}
-      {selectedInterview && (
-        <Modal isOpen={!!selectedInterview} onClose={() => setSelectedInterview(null)}>
-          <h2>Question Package: {selectedInterview.questionPackageId?.packageName}</h2>
+      {/* Selected Interview Details */}
+      {interviewDetails && (
+        <Modal isOpen={!!interviewDetails} onClose={() => setInterviewDetails(null)}>
+          <h2>Question Package: {interviewDetails.questionPackageId?.packageName}</h2>
           <ul>
-            {selectedInterview.questionPackageId?.questions.map((question) => (
+            {interviewDetails.questionPackageId?.questions.map((question) => (
               <li key={question._id}>
-                {question.content} - {question.duration} second
+                {question.content} - {question.duration} seconds
               </li>
             ))}
           </ul>
@@ -116,4 +102,4 @@ const Interview = () => {
   );
 };
 
-export default Interview;
+export default ManageInterview;

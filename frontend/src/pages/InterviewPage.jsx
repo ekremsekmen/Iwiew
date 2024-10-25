@@ -18,10 +18,6 @@ const InterviewPage = () => {
     setInterviewStarted(false);
     setInterviewEnded(false);
   
-    // LocalStorage'ı temizliyoruz
-    localStorage.removeItem('candidateName');
-    localStorage.removeItem('candidateSurname');
-    localStorage.removeItem('candidateId');
   };
   
 

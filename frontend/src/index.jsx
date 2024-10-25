@@ -8,7 +8,7 @@ import InterviewCandidateInfo from './pages/CandidateForm';
 import PrivateRoute from './router/PrivateRoute';
 import PublicRoute from './router/PublicRoute';
 import InterviewPage from './pages/InterviewPage';
-import CandidateList from './pages/CandidateVideoList';
+import CandidateVideoList from './pages/CandidateVideoList';
 
 
 const AppRouter = () => {
@@ -37,7 +37,7 @@ const AppRouter = () => {
           <Route path="question" element={<Question />} />
           <Route path="interviews" element={<Interview />} />
         </Route>
-        <Route path="/interview/:interviewId/candidates" element={<CandidateList />} />
+        <Route path="/interview/:interviewId/candidates" element={<CandidateVideoList />} />
 
 
         {/* PUBLIC route for candidates to submit form */}
