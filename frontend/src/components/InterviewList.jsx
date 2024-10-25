@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react';
 import '../styles/InterviewList.css';
 import { useNavigate } from 'react-router-dom';
-import useInterviewStore from '../store/interviewStore';
+import useInterviewStore from '../store/interviewStore'; // Interview detayları için
+import useCandidateStore from '../store/CandidateStore';  // Aday istatistikleri için
 
 const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
 
 const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }) => {
   const navigate = useNavigate();
-  const { fetchCandidateStats, stats = {}, isLoading } = useInterviewStore();
+  
+  // Interview detaylarını almak için InterviewStore'dan gerekli fonksiyonları kullan
+  const { fetchInterviewDetails } = useInterviewStore();
+
+  // Aday istatistiklerini yönetmek için CandidateStore'dan gerekli fonksiyonları ve state'i kullan
+  const { fetchCandidateStats, stats = {}, isLoading } = useCandidateStore();
 
   useEffect(() => {
     if (fetchCandidateStats) {
       interviews.forEach((interview) => {
         if (interview && interview._id) {
-          fetchCandidateStats(interview._id); // Fetch stats for each interview
+          fetchCandidateStats(interview._id); // Her bir interview için aday istatistiklerini çek
         }
       });
     }
@@ -37,13 +43,13 @@ const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }
   return (
     <div className="interview-list">
       {interviews.map((interview) => {
-        if (!interview) return null; // Skip if interview is undefined
+        if (!interview) return null; // Eğer interview undefined ise atla
 
         const questionPackage = interview.questionPackageId
           ? interview.questionPackageId
           : { packageName: 'No Package' };
 
-        // Safely access interview stats or provide a fallback
+        // Aday istatistiklerini güvenli bir şekilde al, yoksa varsayılan değerleri kullan
         const interviewStats = stats[interview._id] || { total: 'N/A', selected: 'N/A', eliminated: 'N/A', pending: 'N/A' };
 
         return (
@@ -53,13 +59,13 @@ const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }
               <button onClick={() => onShowQuestions(interview._id)} className="question-mark">?</button>
             </div>
             <div className="card-body">
-              {/* Display candidate stats with loading and undefined checks */}
+              {/* Aday istatistiklerini göster */}
               <p><strong>Total Candidates:</strong> {isLoading ? 'Loading...' : interviewStats.total}</p>
               <p><strong>Selected:</strong> {isLoading ? 'Loading...' : interviewStats.selected}</p>
               <p><strong>Eliminated:</strong> {isLoading ? 'Loading...' : interviewStats.eliminated}</p>
               <p><strong>Pending:</strong> {isLoading ? 'Loading...' : interviewStats.pending}</p>
 
-              {/* Other interview details */}
+              {/* Diğer interview detayları */}
               <p><strong>Package:</strong> {questionPackage.packageName}</p>
               <p><strong>Total Duration:</strong> {interview.totalDuration || 0} seconds</p>
               <p><strong>Can Skip:</strong> {interview.canSkip ? 'Yes' : 'No'}</p>
