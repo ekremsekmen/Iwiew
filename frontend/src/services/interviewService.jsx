@@ -12,9 +12,7 @@ const GET_SPESIFIC_INTERVIEW_LINK = `${VITE_API_URL}/interviews/link`;
 
 const cookies = new Cookies();
 
-export const submitCandidateForm = (interviewId, formData) => {
-  return axios.post(`${VITE_API_URL}/candidates/${interviewId}`, formData);
-};
+
 
 export const getInterviewDetails = async (id) => {
   return await axios.get(`${GET_SPESIFIC_INTERVIEW}/${id}`);
@@ -48,6 +46,10 @@ export const deleteInterviewApi = async (id) => {
 // Patch a specific interview
 export const updateInterview = async (id, data) => {
   return await axios.patch(`${PATCH_SPESIFIC_INTERVIEW}/${id}/status`, data, { headers: getAuthHeaders() });
+};
+
+export const submitCandidateForm = (interviewId, formData) => {
+  return axios.post(`${VITE_API_URL}/candidates/${interviewId}`, formData);
 };
 
 export const getCandidates = async (interviewId) => {
