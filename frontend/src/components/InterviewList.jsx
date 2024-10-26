@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import '../styles/InterviewList.css';
-import { useNavigate } from 'react-router-dom';
-import useInterviewStore from '../store/interviewStore'; // Interview detayları için
+import { useNavigate } from 'react-router-dom';// Interview detayları için
 import useCandidateStore from '../store/CandidateStore';  // Aday istatistikleri için
 
 const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
@@ -10,7 +9,7 @@ const InterviewList = ({ interviews, onDelete, onUpdateStatus, onShowQuestions }
   const navigate = useNavigate();
   
   // Interview detaylarını almak için InterviewStore'dan gerekli fonksiyonları kullan
-  const { fetchInterviewDetails } = useInterviewStore();
+  
 
   // Aday istatistiklerini yönetmek için CandidateStore'dan gerekli fonksiyonları ve state'i kullan
   const { fetchCandidateStats, stats = {}, isLoading } = useCandidateStore();
