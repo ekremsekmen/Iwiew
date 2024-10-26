@@ -81,13 +81,14 @@ const InterviewList = ({ interviews, onDelete, onShowQuestions }) => {
               <p><strong>Show at Once:</strong> {interview.showAtOnce ? 'Yes' : 'No'}</p>
               <p><strong>Expire Date:</strong> {interview.expireDate ? interview.expireDate.split('T')[0] : 'N/A'}</p>
               <select
-                value={interview.status}
-                onChange={(e) => handleStatusChange(interview._id, e.target.value)}
-                className="status-select"
+               value={interview.status === 'pending' ? 'unpublished' : interview.status}
+              onChange={(e) => handleStatusChange(interview._id, e.target.value)}
+              className="status-select"
               >
-                <option value="published">Published</option>
-                <option value="unpublished">Unpublished</option>
-              </select>
+            <option value="published">Published</option>
+            <option value="unpublished">Unpublished</option>
+            </select>
+
             </div>
             <div className="card-footer">
               <button onClick={() => handleSeeVideos(interview._id)}>See Videos</button>

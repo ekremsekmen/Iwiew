@@ -1,13 +1,14 @@
+// candidateStore.jsx
 import { create } from 'zustand';
-import { submitCandidateForm, getCandidates, getCandidateStats } from '../services/CandidateService';  // getCandidateStats'ı ekliyoruz
+import { submitCandidateForm, getCandidates, getCandidateStats, evaluateCandidate } from '../services/CandidateService'; 
 
 // Zustand store'u oluşturuyoruz
 const useCandidateStore = create((set) => ({
   candidateId: null,
   interviewId: null,
   interviewLink: null,
-  candidates: [],  // Adaylar listesini ekliyoruz
-  stats: {  // İstatistikler için yeni bir alan ekliyoruz
+  candidates: [],
+  stats: {
     total: 0,
     selected: 0,
     eliminated: 0,
@@ -18,12 +19,9 @@ const useCandidateStore = create((set) => ({
 
   // Formu submit etme işlemi
   submitCandidateForm: async (interviewId, formData) => {
-    set({ isLoading: true, error: null });  // Yükleme durumunu başlatıyoruz
-
+    set({ isLoading: true, error: null });
     try {
-      const response = await submitCandidateForm(interviewId, formData);  // API çağrısını yapıyoruz
-
-      // Gelen response'u store'a kaydediyoruz
+      const response = await submitCandidateForm(interviewId, formData);
       set({
         candidateId: response.data.candidateId,
         interviewId: response.data.interviewId,
@@ -39,42 +37,31 @@ const useCandidateStore = create((set) => ({
   },
 
   // Adayları getirme işlemi
-  // Adayları getirme işlemi
-fetchCandidates: async (interviewId) => {
-  set({ isLoading: true, error: null });  // Yükleme durumunu başlatıyoruz
-
-  try {
-    const response = await getCandidates(interviewId);  // Adayları getirmek için API çağrısı
-    
-    console.log("Fetched candidates:", response.data); // Gelen verileri logla
-    
-    // Gelen adaylar listesini store'a kaydediyoruz
-    set({ candidates: response.data, isLoading: false });
-  } catch (error) {
-    console.error("Error fetching candidates:", error); // Hata durumunu logla
-    set({
-      error: error.response?.data?.message || 'Adaylar getirilirken bir hata oluştu.',
-      isLoading: false,
-    });
-  }
-},
+  fetchCandidates: async (interviewId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await getCandidates(interviewId);
+      set({ candidates: response.data, isLoading: false });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || 'Adaylar getirilirken bir hata oluştu.',
+        isLoading: false,
+      });
+    }
+  },
 
   // Aday istatistiklerini getirme işlemi
   fetchCandidateStats: async (interviewId) => {
     set((state) => ({ 
       isLoading: true, 
       error: null,
-      // stats'ı önceki durumu koruyarak güncelliyoruz
-      stats: { ...state.stats } 
+      stats: { ...state.stats }
     }));
-  
     try {
-      const response = await getCandidateStats(interviewId);  // İstatistikleri getirmek için API çağrısı
-  
-      // Gelen istatistikleri interviewId'ye göre kaydediyoruz
-      set((state) => ({ 
+      const response = await getCandidateStats(interviewId);
+      set((state) => ({
         stats: {
-          ...state.stats,  // Mevcut diğer istatistikleri koruyoruz
+          ...state.stats,
           [interviewId]: {
             total: response.data.total,
             selected: response.data.selected,
@@ -91,7 +78,27 @@ fetchCandidates: async (interviewId) => {
       });
     }
   },
-  
+
+  // Aday değerlendirme güncelleme işlemi
+  evaluateCandidate: async (candidateId, evaluationData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await evaluateCandidate(candidateId, evaluationData);
+
+      // Güncellenmiş adayı adaylar listesinde bul ve güncelle
+      set((state) => ({
+        candidates: state.candidates.map(candidate =>
+          candidate._id === candidateId ? response.data.candidate : candidate
+        ),
+        isLoading: false,
+      }));
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || 'Değerlendirme güncellenirken bir hata oluştu.',
+        isLoading: false,
+      });
+    }
+  },
 }));
 
 export default useCandidateStore;
