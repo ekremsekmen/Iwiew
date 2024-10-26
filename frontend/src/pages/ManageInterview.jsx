@@ -50,20 +50,11 @@ const ManageInterview = () => {
     fetchInterviews(); // Refresh interviews after updating status
   };
 
-  const handleCopyLink = (link) => {
-    navigator.clipboard.writeText(link)
-      .then(() => {
-        alert('Link panoya kopyalandı!');
-      })
-      .catch((err) => {
-        console.error('Link kopyalanırken hata oluştu:', err);
-      });
-  };
+  
 
   return (
     <div className="interview-container" style={{ marginRight: '300px' }}>
       <h1>Interview Management</h1>
-      {loading && <p>Loading interview details...</p>}
       {error && <p className="error-message">{error}</p>}
 
       {/* Add new interview button */}
@@ -82,7 +73,7 @@ const ManageInterview = () => {
         onDelete={deleteInterview}
         onUpdateStatus={handleStatusChange}
         onShowQuestions={handleShowQuestions}
-        onCopyLink={handleCopyLink}
+        
       />
 
       {/* Selected Interview Details */}
