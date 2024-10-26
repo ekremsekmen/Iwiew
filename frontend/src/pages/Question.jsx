@@ -21,6 +21,7 @@ const Questions = () => {
   const [newQuestion, setNewQuestion] = useState({ content: '', duration: '' });
   const [questions, setQuestions] = useState([]); // Soru listesini yönetmek için state
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal kontrolü
+  const [isPackageUpdated, setIsPackageUpdated] = useState(false); // Paket üzerinde değişiklik yapıldığını takip etmek için state
 
   useEffect(() => {
     fetchQuestionPackages();
@@ -43,16 +44,26 @@ const Questions = () => {
     }
     setQuestions([...questions, newQuestion]); // Yeni soruyu listeye ekle
     setNewQuestion({ content: '', duration: '' }); // Formu temizle
+    setIsPackageUpdated(true); // Paket üzerinde değişiklik yapıldığını işaretle
   };
 
-  const handleDeleteQuestionFromList = (index) => {
-    setQuestions(questions.filter((_, i) => i !== index)); // Soruyu listeden sil
+  // Paketten soru silme fonksiyonu
+  const handleDeleteQuestionFromPackage = async (questionId) => {
+    if (editingPackage && editingPackage._id) {
+      // Store'dan deleteQuestionFromPackage fonksiyonunu çağır
+      await deleteQuestionFromPackage(editingPackage._id, questionId);
+
+      // Silinen soruyu state'ten kaldır
+      setQuestions(questions.filter((q) => q._id !== questionId));
+      setIsPackageUpdated(true); // Paket üzerinde değişiklik yapıldığını işaretle
+    }
   };
 
   const handleEditPackage = (pkg) => {
     setEditingPackage(pkg); // Düzenlemek istediğin paketi seç
     setQuestions(pkg.questions); // Soruları göster
     setIsModalOpen(true); // Modal'ı aç
+    setIsPackageUpdated(false); // Düzenleme başladığında değişiklik yok olarak başlat
   };
 
   const handleUpdatePackage = async () => {
@@ -63,6 +74,15 @@ const Questions = () => {
     await updateQuestionPackage(editingPackage._id, updatedPackage);
     setEditingPackage(null); // Düzenleme modundan çık
     setIsModalOpen(false); // Modal'ı kapat
+  };
+
+  // Modal kapatıldığında pakette değişiklik yapılmışsa otomatik olarak kaydet
+  const handleModalClose = () => {
+    if (isPackageUpdated && editingPackage) {
+      handleUpdatePackage(); // Eğer paket üzerinde değişiklik yapıldıysa güncelle
+    } else {
+      setIsModalOpen(false); // Değişiklik yoksa sadece modalı kapat
+    }
   };
 
   const handleDeletePackage = async (id) => {
@@ -80,12 +100,12 @@ const Questions = () => {
       <button onClick={() => setIsModalOpen(true)}>Add New Question Package</button>
 
       {/* Modal içeriği */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
         <h2>{editingPackage ? 'Edit Question Package' : 'Add New Question Package'}</h2>
         <QuestionForm
           initialValues={editingPackage || { packageName: '' }}
           onSubmit={editingPackage ? handleUpdatePackage : handleAddPackage}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={handleModalClose}
         />
 
         <div className="add-questions">
@@ -105,10 +125,11 @@ const Questions = () => {
           <button onClick={handleAddQuestionToPackage}>Add Question</button>
 
           <ul>
-            {questions.map((question, index) => (
-              <li key={index}>
+            {questions.map((question) => (
+              <li key={question._id}>
                 {question.content} - {question.duration} seconds
-                <button onClick={() => handleDeleteQuestionFromList(index)}>Delete</button>
+                {/* Soruyu silme butonunu güncelliyoruz */}
+                <button onClick={() => handleDeleteQuestionFromPackage(question._id)}>Delete</button>
               </li>
             ))}
           </ul>
