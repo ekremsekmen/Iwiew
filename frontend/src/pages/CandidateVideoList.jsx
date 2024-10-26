@@ -63,12 +63,16 @@ const CandidateVideoList = () => {
               {/* Evaluation and Note Input Fields */}
               
               <select
-            value={evaluationData[candidate._id]?.evaluation || candidate.evaluation || 'pending'}
-            onChange={(e) => handleInputChange(candidate._id, 'evaluation', e.target.value)}
-              >
-            <option value="selected">Selected</option>
-            <option value="eliminated">Eliminated</option>
-            </select>
+  value={evaluationData[candidate._id]?.evaluation || candidate.evaluation || 'pending'}
+  onChange={(e) => handleInputChange(candidate._id, 'evaluation', e.target.value)}
+>
+  <option value="pending" disabled>
+    Pending
+  </option>
+  <option value="selected">Selected</option>
+  <option value="eliminated">Eliminated</option>
+</select>
+
 
               <input
                 type="text"
