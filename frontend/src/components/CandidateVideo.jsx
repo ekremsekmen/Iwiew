@@ -96,15 +96,19 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
       resetState();
     };
   }, [videoUrl, resetState]);
-
   return (
-    <div>
-      <video ref={videoRef} width="400"></video>
+    <div className="h-full w-full flex flex-col items-center justify-center">
+      <video
+        ref={videoRef}
+        className="w-full h-[85vh] max-w-none flex-grow object-cover rounded-md"
+        controls
+      ></video>
       {isLoading && <p>Uploading...</p>}
       {error && <p>{error}</p>}
       {videoUrl && <p>Video başarıyla yüklendi!</p>}
     </div>
   );
+  
 };
 
 export default VideoUpload;

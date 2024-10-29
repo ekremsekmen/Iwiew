@@ -7,9 +7,9 @@ import Interview from './ManageInterview';
 
 const AdminPanel = () => {
   return (
-    <div className="admin-panel">
+    <div className="flex h-screen">
       <Sidebar />
-      <div className="admin-content">
+      <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         <Routes>
           <Route path="/question" element={<Question />} />
           <Route path="/interviews" element={<Interview />} />

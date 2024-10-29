@@ -1,6 +1,7 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 interface Question {
+  _id: Types.ObjectId;  // MongoDB ObjectId'si
   content: string;
   duration: number;  // Soru için belirlenen süre (saniye cinsinden)
 }
@@ -13,6 +14,7 @@ interface QuestionPackage extends Document {
 }
 
 const QuestionSchema = new Schema<Question>({
+  _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() },  // ObjectId tanımlaması
   content: { type: String, required: true },
   duration: { type: Number, required: true },
 });

@@ -1,8 +1,0 @@
-/* src/styles/AdminPanel.css */
-.admin-panel {
-  @apply flex min-h-screen;
-}
-
-.admin-content {
-  @apply flex-1 p-6;
-}

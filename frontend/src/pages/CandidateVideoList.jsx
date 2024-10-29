@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useCandidateStore from '../store/candidateStore';
 import Modal from '../components/Modal'; // Modal bileşenini import ediyoruz
-import '../styles/CandidateVideoList.css';
 
 
 const CandidateVideoList = () => {

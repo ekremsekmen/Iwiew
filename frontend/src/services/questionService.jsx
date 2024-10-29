@@ -35,5 +35,5 @@ export const deleteQuestionPackage = async (id) => {
 };
 
 export const deleteQuestionFromPackage = async (packageId, questionId) => {
-  return await axios.put(`${DELETE_QUESTION_URL}/${packageId}/questions/${questionId}`, { headers: getAuthHeaders() });
+  return await axios.delete(`${DELETE_QUESTION_URL}/${packageId}/questions/${questionId}`, { headers: getAuthHeaders() });
 };

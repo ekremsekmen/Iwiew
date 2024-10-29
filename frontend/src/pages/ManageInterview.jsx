@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import InterviewForm from '../components/InterviewForm';
 import InterviewList from '../components/InterviewList';
 import Modal from '../components/Modal';
-import '../styles/InterviewList.css';
 import useInterviewStore from '../store/interviewStore'; // Zustand for interviews
 import useQuestionStore from '../store/questionStore'; // Zustand for question packages
+
 
 const ManageInterview = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state control
@@ -12,7 +12,6 @@ const ManageInterview = () => {
   // Zustand store for interviews
   const {
     interviews,
-    loading,
     error,
     fetchInterviews,
     addInterview,
@@ -53,16 +52,13 @@ const ManageInterview = () => {
   
 
   return (
-    <div className="interview-container" style={{ marginRight: '300px' }}>
-      <h1>Interview Management</h1>
-      {error && <p className="error-message">{error}</p>}
-
-      {/* Add new interview button */}
-      <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">+ Add Interview</button>
+    <div className="w-full p-6">
+    {/* Add new interview button */}
+      <button onClick={() => setIsModalOpen(true)}className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      >+ Create Interview</button>
 
       {/* Modal for creating a new interview */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2>Create New Interview</h2>
         <InterviewForm questionPackages={questionPackages} onSubmit={handleAddInterview} />
       </Modal>
 
@@ -78,16 +74,25 @@ const ManageInterview = () => {
 
       {/* Selected Interview Details */}
       {interviewDetails && (
-        <Modal isOpen={!!interviewDetails} onClose={() => setInterviewDetails(null)}>
-          <h2>Question Package: {interviewDetails.questionPackageId?.packageName}</h2>
-          <ul>
-            {interviewDetails.questionPackageId?.questions.map((question) => (
-              <li key={question._id}>
-                {question.content} - {question.duration} seconds
-              </li>
-            ))}
-          </ul>
-        </Modal>
+      <Modal isOpen={!!interviewDetails} onClose={() => setInterviewDetails(null)}>
+      <h2 className="text-xl font-bold mb-4">
+        Question Package: {interviewDetails.questionPackageId?.packageName}
+      </h2>
+      <ul className="space-y-4">
+        {interviewDetails.questionPackageId?.questions.map((question) => (
+          <li
+            key={question._id}
+            className="p-4 bg-gray-200 rounded-lg shadow-md transition-transform hover:scale-105"
+          >
+            <h3 className="font-semibold text-lg mb-2 text-blue-600">
+              {question.content}
+            </h3>
+            <p className="text-gray-700">Duration: {question.duration} seconds</p>
+          </li>
+        ))}
+      </ul>
+    </Modal>
+    
       )}
     </div>
   );

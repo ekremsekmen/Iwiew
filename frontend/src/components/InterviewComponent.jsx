@@ -62,26 +62,26 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
   }
 
   return (
-    <div className="interview-component">
+    <div className="interview-component w-full h-full p-4 overflow-y-auto">
       {loading ? (
         <p>Yükleniyor...</p>
       ) : error ? (
         <p>Hata: {error}</p>
       ) : interviewDetails ? (
         <div>
-          <h1>{interviewDetails.title}</h1>
+          <h1 className="text-2xl font-semibold mb-4">{interviewDetails.title}</h1>
           {interviewDetails.showAtOnce ? (
             <div>
               {interviewDetails.questions.map((question, index) => (
-                <div key={index}>
-                  <h2>Soru {index + 1}</h2>
+                <div key={index} className="mb-4">
+                  <h2 className="text-xl font-semibold">Soru {index + 1}</h2>
                   <p>{question.content}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <div>
-              <h2>Soru {currentQuestionIndex + 1}</h2>
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">Soru {currentQuestionIndex + 1}</h2>
               {interviewDetails?.questions?.[currentQuestionIndex] ? (
                 <p>{interviewDetails.questions[currentQuestionIndex].content}</p>
               ) : (
@@ -89,10 +89,15 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
               )}
             </div>
           )}
-          <div>Progress: {progress}%</div>
-          <div>Kalan Süre: {remainingTime} saniye</div>
+          <div className="mt-4 text-gray-700">
+            <div>Progress: {progress}%</div>
+            <div>Kalan Süre: {remainingTime} saniye</div>
+          </div>
           {interviewDetails.canSkip && !interviewDetails.showAtOnce && currentQuestionIndex < interviewDetails.questions.length - 1 && (
-            <button onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}>
+            <button 
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md" 
+              onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
+            >
               Sonraki Soru
             </button>
           )}
@@ -102,6 +107,7 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
       )}
     </div>
   );
+  
 };
 
 export default InterviewComponent;

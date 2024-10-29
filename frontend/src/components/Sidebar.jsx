@@ -1,37 +1,61 @@
+// Sidebar.js
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import '../styles/Sidebar.css';
 
 function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout } = useAuthStore();
 
   const handleLogout = () => {
-    logout(); // Perform the logout action
-    navigate('/login'); // Redirect to the login page after logging out
+    logout();
+    navigate('/login');
   };
 
   return (
-    <div className="admin-panel">
-      <div className="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-          <li>
-            <Link to="/admin/question">Manage Questions</Link>
-          </li>
-          <li>
-            <Link to="/admin/interviews">Interview Management</Link>
-          </li>
-          <li>
-            <button onClick={handleLogout} className="logout-button">
-              Logout
-            </button>
-          </li>
-        </ul>
+    <div className="flex h-screen bg-blue-50">
+      <div className="w-64 bg-gradient-to-b from-blue-400 to-blue-500 text-gray-700 flex flex-col justify-between p-6 shadow-2xl">
+        <div>
+          <h2 className="text-2xl font-semibold mb-8 text-center text-blue-800">Admin Panel</h2>
+          <ul className="space-y-4">
+            <li>
+              <Link
+                to="/admin/question"
+                className={`block py-3 px-4 rounded-lg text-lg ${
+                  location.pathname === '/admin/question'
+                    ? 'bg-blue-100 text-blue-900 font-medium'
+                    : 'hover:bg-blue-200'
+                } transition-colors duration-200`}
+              >
+                Questions
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/admin/interviews"
+                className={`block py-3 px-4 rounded-lg text-lg ${
+                  location.pathname === '/admin/interviews'
+                    ? 'bg-blue-100 text-blue-900 font-medium'
+                    : 'hover:bg-blue-200'
+                } transition-colors duration-200`}
+              >
+                Interviews
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <button
+            onClick={handleLogout}
+            className="w-full py-2 px-4 mt-6 text-center rounded-lg bg-red-400 hover:bg-red-500 text-white transition-colors duration-200"
+          >
+            Logout
+          </button>
+        </div>
       </div>
-      <div className="admin-content">
-        {/* Main content goes here */}
+      <div className="flex-1 p-0 bg-blue-50 overflow-y-auto">
+        {/* Burada Sidebar’ın yanında ana içerik render edilir */}
       </div>
     </div>
   );

@@ -49,67 +49,82 @@ const InterviewCandidateInfo = () => {
   };
 
   return (
-    <div>
-      <h1>Candidate Information</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-lg mx-auto mt-10 p-6 bg-gradient-to-br from-gray-200 via-gray-200 to-gray-200 rounded-xl shadow-xl">
+
+      <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">Candidate Information</h1>
+      <p className="text-center text-blue-500 font-medium mb-6">
+      “Please enter your information accurately and completely. You will be redirected to the interview after submitting the form.”
+    </p>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label>Name:</label>
+          <label className="block text-base font-medium text-gray-700">Name</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleInputChange}
             required
+            className="w-full mt-2 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
           />
         </div>
         <div>
-          <label>Surname:</label>
+          <label className="block text-base font-medium text-gray-700">Surname</label>
           <input
             type="text"
             name="surname"
             value={formData.surname}
             onChange={handleInputChange}
             required
+            className="w-full mt-2 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
           />
         </div>
         <div>
-          <label>Email:</label>
+          <label className="block text-base font-medium text-gray-700">Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             required
+            className="w-full mt-2 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
           />
         </div>
         <div>
-          <label>Phone:</label>
+          <label className="block text-base font-medium text-gray-700">Phone</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
             required
+            className="w-full mt-2 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
           />
         </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="kvkk"
-              checked={formData.kvkk}
-              onChange={handleInputChange}
-            />
-            I agree to KVKK terms
-          </label>
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            name="kvkk"
+            checked={formData.kvkk}
+            onChange={handleInputChange}
+            className="h-5 w-5 text-indigo-500 border-gray-300 rounded focus:ring-indigo-400"
+          />
+          <label className="text-base text-gray-600">I agree to KVKK terms</label>
         </div>
-        {formError && <p style={{ color: 'red' }}>{formError}</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" disabled={isLoading}>
+        {formError && <p className="text-sm text-red-500">{formError}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`w-full py-3 text-lg font-semibold text-white rounded-lg transition-colors ${
+            isLoading ? 'bg-gray-300' : 'bg-indigo-500 hover:bg-indigo-600'
+          }`}
+        >
           {isLoading ? 'Submitting...' : 'Submit'}
         </button>
       </form>
-      {candidateId && <p>Candidate ID: {candidateId}</p>}
+      <p className="text-center text-gray-500 mt-8">
+          © 2024 IWiew. All rights reserved.
+        </p>
     </div>
   );
 };
