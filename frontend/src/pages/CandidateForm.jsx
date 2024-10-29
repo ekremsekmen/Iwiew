@@ -1,5 +1,4 @@
-// InterviewCandidateInfo.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useCandidateStore from '../store/candidateStore';  // Zustand store'u içe aktarıyoruz
 
@@ -38,15 +37,17 @@ const InterviewCandidateInfo = () => {
 
     try {
       await submitCandidateForm(interviewId, formData);  // Store'daki submit fonksiyonunu çağırıyoruz
-
-      // interviewLink var ise aday ilgili mülakat sayfasına yönlendirilir
-      if (candidateId && interviewLink) {
-        navigate(`/interviews/link/${interviewLink}`);
-      }
     } catch (err) {
       setFormError('Form submission failed. Please try again.');
     }
   };
+
+  // Candidate ID ve interviewLink alındıktan sonra yönlendirme işlemini burada yapıyoruz
+  useEffect(() => {
+    if (candidateId && interviewLink) {
+      navigate(`/interviews/link/${interviewLink}`);
+    }
+  }, [candidateId, interviewLink, navigate]);
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-gradient-to-br from-gray-200 via-gray-200 to-gray-200 rounded-xl shadow-xl">
@@ -56,6 +57,7 @@ const InterviewCandidateInfo = () => {
       “Please enter your information accurately and completely. You will be redirected to the interview after submitting the form.”
     </p>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Form input alanları */}
         <div>
           <label className="block text-base font-medium text-gray-700">Name</label>
           <input

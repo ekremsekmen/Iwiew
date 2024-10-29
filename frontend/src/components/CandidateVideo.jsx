@@ -6,6 +6,8 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Modal'ı kontrol etmek için state
+  const [modalStatus, setModalStatus] = useState(''); // Modal'ın durumunu kontrol etmek için state
 
   // Zustand store'lardan gerekli fonksiyon ve state'leri alıyoruz
   const { uploadCandidateVideo, isLoading, error, videoUrl, resetState } = useVideoStore();
@@ -79,6 +81,10 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
       return;
     }
 
+    // Yükleme başladığında modal açılır ve yükleme durumu gösterilir
+    setShowModal(true);
+    setModalStatus('loading');
+
     await uploadCandidateVideo(videoBlob, candidateId);
 
     if (!error) {
@@ -89,13 +95,61 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
 
   useEffect(() => {
     if (videoUrl) {
-      console.log('Video başarıyla yüklendi:', videoUrl);
+      // Video yüklendiğinde modal'da başarı mesajı gösterilir
+      setModalStatus('success');
+      setTimeout(() => {
+        setShowModal(false); // Modal'ı bir süre sonra kapat
+      }, 2000); // 2 saniye sonra modal kapanır
     }
+  }, [videoUrl]);
 
-    return () => {
-      resetState();
+  useEffect(() => {
+    if (error) {
+      // Hata durumunda hata mesajı gösterilir
+      setModalStatus('error');
+      setTimeout(() => {
+        setShowModal(false); // Modal'ı bir süre sonra kapat
+      }, 2000); // 2 saniye sonra modal kapanır
+    }
+  }, [error]);
+
+  // Modal Component
+  const Modal = ({ showModal, status, message }) => {
+    if (!showModal) return null;
+
+    const getStatusIcon = () => {
+      if (status === 'loading') {
+        return (
+          <svg className="animate-spin h-10 w-10 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+        );
+      } else if (status === 'success') {
+        return (
+          <svg className="h-10 w-10 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        );
+      } else if (status === 'error') {
+        return (
+          <svg className="h-10 w-10 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        );
+      }
     };
-  }, [videoUrl, resetState]);
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75">
+        <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+          {getStatusIcon()}
+          <p className="text-xl font-semibold mt-4">{message}</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
       <video
@@ -103,12 +157,18 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
         className="w-full h-[85vh] max-w-none flex-grow object-cover rounded-md"
         controls
       ></video>
-      {isLoading && <p>Uploading...</p>}
-      {error && <p>{error}</p>}
-      {videoUrl && <p>Video başarıyla yüklendi!</p>}
+      {/* Modal gösterimi */}
+      {showModal && modalStatus === 'loading' && (
+        <Modal showModal={showModal} status="loading" message="Video yükleniyor, lütfen bekleyiniz..." />
+      )}
+      {showModal && modalStatus === 'success' && (
+        <Modal showModal={showModal} status="success" message="Video başarıyla yüklendi!" />
+      )}
+      {showModal && modalStatus === 'error' && (
+        <Modal showModal={showModal} status="error" message={`Bir hata oluştu: ${error}`} />
+      )}
     </div>
   );
-  
 };
 
 export default VideoUpload;
