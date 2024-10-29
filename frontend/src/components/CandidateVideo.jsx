@@ -141,7 +141,7 @@ const VideoUpload = ({ interviewStarted, interviewEnded, onEndInterview }) => {
     };
 
     return (
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75">
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75">
         <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
           {getStatusIcon()}
           <p className="text-xl font-semibold mt-4">{message}</p>

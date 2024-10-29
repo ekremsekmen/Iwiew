@@ -83,23 +83,22 @@ const InterviewPage = () => {
         </div>
       )}
   
-  <div className="content flex flex-col md:flex-row w-full bg-white shadow-md rounded-lg overflow-hidden border-4 border-black">
-  <div className="videoSection flex-grow p-2">
-    <VideoUpload 
-      interviewStarted={interviewStarted} 
-      interviewEnded={interviewEnded} 
-      onEndInterview={endInterview} 
-    />
-  </div>
-  <div className="questionSection flex-grow p-2 border-l-4 border-black">
-    <InterviewComponent 
-      interviewStarted={interviewStarted} 
-      interviewEnded={interviewEnded} 
-      onEndInterview={endInterview} 
-    />
-  </div>
-</div>
-
+      <div className="content flex flex-col md:flex-row w-full bg-white shadow-md rounded-lg overflow-hidden border-4 border-black">
+        <div className="videoSection flex-grow p-2">
+          <VideoUpload 
+            interviewStarted={interviewStarted} 
+            interviewEnded={interviewEnded} 
+            onEndInterview={endInterview} 
+          />
+        </div>
+        <div className="questionSection flex-grow p-2 border-l-4 border-black">
+          <InterviewComponent 
+            interviewStarted={interviewStarted} 
+            interviewEnded={interviewEnded} 
+            onEndInterview={endInterview} 
+          />
+        </div>
+      </div>
   
       <div className="controlSection mt-4">
         {interviewStarted && (
@@ -108,13 +107,23 @@ const InterviewPage = () => {
           </button>
         )}
         {interviewEnded && (
-          <p className="text-gray-600 mt-2">Mülakat sona erdi. Teşekkür ederiz!</p>
+          <div className="fixed inset-0 bg-black bg-opacity-100 flex justify-center items-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-lg">
+              <h2 className="text-2xl font-bold mb-4">Mülakat Tamamlanmıştır</h2>
+              <p className="mb-4">Tarafınıza en kısa sürede dönüş yapılacaktır. Katıldığınız için teşekkürler!</p>
+              <button 
+                className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                onClick={() => window.close()}
+ // Sayfadan çıkmak için buton fonksiyonu
+              >
+                Çık
+              </button>
+            </div>
+          </div>
         )}
       </div>
-    </div>
-  );
+    </div> // Bu parantez ile div'i kapatıyoruz
+  ); }
   
+  export default InterviewPage;
   
-};
-
-export default InterviewPage;
