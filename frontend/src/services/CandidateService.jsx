@@ -36,3 +36,19 @@ export const evaluateCandidate = async (candidateId, evaluationData) => {
     { headers: getAuthHeaders() }
   );
 };
+
+export const getSelectedCandidates = async () => {
+  return await axios.get(`${VITE_API_URL}/evaluations/selected-candidates`, {
+    headers: getAuthHeaders(),
+  });
+
+}
+
+export const deleteCandidate = async (candidateId) => {
+  return await axios.delete(`${VITE_API_URL}/candidates/${candidateId}`, {
+    headers: getAuthHeaders(),
+  });
+};
+
+
+

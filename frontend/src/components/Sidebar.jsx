@@ -43,6 +43,19 @@ function Sidebar() {
                 Interviews
               </Link>
             </li>
+            <li>
+           <Link
+              to="/admin/selected-candidates"
+            className={`block py-3 px-4 rounded-lg text-lg ${
+            location.pathname === '/admin/selected-candidates'
+             ? 'bg-blue-100 text-blue-900 font-medium'
+              : 'hover:bg-blue-200'
+            } transition-colors duration-200`}
+           >
+          Selected Candidates
+          </Link>
+          </li>
+
           </ul>
         </div>
         <div>

@@ -42,3 +42,19 @@ export const submitCandidateForm = async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Aday bilgileri kaydedilirken hata oluştu', error });
     }
 };
+
+export const deleteCandidate = async (req: Request, res: Response) => {
+  const { candidateId } = req.params;
+
+  try {
+      // Adayı ID ile bul ve sil
+      const candidate = await Candidate.findByIdAndDelete(candidateId);
+      if (!candidate) {
+          return res.status(404).json({ message: 'Aday bulunamadı' });
+      }
+
+      res.status(200).json({ message: 'Aday başarıyla silindi' });
+  } catch (error) {
+      res.status(500).json({ message: 'Aday silinirken bir hata oluştu', error });
+  }
+};

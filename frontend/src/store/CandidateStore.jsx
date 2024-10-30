@@ -1,6 +1,13 @@
 // candidateStore.jsx
 import { create } from 'zustand';
-import { submitCandidateForm, getCandidates, getCandidateStats, evaluateCandidate } from '../services/CandidateService'; 
+import {
+  submitCandidateForm,
+  getCandidates,
+  getCandidateStats,
+  evaluateCandidate,
+  getSelectedCandidates,
+  deleteCandidate // deleteCandidate fonksiyonunu import ediyoruz
+} from '../services/CandidateService';
 
 // Zustand store'u oluşturuyoruz
 const useCandidateStore = create((set) => ({
@@ -8,6 +15,7 @@ const useCandidateStore = create((set) => ({
   interviewId: null,
   interviewLink: null,
   candidates: [],
+  selectedCandidates: [], // Yeni alan: Seçilen adaylar
   stats: {
     total: 0,
     selected: 0,
@@ -95,6 +103,41 @@ const useCandidateStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || 'Değerlendirme güncellenirken bir hata oluştu.',
+        isLoading: false,
+      });
+    }
+  },
+
+  // Seçilen adayları getirme işlemi
+  fetchSelectedCandidates: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await getSelectedCandidates();
+      set({
+        selectedCandidates: response.data, // Seçilen adayları kaydet
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || 'Seçilen adaylar getirilirken bir hata oluştu.',
+        isLoading: false,
+      });
+    }
+  },
+
+  // Adayı silme işlemi
+  deleteCandidate: async (candidateId) => {
+    set({ isLoading: true, error: null });
+    try {
+      await deleteCandidate(candidateId);
+      // Silinen adayı adaylar listesinden çıkar
+      set((state) => ({
+        candidates: state.candidates.filter(candidate => candidate._id !== candidateId),
+        isLoading: false,
+      }));
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || 'Aday silinirken bir hata oluştu.',
         isLoading: false,
       });
     }

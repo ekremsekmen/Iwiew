@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Question from './Question';
 import Interview from './ManageInterview';
+import SelectedCandidatesPage from './SelectedCandidatesPage'; // Eklenen satır
 
 const AdminPanel = () => {
   return (
@@ -13,6 +14,7 @@ const AdminPanel = () => {
         <Routes>
           <Route path="/question" element={<Question />} />
           <Route path="/interviews" element={<Interview />} />
+          <Route path="/selected-candidates" element={<SelectedCandidatesPage />} /> {/* Eklenen satır */}
         </Routes>
       </div>
     </div>
