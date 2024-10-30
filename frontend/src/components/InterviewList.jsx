@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import useCandidateStore from '../store/CandidateStore';
+import useCandidateStore from '../store/candidateStore';
 import useInterviewStore from '../store/interviewStore';
 
 const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;

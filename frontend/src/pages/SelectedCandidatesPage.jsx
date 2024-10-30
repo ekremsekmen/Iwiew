@@ -1,6 +1,6 @@
 // src/pages/SelectedCandidatesPage.jsx
 import React, { useEffect } from 'react';
-import useCandidateStore from '../store/CandidateStore';
+import useCandidateStore from '../store/candidateStore';
 
 const SelectedCandidatesPage = () => {
   const {
