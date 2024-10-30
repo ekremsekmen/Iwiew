@@ -61,41 +61,63 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
     return <div className="interview-end-message"><h2>Mülakat sona erdi. Teşekkür ederiz!</h2></div>;
   }
 
+  const formatRemainingTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
+  
+
   return (
-    <div className="interview-component w-full h-full p-4 overflow-y-auto">
+    <div className="interview-component w-full max-w-xl mx-auto h-full p-6 bg-gray-100 shadow-lg rounded-lg overflow-y-auto relative">
       {loading ? (
-        <p>Yükleniyor...</p>
+        <div className="text-center text-gray-500">
+          <p className="text-lg font-semibold">Yükleniyor...</p>
+        </div>
       ) : error ? (
-        <p>Hata: {error}</p>
+        <div className="text-center text-red-500">
+          <p className="text-lg font-semibold">Hata: {error}</p>
+        </div>
       ) : interviewDetails ? (
         <div>
-          <h1 className="text-2xl font-semibold mb-4">{interviewDetails.title}</h1>
+          <h1 className="text-3xl font-bold text-blue-600 mb-4 border-b pb-2">{interviewDetails.title}</h1>
+  
+          {/* Dijital Zaman Sayacı - Sağ Üst Köşe */}
+          <div className="absolute top-4 right-4 bg-gray-800 text-white text-2xl font-semibold rounded-lg p-2 shadow-md">
+            {formatRemainingTime(remainingTime)}
+          </div>
+  
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+            <div
+              className="bg-blue-500 h-2.5 rounded-full"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+  
           {interviewDetails.showAtOnce ? (
             <div>
               {interviewDetails.questions.map((question, index) => (
-                <div key={index} className="mb-4">
-                  <h2 className="text-xl font-semibold">Soru {index + 1}</h2>
-                  <p>{question.content}</p>
+                <div key={index} className="mb-6 bg-gray-50 p-4 rounded-lg shadow">
+                  <h2 className="text-xl font-semibold text-gray-700">Soru {index + 1}</h2>
+                  <p className="text-gray-600 mt-2">{question.content}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">Soru {currentQuestionIndex + 1}</h2>
-              {interviewDetails?.questions?.[currentQuestionIndex] ? (
-                <p>{interviewDetails.questions[currentQuestionIndex].content}</p>
+            <div className="mb-6 bg-gray-50 p-4 rounded-lg shadow">
+              <h2 className="text-xl font-semibold text-gray-700">Soru {currentQuestionIndex + 1}</h2>
+              {interviewDetails.questions[currentQuestionIndex] ? (
+                <p className="text-gray-600 mt-2">{interviewDetails.questions[currentQuestionIndex].content}</p>
               ) : (
                 <p>Yükleniyor...</p>
               )}
             </div>
           )}
-          <div className="mt-4 text-gray-700">
-            <div>Progress: {progress}%</div>
-            <div>Kalan Süre: {remainingTime} saniye</div>
-          </div>
+  
           {interviewDetails.canSkip && !interviewDetails.showAtOnce && currentQuestionIndex < interviewDetails.questions.length - 1 && (
             <button 
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md" 
+              className="mt-6 w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md transition duration-300" 
               onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
             >
               Sonraki Soru
@@ -103,11 +125,10 @@ const InterviewComponent = ({ interviewStarted, interviewEnded, onEndInterview }
           )}
         </div>
       ) : (
-        <p>Yükleniyor...</p>
+        <p className="text-center text-gray-500">Yükleniyor...</p>
       )}
     </div>
   );
-  
-};
+}  
 
 export default InterviewComponent;

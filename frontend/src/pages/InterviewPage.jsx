@@ -91,13 +91,14 @@ const InterviewPage = () => {
             onEndInterview={endInterview} 
           />
         </div>
-        <div className="questionSection flex-grow p-2 border-l-4 border-black">
-          <InterviewComponent 
-            interviewStarted={interviewStarted} 
-            interviewEnded={interviewEnded} 
-            onEndInterview={endInterview} 
-          />
-        </div>
+        <div className="questionSection w-1/3 h-full p-2 border-l-4 border-black overflow-y-auto">
+        <InterviewComponent 
+       interviewStarted={interviewStarted} 
+       interviewEnded={interviewEnded} 
+       onEndInterview={endInterview} 
+  />
+</div>
+
       </div>
   
       <div className="controlSection mt-4">
