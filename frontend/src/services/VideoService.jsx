@@ -1,6 +1,8 @@
 // services/VideoService.jsx
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL ;
+
 const uploadVideo = async (videoBlob, candidateId) => {
   if (!videoBlob || !candidateId) {
     console.error('Video veya aday ID eksik.');
@@ -11,7 +13,7 @@ const uploadVideo = async (videoBlob, candidateId) => {
   formData.append('video', videoBlob, `candidate-video-${Date.now()}.mp4`);
 
   try {
-    const response = await axios.post(`http://localhost:3000/api/videos/${candidateId}/video`, formData, {
+    const response = await axios.post(`${API_BASE_URL}/videos/${candidateId}/video`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return response.data;
