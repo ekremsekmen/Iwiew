@@ -58,8 +58,14 @@ const InterviewPage = () => {
   return (
     <div className="interviewPage flex flex-col items-center justify-center h-screen w-full bg-gray-500 overflow-hidden">
       {modalOpen && (
-        <div className="modal fixed inset-0 bg-black bg-opacity-200 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-11/12 md:w-1/3 lg:w-1/4 max-w-md">
+              <div
+              className="modal fixed inset-0 bg-black bg-opacity-200 flex justify-center items-center"
+              style={{ zIndex: 9998 }}
+            >
+              <div
+                className="bg-white p-8 rounded-lg shadow-lg w-11/12 md:w-1/3 lg:w-1/4 max-w-md"
+                style={{ zIndex: 9999 }}
+              >            
             <h2 className="text-xl font-semibold mb-4">Mülakat Kaydı Hakkında</h2>
             <p className="mb-4">
               Bu mülakat sırasında video ve ses kaydı alınacaktır. Devam ederek, kayıt yapılmasını kabul etmiş sayılacaksınız. Mülakatı Başlat butonuna tıkladığınızda mülakat başlayacaktır. Kamera ve mikrofon izinlerini vermeniz gerekmektedir.
