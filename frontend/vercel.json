@@ -1,0 +1,29 @@
+{
+    "rewrites": [
+      {
+        "source": "/login",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/admin/:path*",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/interview/:interviewId/candidates",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/candidates/:interviewId",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/interviews/link/:interviewLink",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/:path*",
+        "destination": "/index.html"
+      }
+    ]
+  }
+  
